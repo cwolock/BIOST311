@@ -1,0 +1,16 @@
+# latex trash
+*.aux
+*.bbl
+*.blg
+*.out
+*.synctex.gz
+*.log
+*.nav
+*.pdf
+
+# R trash
+*.Rdata
+*.RData
+*.rds
+*.Rhistory
+*.Rproj
