@@ -7,6 +7,8 @@
 *.log
 *.nav
 *.pdf
+*.snm
+*.toc
 
 # R trash
 *.Rdata
@@ -14,3 +16,6 @@
 *.rds
 *.Rhistory
 *.Rproj
+
+# mac stuff
+*.DS_Store
