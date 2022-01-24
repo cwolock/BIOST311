@@ -1,0 +1,46 @@
+% Create a Table of Contents in Beamer
+\documentclass{beamer}
+% Theme choice:
+\usetheme{AnnArbor}
+\usecolortheme{whale}
+\setbeamercolor{frametitle}{fg=white,bg=blue}
+% Title page details: 
+\title{Chapter 0: Introduction and Review} 
+\author{Taylor Okonek \& Charlie Wolock}
+\date{\today}
+\begin{document}
+% Title page frame
+\begin{frame}
+    \titlepage 
+\end{frame}
+% Outline frame
+\begin{frame}{Outline}
+    \tableofcontents
+\end{frame}
+
+\AtBeginSection[ ]
+{
+\begin{frame}{Outline}
+    \tableofcontents[currentsection]
+\end{frame}
+}
+
+% Presentation structure
+\section{Syllabus}
+
+\begin{frame}{A slide}
+    ta da, it says the section title at the top of the slide!!
+\end{frame}
+
+\section{Motivation}
+
+\section{Study Design}
+
+\section{Summarizing data}
+
+\section*{References}
+\begin{frame}
+% to enforce entries in the table of contents
+\end{frame}
+ 
+\end{document}

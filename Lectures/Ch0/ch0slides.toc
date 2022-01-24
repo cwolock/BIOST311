@@ -1,0 +1,4 @@
+\beamer@sectionintoc {1}{Syllabus}{3}{0}{1}
+\beamer@sectionintoc {2}{Motivation}{5}{0}{2}
+\beamer@sectionintoc {3}{Study Design}{6}{0}{3}
+\beamer@sectionintoc {4}{Summarizing data}{7}{0}{4}
