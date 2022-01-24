@@ -1,27 +1,30 @@
 % Create a Table of Contents in Beamer
 \documentclass{beamer}
 % Theme choice:
-\usetheme{AnnArbor}
+\usetheme{Singapore}
 \usecolortheme{whale}
-\setbeamercolor{frametitle}{fg=white,bg=blue}
+\setbeamercolor{titlelike}{fg=blue,bg=white}
+\setbeamercolor{frametitle}{fg=blue,bg=white}
+\setbeamertemplate{frametitle}[default][left]
+\setbeamertemplate{navigation symbols}{}
 % Title page details: 
 \title{Chapter 0: Introduction and Review} 
 \author{Taylor Okonek \& Charlie Wolock}
 \date{\today}
 \begin{document}
-% Title page frame
-\begin{frame}
-    \titlepage 
+	% Title page frame
+	\begin{frame}
+	\titlepage 
 \end{frame}
 % Outline frame
 \begin{frame}{Outline}
-    \tableofcontents
+\tableofcontents
 \end{frame}
 
 \AtBeginSection[ ]
 {
 \begin{frame}{Outline}
-    \tableofcontents[currentsection]
+\tableofcontents[currentsection]
 \end{frame}
 }
 
@@ -29,7 +32,7 @@
 \section{Syllabus}
 
 \begin{frame}{A slide}
-    ta da, it says the section title at the top of the slide!!
+ta da, it says the section title at the top of the slide!!
 \end{frame}
 
 \section{Motivation}
@@ -42,5 +45,5 @@
 \begin{frame}
 % to enforce entries in the table of contents
 \end{frame}
- 
+
 \end{document}
