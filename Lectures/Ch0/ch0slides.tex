@@ -7,10 +7,20 @@
 \setbeamercolor{frametitle}{fg=blue,bg=white}
 \setbeamertemplate{frametitle}[default][left]
 \setbeamertemplate{navigation symbols}{}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
 % Title page details: 
 \title{Chapter 0: Introduction and Review} 
 \author{Taylor Okonek \& Charlie Wolock}
 \date{\today}
+
+
+
 \begin{document}
 	% Title page frame
 	\begin{frame}
@@ -31,8 +41,184 @@
 % Presentation structure
 \section{Syllabus}
 
-\begin{frame}{A slide}
-ta da, it says the section title at the top of the slide!!
+\begin{frame}{Instructors}
+
+\begin{figure}
+	\begin{center}
+		\includegraphics[height=0.4\textheight]{charlie.jpg} 
+		\hspace{2cm}
+		\includegraphics[height=0.4\textheight]{taylor.jpg}
+	\end{center}
+\end{figure}
+
+\begin{columns}
+	\begin{column}[t]{0.4\textwidth}
+            \small Charlie Wolock (he/him) \\~\
+            
+            \small 4th year Ph.D. Student, Dept. of Biostatistics
+            \small Statistical interests:
+	\end{column}
+	\begin{column}[t]{0.4\textwidth}  %%<--- here
+			\small Taylor Okonek (she/her) \\~\ 
+			
+			\small 4th year Ph.D. Student, Dept. of Biostatistics
+			\small Statistical interests: spatial stats, infectious disease
+	\end{column}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}{Course description}
+``Introduction to regression methods for analysis of continuous, binary, and time-to-event (survival) data. Covers linear regression, logistic regression, and proportional hazards regression, all at an introductory level. Makes use of examples drawn from the biomedical and health sciences literature." \\~\
+
+\begin{itemize}
+	\item Graded, 4 credits
+	\item Course website: canvas.uw.edu
+	\item No textbooks for the course, all material needed for homeworks/project can be found in lecture and discussion section slides
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Logistics}
+Class sessions times and room (if not on zoom) \\
+Office hours times and room (if not on zoom)
+\end{frame}
+
+\begin{frame}{Learning objectives}
+\begin{itemize}
+	\item Interpret numerical and graphical summaries of data that are relevant to medical and health sciences studies
+	\item Interpret coefficients in linear, logistic, and proportional hazards regression models in the context of health outcomes
+	\item Select an appropriate regression model based on a scientific question and study design
+	\item Describe the necessary assumptions for linear, logistic, and proportional hazards regression in the contexts of estimation and prediction
+	\item Develop and interpret confidence intervals for model parameters
+	\item Set up and carry out appropriate hypothesis tests for linear, logistic, and proportional hazards regression models
+	
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Learning objectives (continued)}
+\begin{itemize}
+	\item Use linear and logistic regression models to make predictions
+	\item Use diagnostic procedures and sensitivity analyses to investigate potential deviations from model assumptions
+	\item Use the statistical software R to:
+	\begin{itemize}
+		\item Read in data files
+		\item Calculate summary statistics and create appropriate graphical displays
+		\item Perform basic statistical inference procedures
+		\item Fit linear, logistic, and proportional hazards regression models
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Class communication}
+We will communicate with you outside of class using the Canvas page, so please sign up to receive email notifications for the page. \\~\
+
+Questions about course context or homework assignments should be posted to the Canvas Discussion Board, \textbf{not sent via email}. We will monitor the discussion board regularly, and also strongly encourage you to reply to each other’s questions. Concerns of a personal nature can be communicated with us via email, and in general any emails should be sent to both instructors. \\~\
+
+Please communicate respectfully to your classmates and to us, and let us know if there are ways classroom communication can be made more accessible to you. \\~\
+
+Instructors will not send same-day responses to messages sent after 8:00pm PST.
+\end{frame}
+
+\begin{frame}{Homework}
+
+Homework assignments will be posted on the Canvas website one week 
+prior to the due date. They should be completed in a Word or .pdf document and 
+submitted electronically to the Canvas website by the due date. You are welcome to work together on homework; however, your submitted assignment (including R code, if applicable) should be in your own words. \\~\
+
+Solution keys and individual feedback will be provided. \textcolor{red}{We have prepared a guide for how to present your assignments which is available on our Canvas page.} The lowest homework score will be dropped.
+
+\end{frame}
+
+\begin{frame}{Homework: Late policy}
+Throughout the quarter, you may use up to three homework 
+extension days. These three days may be divided up for homework assignments however you choose (for example: all three days for a single assignment, one day each for three separate assignments). \\~\
+
+In order to use your extension days, \textbf{you must email both instructors prior to the homework due date} to inform them you plan to use an extension day. If you do not email the instructors prior to homework due date, the extension days will not be counted, and your homework will be counted as late. \\~\
+
+Late homework receives no credit.
+
+\end{frame}
+
+\begin{frame}{Quizzes}
+There will be weekly, open-note Canvas quizzes on Mondays. These quizzes are designed to ensure that you keep up with course material and can recall material from previous weeks. Each quiz will consist of 10 questions, 3 of which will be on information from previous weeks, and 7 of which will be on material from the most recent week of lectures. Questions will be a mix of multiple choice, True/False, and open response. \\~\
+
+Quizzes will be graded Monday evening, and you will have 48 hours from Monday 11:59pm PST to Wednesday 11:59pm PST to complete quiz revisions, for the opportunity to earn back up to 50\% of the points you missed.
+\end{frame}
+
+
+\begin{frame}{Discussion section}
+Discussion sections will consist of \textcolor{red}{group activities}, review of class material, discussion of group projects, and practice using R. You will be required to hand in a brief exercise (credit/no credit) at each discussion section. Your discussion section score will be based on completion of these assignments. To receive full credit for discussion section, you can miss at most one of the discussions.
+\end{frame}
+
+\begin{frame}{Final Project}
+There will be a final data analysis project for which you will be given a dataset (or select your own, with approval from the instructors) and asked to develop a appropriate analysis plan, carry out the analysis, and write a short report. Projects will be introduced in the first discussion section. \textcolor{red}{You will complete your project in small groups, assigned by the instructors.}
+\end{frame}
+
+\begin{frame}{Grading}
+\begin{columns}
+	\begin{column}[t]{0.4\textwidth}
+		Homework \\
+		Quizzes \\
+		Final Project \\
+		Discussion Section 
+	\end{column}
+	\begin{column}[t]{0.4\textwidth}  %%<--- here
+		30\% \\
+		30\% \\
+		30\% \\
+		10\% 
+	\end{column}
+\end{columns}
+
+\vspace{1cm}
+
+At the end of the course, we will convert your percentage to the UW 0.0-4.0 scale. Final course grades will be calculated based on the guidelines linked below. At minimum, you will get an A (3.9-4.0) if you earn at least 95\% of the total possible points, an A- (3.5-3.8) if you earn between 90\% and 95\% of the total possible points, and a C- (1.5-1.8) if you earn 65\% of the total possible points. \\~\
+
+Guidelines: http://depts.washington.edu/grading/practices/guidelines.html 
+
+\end{frame}
+
+\begin{frame}{Course policies}
+\begin{itemize}
+	\item \textbf{Laptops}: You will be expected to have access to a laptop during discussion sections. However, you will not generally need access to a computer during lecture (different if zoom, obviously).
+	\item \textbf{Computing}: Computing in R is an important component of this course. FIND OUT WHERE THEY CAN BORROW COMPUTERS and include here. Please see us if this expectation will cause trouble for you, and we can work out a solution.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Course policies (continued)}
+\begin{itemize}
+	\item \textbf{Collaboration}: You are encouraged to work together on homework assignments, but the final write-up should be done individually. The course project will be a \textcolor{red}{group project}; you will discuss approaches to the project with your group and other classmates during discussion sections, but outside of class you may only discuss your project with your group members and the instructors.
+	\item \textbf{Academic Honesty}: Students are encouraged to familiarize themselves with the academic honesty policies. If you hand in work that is not written in your own words, you will at minimum lose all credit for the problem, and at maximum all credit for the assignment. Issues surrounding academic integrity will be handled in accordance with university policies.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Course policies (continued)}
+\begin{itemize}
+	\item \textbf{Grading}: We will have assignments graded in a timely fashion. If you have questions or concerns about the grading, see us. We reserve the right to change or not change the grade.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Classroom climate}
+The UW School of Public Health seeks to ensure all students are fully included in each course. We strive to create an environment that reflects community and mutual caring. We encourage students with concerns about classroom climate to talk to your instructor, your advisor, a member of the departmental or SPH Diversity Committee and/or the program director. DCinfo@uw.edu is a resource for students with classroom climate concerns.
+\end{frame}
+
+\begin{frame}{Concerns}
+If you have any concerns about the class or your instructors, please feel free to talk to or email us at any time during the quarter. If you are not comfortable talking with us or not satisfied with the response that you receive, you may contact the Department of Biostatistics Associate Director of Academic Affairs (biostgp@uw.edu). If you still are not satisfied with the response, you may contact the Department of Biostatistics Chair (bchair@uw.edu). You may also contact the Graduate School at G-1 Communications Building, by phone at 206-543-5139 or by email at raan@uw.edu.
+\end{frame}
+
+\begin{frame}{Academic integrity}
+Students at the University of Washington (UW) are expected to maintain the highest standards of academic conduct, professional honesty, and personal integrity. \\~\
+
+The UW School of Public Health (SPH) is committed to upholding standards of academic integrity consistent with the academic and professional communities of which it is a part. Plagiarism, cheating, and other misconduct are serious violations of the University of Washington Student Conduct Code (WAC 478-121). We expect you to know and follow the university’s policies on cheating and plagiarism, and the SPH Academic Integrity Policy. Any suspected cases of academic misconduct will be handled according to University of Washington regulations. For more information, see the University of Washington Community Standards and Student Conduct website.
+
+\end{frame}
+
+\begin{frame}{Access and accommodation}
+\small Your experience in this class is important to us. If you have already established accommodations with Disability Resources for Students (DRS), please communicate your approved accommodations to us at your earliest convenience so we can discuss your needs in this course.\\~\
+
+\small If you have not yet established services through DRS, but have a temporary health condition or permanent disability that requires accommodations (conditions include but not limited to; mental health, attention-related, learning, vision, hearing, physical or health impacts), you are welcome to contact DRS at 206-543- 8924 or uwdrs@uw.edu or disability.uw.edu. DRS offers resources and coordinates reasonable accommodations for students with disabilities and/or temporary health conditions. Reasonable accommodations are established through an interactive process between you, your instructor(s) and DRS. It is the policy and practice of the University of Washington to create inclusive and accessible learning environments consistent with federal and state law.
+
 \end{frame}
 
 \section{Motivation}
