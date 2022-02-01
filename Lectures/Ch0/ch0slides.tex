@@ -1,5 +1,5 @@
 % Create a Table of Contents in Beamer
-\documentclass{beamer}
+\documentclass[10pt,t]{beamer}
 % Theme choice:
 \usetheme{Singapore}
 \usecolortheme{whale}
@@ -227,6 +227,316 @@ The UW School of Public Health (SPH) is committed to upholding standards of acad
 \section{Motivation}
 
 \section{Study Design}
+
+\begin{frame}{Study Design}
+\textit{How you collect data impacts what questions you can (cannot) answer, what statistical methods you can (cannot) use, and what conclusions you can (cannot) draw.} \\~\
+
+\textcolor{blue}{Extreme Example:} Suppose I'm interested in understanding public opinion about biostatistics. I randomly select on individual from our class and ask if they like biostatistics.
+
+\begin{itemize}
+	\item What questions can I answer using these data?
+	\item What statistical methods can I use to analyze these data?
+	\item What conclusions can I draw using these data?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Experimental vs. Observational Studies}
+
+\textcolor{blue}{Experimental:} exposure/treatment is \textit{controlled} by the researcher (e.g., randomly assign people to drug or placebo)
+\begin{itemize}
+	\item Randomized controlled trial 
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Observational:} exposure/treatment is \textit{not controlled} by the researcher (e.g., we look at a group of people and \textit{observe} who smokes and who doesn't smoke)
+\begin{itemize}
+	\item Cross-sectional study
+	\item Cohort study
+	\item Case-control study
+\end{itemize}
+\end{frame}
+	
+	
+\begin{frame}{Experimental vs. Observational Studies}
+In \textit{experimental} studies, we can talk about \color{blue} \textit{causation}\color{black}. In \textit{observational} studies we  talk instead about \color{blue} \textit{association} \color{black}(because we worry about \color{blue} \textit{confounding}\color{black}). \\
+
+\vspace{0.3cm}
+
+% we'll come back to this when we talk about interpreting results
+A \textit{\textcolor{blue}{confounder}} is a variable that is \textcolor{red}{causally associated EDIT I don't like this phrase} with our outcome and also associated with the exposure in our sample.  \\
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item[] \textit{Example:} suppose we're interested in the relationship between smoking and lung function in kids. We know that age is causally associated with lung function: as children grow and develop, their lung function improves. If age is also associated with smoking in our sample (e.g., if older kids are more likely to smoke), then age is a confounder.
+\end{itemize} 
+
+\vspace{0.3cm}
+
+\small \textit{Much more on the topic of confounding to come...} 
+\end{frame}
+
+\subsection{Experimental studies}
+
+\begin{frame}{Randomized controlled trial}
+Description:
+\begin{itemize}
+	\item Take a sample from the population and \textbf{randomly assign} individuals to either treatment (\textit{exposed}) or control/placebo (\textit{unexposed}), and follow individuals to observe a specific outcome (e.g., death yes/no, disease yes/no, time to death, change in cholesterol level, \dots)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Randomized controlled trial}
+Description:
+\begin{itemize}
+	\item Take a sample from the population and \textbf{randomly assign} individuals to either treatment (\textit{exposed}) or control/placebo (\textit{unexposed}), and follow individuals to observe a specific outcome (e.g., death yes/no, disease yes/no, time to death, change in cholesterol level, \dots)
+\end{itemize}
+Pros:
+\begin{itemize}
+	\item With a large enough sample, no confounding
+	\item Gold standard for establishing causality
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Randomized controlled trial}
+Description:
+\begin{itemize}
+	\item Take a sample from the population and \textbf{randomly assign} individuals to either treatment (\textit{exposed}) or control/placebo (\textit{unexposed}), and follow individuals to observe a specific outcome (e.g., death yes/no, disease yes/no, time to death, change in cholesterol level, \dots)
+\end{itemize}
+Pros:
+\begin{itemize}
+	\item With a large enough sample, no confounding
+	\item Gold standard for establishing causality
+\end{itemize}
+Cons:
+\begin{itemize}
+	\item Often very expensive
+	\item Not always possible or ethical to randomize individuals
+	\begin{itemize}
+		\item Cannot randomly assign someone to a specific age, genetic variant, etc.
+		\item Unethical to randomly assign harmful exposures (e.g., smoking)
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Randomized controlled trial}
+Examples: 
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \href{https://jamanetwork.com/journals/jama/article-abstract/2613159}{\color{cyan} Effect of Vitamin D and Calcium Supplementation on Cancer Incidence in Older Women}
+	\item \href{http://stroke.ahajournals.org/content/36/8/1764.short}{\color{cyan} Daily Functioning and Quality of Life in a Randomized Controlled Trial of Therapeutic Exercise for Subacute Stroke Survivors}
+\end{itemize}
+\textcolor{red}{maybe update the second link, it's from 2005} 
+\end{frame}
+
+
+\subsection{Observational studies}
+
+\begin{frame}{Cross-sectional study}
+Description:
+\begin{itemize}
+	\item Randomly sample individuals, record their exposure and outcome at a \textit{single time point/interval} (no follow-up)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Cross-sectional study}
+Description:
+\begin{itemize}
+	\item Randomly sample individuals, record their exposure and outcome at a \textit{single time point/interval} (no follow-up)
+\end{itemize}
+Pros:
+\begin{itemize}
+	\item Relatively cheap and easy
+	\item Can study multiple outcomes and exposures
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Cross-sectional study}
+Description:
+\begin{itemize}
+	\item Randomly sample individuals, record their exposure and outcome at a \textit{single time point/interval} (no follow-up)
+\end{itemize}
+Pros:
+\begin{itemize}
+	\item Relatively cheap and easy
+	\item Can study multiple outcomes and exposures
+\end{itemize}
+Cons:
+\begin{itemize}
+	\item Inefficient for rare exposure and disease 
+	\item Time sequence of exposure and outcome (i.e. which came first) is not always clear
+	\item Potential confounding (so no conclusions about causality)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Cross-sectional study}
+Examples:
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \href{http://ajph.aphapublications.org/doi/abs/10.2105/AJPH.78.10.1336}{\color{cyan} Job strain, work place social support, and cardiovascular disease in a random sample of the Swedish working population}
+	\item \href{onlinelibrary.wiley.com/doi/10.1111/add.12623/full}{\color{cyan} Real-world effectiveness of e-cigarettes when used to aid smoking cessation}
+\end{itemize}
+
+\textcolor{red}{first one from 2011, second from 2014}
+
+\end{frame}
+
+\begin{frame}{Cohort study}
+Description:
+\begin{itemize}
+	\item Sample people \textit{without the outcome of interest}, record their exposure, then \textit{follow} those individuals over time to observe the outcome
+	\item Can be \textit{prospective} (sample people in present time, then follow-up) or \textit{restrospective} (sample people from a database collected in the past, and observe them through their time recorded in the database)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Cohort study}
+Description:
+\begin{itemize}
+	\item Sample people \textit{without the outcome of interest}, record their exposure, then \textit{follow} those individuals over time to observe the outcome
+	\item Can be \textit{prospective} (sample people in present time, then follow-up) or \textit{restrospective} (sample people from a database collected in the past, and observe them through their time recorded in the database)
+\end{itemize}
+Pros:
+\begin{itemize}
+	\item Time sequence is known (exposure came first)
+	\item Can study multiple outcomes 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Cohort study}
+Description:
+\begin{itemize}
+	\item Sample people \textit{without the outcome of interest}, record their exposure, then \textit{follow} those individuals over time to observe the outcome
+	\item Can be \textit{prospective} (sample people in present time, then follow-up) or \textit{restrospective} (sample people from a database collected in the past, and observe them through their time recorded in the database)
+\end{itemize}
+Pros:
+\begin{itemize}
+	\item Time sequence is known (exposure came first)
+	\item Can study multiple outcomes 
+\end{itemize}
+Cons:
+\begin{itemize}
+	\item Inefficient for rare outcomes
+	\item Prospective cohort studies are often expensive and time-consuming to follow people, and there are opportunities for people to drop out
+	\item Potential confounding (so no conclusions about causality)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Cohort study}
+Examples:
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \href{https://www.medicalnewstoday.com/articles/316619.php}{\color{cyan} Drinking tea could help stave off cognitive decline}
+	\item \href{https://www.medicalnewstoday.com/articles/316565.php}{\color{cyan} Birth control pills may protect against some cancers for decades}
+\end{itemize}
+
+\textcolor{red}{both of these should be updated}
+
+\end{frame}
+
+\begin{frame}{Case-control study}
+Description:
+\begin{itemize}
+	\item Sample individuals \textit{based on the outcome} (some with, some without), look back in time (usually) for exposure
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Case-control study}
+Description:
+\begin{itemize}
+	\item Sample individuals \textit{based on the outcome} (some with, some without), look back in time (usually) for exposure
+\end{itemize}
+Pros:
+\begin{itemize}
+	\item Efficient for rare diseases
+	\item Cheaper and faster than cohort studies
+	\item Can study multiple exposures
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Case-control study}
+Description:
+\begin{itemize}
+	\item Sample individuals \textit{based on the outcome} (some with, some without), look back in time (usually) for exposure
+\end{itemize}
+Pros:
+\begin{itemize}
+	\item Efficient for rare diseases
+	\item Cheaper and faster than cohort studies
+	\item Can study multiple exposures
+\end{itemize}
+Cons:
+\begin{itemize}
+	\item May not know time sequence of disease and exposure
+	\item Cannot use to estimate relative risk or disease prevalence % more detail here??
+	\item Potential confounding (so no conclusions about causality)
+\end{itemize}
+\end{frame}
+
+\begin{frame}[c]{Case-control study}
+Examples:
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \href{https://www.sciencedirect.com/science/article/pii/S0140673605676635}{\color{cyan}Obesity and the risk of myocardial infarction in 27,000 participants from 52 countries}
+	\item \href{http://www.nejm.org/doi/full/10.1056/NEJMoa065497\#t=article}{\color{cyan}Case control study of human papillomavirus and oropharyngeal cancer}
+\end{itemize}
+
+\color{red} first is a lancet article from 2005, next is from 2007. both should be updated
+
+\end{frame}
+
+\begin{frame}{Study design: Practice}
+You read \href{https://jamanetwork.com/journals/jamaoncology/fullarticle/2569059?resultClick=24}{\color{cyan} this article} (from 2017), interested in the association between androgen deprivation therpy (ADT), a treatment for prostate cancer, and risk of dementia (ADT). \\~\
+
+From the article: \textit{In this... study, a text-processing method was used to analyze electronic medical record data from... 1994 to 2013. We identified 9455 individuals with prostate cancer who were 18 years or older at diagnosis with data recorded in the electronic health record and follow-up after diagnosis. We tested the effect of ADT on the risk of dementia.}
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item What kind of study design is this?
+	\item Why do you think they chose this design? % cheap, can't randomly assign ADT
+	\item What are potential limitations of this study design?
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Study design: Practice}
+\begin{itemize}
+	\item What kind of study design is this?
+	\begin{itemize}
+		\item[]  \color{cyan} Cohort study (retrospective)
+	\end{itemize}
+	\item Why do you think they chose this design? % cheap, can't randomly assign ADT
+	\begin{itemize}
+		\item[] \color{cyan} Randomized controlled trials are out of the question, since you can't randomly assign prostate cancer to individuals. This leaves observational studies. Dementia is not particularly rare, and they likely wanted to make statements about relative risks, so case-control studies are out as well. Cross-sectional studies wouldn't necessarily allow the researchers to determine if dementia came before or after ADT. It may also be difficult to ask individuals with dementia about their history with ADT. Cohort studies are cheap (especially retrospective), and also easily allow the researchers to know whether or not ADT came before dementia \textit{and} how long of a time there was between ADT and dementia, which may be of interest.
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Study design: Practice}
+\begin{itemize}
+	\item What are potential limitations of this study design?
+	\begin{itemize}
+		\item[] \color{cyan} Potential confounding: cannot conclude that ADT causes / does not cause dementia
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Study design: Practice}
+Suppose you are interested in determining whether or not there is an association between being a vegetarian and owning a pet iguana. \textit{Very few} individuals own iguanas. Which study design would be most appropriate for answering your research question, and why?
+\end{frame}
+
+\begin{frame}{Study design: Practice}
+Suppose you are interested in determining whether or not there is an association between being a vegetarian and owning a pet iguana. \textit{Very few} individuals own iguanas. Which study design would be most appropriate for answering your research question, and why? 
+
+\vspace{0.3cm}
+
+\color{cyan} Case-control study. Since we are not interested in establishing causality (``being a vegetarian causes you to own an iguana"...), an observational study is appropriate. Since owning an iguana is rare, cohort studies and cross-sectional studies will likely be inefficient. Therefore, a case-control study is most appropriate.
+
+\end{frame}
 
 \section{Summarizing data}
 
