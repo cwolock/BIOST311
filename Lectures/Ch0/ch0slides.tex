@@ -53,15 +53,17 @@
 
 \begin{columns}
 	\begin{column}[t]{0.4\textwidth}
-            \small Charlie Wolock (he/him) \\~\
+            \small Charlie Wolock (he/him) \\ 
+            cwolock@uw.edu \\~\
             
-            \small 4th year Ph.D. Student, Dept. of Biostatistics
+            \small 4th year Ph.D. Student, Dept. of Biostatistics \\
             \small Statistical interests: Nonparametrics, survival analysis
 	\end{column}
 	\begin{column}[t]{0.4\textwidth}  %%<--- here
-			\small Taylor Okonek (she/her) \\~\ 
+			\small Taylor Okonek (she/her) \\
+			tokonek@uw.edu  \\~\ 
 			
-			\small 4th year Ph.D. Student, Dept. of Biostatistics
+			\small 4th year Ph.D. Student, Dept. of Biostatistics \\
 			\small Statistical interests: spatial stats, infectious disease
 	\end{column}
 \end{columns}
@@ -224,7 +226,162 @@ The UW School of Public Health (SPH) is committed to upholding standards of acad
 
 \end{frame}
 
+\begin{frame}{First Canvas quiz!}
+Please complete the Canvas quiz by Friday! \textcolor{red}{tbd a bit, but we should do something like this probably} 
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item Name
+	\item Pronunciation guide
+	\item What are you most looking forward to learning this quarter?
+	\item What do you anticipate having the most trouble with this quarter?
+\end{itemize}
+
+\vspace{0.3cm}
+
+Pronunciation guide example:
+\begin{itemize}
+	\item Taylor Okonek
+	\item TAY-lor AH-ke-nik
+\end{itemize}
+
+\vspace{0.3cm}
+
+\color{blue} We'll do a mid-quarter Stop/Start/Continue check-in as well!
+
+\end{frame}
+
+\begin{frame}{What to Expect: Statistics}
+You will need light algebra and mathematical reasoning
+\vspace{0.3cm}
+\begin{itemize}
+	\item No calculus assumed
+	\item We won't prove technical results, but can provide resources for those available if asked
+	\item Quizzes will not require any math beyond basic arithmetic, and are open note
+\end{itemize}
+
+\vspace{0.3cm}
+
+This course is the natural sequel to BIOST 310 
+
+\vspace{0.3cm}
+
+We will learn how to build regression models, estimate parameters, and interpret coefficients 
+
+\vspace{0.3cm}
+
+Examples will be primarily in public health or health sciences applications
+
+\end{frame}
+
+\begin{frame}{What to Expect: Computing}
+We will learn basic statistical computing in \texttt{R}
+
+\vspace{0.3cm}
+
+You are \textit{not} expected to have a computing background
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item We will demonstrate important functions in lectures and discussion sections
+	\item We will provide helpful resources: templates for homework assignments, \texttt{R} code "cheat sheets" with useful functions, video tutorials (as applicable), etc. \textcolor{red}{We need to make cheat sheets i guess}
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textbf{Homework for tonight:} download \texttt{R} and \texttt{R Studio} (see instructions on Canvas) \textcolor{red}{need to make instructions}
+
+\end{frame}
+
+\begin{frame}[c]
+\centering \huge Any Questions?
+\end{frame}
+
 \section{Motivation}
+
+\begin{frame}{Why is statistics important?}
+\begin{itemize}
+	\item We have a research question we want to answer
+	\item We hear a claim we think is false, and want to refute it
+	\item We have a \textit{ton} of information and we don't know how to make sense of it
+	\item We understand the current state of things, but want to predict future outcomes
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: Research question}
+
+Retinol (a Vitamin A derivative) is a popular skin care agent that has been shown in studies to decrease wrinkle surface area and hyperpigmentation. However, retinol is not safe to use for pregant individuals, and additionally retinol has known side-effects of causing skin dryness and stinging for many people. Bakuchiol has been proposed as a retinol alternative that is safe for pregnant individuals to use and does not have similar negative side-effects. However, we are not sure if Bakuchiol is \textit{as effective} as retinol for decreasing wrinkle surface area and hyperpigmentation. 
+
+\vspace{0.3cm}
+
+Q: \textit{Is Bakuchiol as effective as retinol for improving wrinkle surface area and hyperpigmentation?} 
+
+\vspace{0.3cm}
+
+How do we answer this question? (one option: \href{https://onlinelibrary.wiley.com/doi/10.1111/bjd.16918}{a randomized trial})
+
+\end{frame}
+
+\begin{frame}{Example: Research question}
+
+\begin{itemize}
+	\item Randomly assign 44 individuals to either use Bakuchiol or Retinol over the course of 12 weeks, surveying individuals and taking images every 4 weeks 
+	\item Use image analysis to determine fine wrinkle surface area at each time point
+\end{itemize}
+
+\centering \includegraphics[scale=0.4]{retinol.png}
+
+\end{frame}
+
+\begin{frame}{Example: Research question}
+
+Why is statistics important?
+
+\vspace{0.3cm}
+
+In this example:
+\begin{itemize}
+	\item Allows us to determine whether or not there is a difference in outcomes based on exposure (retinol vs. Bakuchiol) that is due to \textit{the exposure alone} (i.e. no other variable could have mattered)
+	\item A standardized way of measuring the outcome. This study didn't compare qualitatively if they thought individuals had a lower wrinkle surface area, they used image analysis!
+	\item Allows us to determine if there is a \textit{statistically significant} difference in outcomes between Bakuchiol and retinol users (we'll come back to this throughout the course)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}[c]{Example: Refuting a false claim}
+\centering \includegraphics[scale=0.4]{lancet.png}
+\end{frame}
+
+\begin{frame}{Example: Refuting a false claim}
+A paper published in the Lacet (a relatively high-impact journal!) in 1998 suggested that the measles, mumps, and rubella (MMR) vaccine may cause autism spectrum disorder in children.
+
+\centering \includegraphics[scale=0.4]{mmrvax.jpg}
+
+\end{frame}
+
+\begin{frame}{Example: Refuting a false claim}
+
+Statistical tools used to critically assess (and eventually refute) this claim:
+\begin{itemize}
+	\item The sample size in their study was $n = 12$ (which is \textit{very} small)
+	\item Their study design was uncontrolled, so causal claims could not be made (more on this to follow in the Study Design review section!)
+\end{itemize}
+
+\vspace{0.3cm}
+
+Why is statistics important?
+\begin{itemize}
+	\item Allows us to critically assess scientific claims
+	\item Understanding the assumptions underlying statistical methods and study designs lets us think \textit{scientifically and statistically} about whether or not these assumptions are met
+\end{itemize}
+
+\vspace{0.3cm}
+
+\footnotesize An important aside with this study is that the lead author was funded by lawyers who had been representing parents in lawsuits against vaccine-producing companies. Critically reading studies from \textit{many} angles (not only statistical) is important! A more detailed summary of this article and follow-up can be found \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3136032/}{\color{cyan} here}.
+
+\end{frame}
 
 \section{Study Design}
 
@@ -539,6 +696,8 @@ Suppose you are interested in determining whether or not there is an association
 \end{frame}
 
 \section{Summarizing data}
+
+
 
 \section{Statistical inference}
 
