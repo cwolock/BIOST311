@@ -357,9 +357,166 @@ Suppose you are interested in determining whether or not there is an association
 
 \section{Summarizing data}
 
+
+\begin{frame}{Motivating Dataset}
+Throughout this chapter (and the next), we'll be exploring a dataset containing information on global health indicators by country and year, including:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item Infant Mortality Rate (per 1000 live births)
+	\item Fertility rate (births per individual)
+	\item HIV incidence
+	\item GDP per capita (current US\$)
+	\item A handful of other health outcomes!
+\end{itemize}
+
+\vspace{0.3cm} 
+
+Data sourced from the \href{https://childmortality.org/data}{\color{cyan} UN Inter-agency Group for Child Mortality Estimation} and the \href{https://databank.worldbank.org/databases}{\color{cyan} World Bank}
+
+\vspace{0.3cm} 
+
+\textit{We'll refer to this dataset as the GHI dataset.}
+
+\end{frame}
+
 \subsection{Types of Variables}
 
+\begin{frame}{Types of Variables}
+\textit{How you summarize/analyze data often depends on what type of data you've collected.}
+
+\vspace{0.3cm}
+
+The first step to summarizing/describing data is making sure you know what kind of data you have!
+
+\end{frame}
+
+\begin{frame}{Types of Variables}
+
+\textcolor{blue}{Categorical:} 
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textit{Nominal:} order has no meaning (e.g., country)
+	\item \textit{Ordinal:} order may be meaningful (e.g., level of education)
+	\item \textit{Binary:} two possible values; nominal or ordinal (e.g., presence of a genetic variant)
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Quantitative:} 
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textit{Discrete:} values are typically integers (e.g., number of people living with HIV)
+	\item \textit{Continuous:} values on a continuum (e.g., time)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Types of Variables: Activity}
+
+Sometimes determining variable type is complicated! Consider the following scenario:
+
+\vspace{0.3cm}
+
+We survey parents and record information on whether or not they have any children. We record each living child's age, and if any of their children have died, we record the child's age of death. Age at death is recorded monthly from age 0 months to 24 months, and yearly after that. 
+
+\end{frame}
+
+\begin{frame}
+
+We survey parents and record information on whether or not they have any children. We record each living child's age, and if any of their children have died, we record the child's age of death. Age at death is recorded monthly from age 0 months to 24 months, and yearly after that. We plot the number of children who died at each age recorded vs. age in months:
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.3]{u5mr.pdf}
+\end{frame}
+
+\begin{frame}
+\begin{figure}
+	\centering \includegraphics[scale=0.3]{u5mr.pdf}
+\end{figure}
+	
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item Argue why we should consider age at death to be a continuous variable.
+	\item Argue why we should consider age at death to be a discrete variable.
+	\item Do you notice anything strange about the plot? Does this affect whether or not we should consider age at death to be continuous or discrete?
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+
+Argue why we should consider age at death to be a continuous variable.
+	
+	\vspace{0.3cm}
+	
+	\begin{itemize}
+		\item[] \textcolor{blue}{Age is inherently continuous. We could, in theory, have ages recorded with an infinite number of decimal points.}
+	\end{itemize}
+	
+		
+	
+	\vspace{0.3cm}
+	
+	Argue why we should consider age at death to be a discrete variable.
+	
+	\vspace{0.3cm}
+	
+	\begin{itemize}
+		\item[] 	\textcolor{blue}{Age is collected discretely in the survey. According to the survey, children could not be 2.5 years old, for example. }
+	\end{itemize}
+
+	
+
+\end{frame}
+
+\begin{frame}
+
+	
+Do you notice anything strange about the plot? Does this affect whether or not we should consider age at death to be continuous or discrete?
+	
+	\vspace{0.3cm}
+	
+\begin{itemize}
+	\item[] \small \textcolor{blue}{Death counts seem to be higher at exact years than for the months in between 1-2 years. For 24 months, 3 years, and 4 years, this is likely due to grouping. If a child died between ages 2.5 - 3.5, they would be recorded as having died at 3 years, so this count would be inherently higher since it spans a longer time period than simply 1 month. However, what about 12 months?} 
+	
+	\vspace{0.3cm}
+	
+	\item[] \small \textcolor{blue}{This phenomenon is known as ``age-heaping", and often occurs in surveys where parents do not know the exact age their child was when they died, or when surveyers themselves record dates inexactly. This is essentially a rounding error, where many deaths are recorded at 1 year even though they may have occurred at any time between 0 and 2 years. }
+\end{itemize}	
+	
+	
+
+	\vspace{0.3cm}
+
+Considering age to be continuous \textit{or} discrete in this example are both justifiable conclusions! In general, we'll consider age to be continuous in this class, but in specific scenarios it may make more sense to consider age in discrete, ordinal groups.
+
+\end{frame}
+
 \subsection{Descriptive Statistics}
+
+\begin{frame}{Descriptive Statistics}
+Why do we need descriptive statistics?
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item Making sense of large amounts of data
+	\item Checking data quality
+	\begin{itemize}
+		\item Values outside reasonable range (e.g., height = 9')
+		\item Implausible combinations of variables (e.g.,)
+	\end{itemize}
+\end{itemize}
+
+\end{frame}
 
 \subsubsection{Univariate}
 
