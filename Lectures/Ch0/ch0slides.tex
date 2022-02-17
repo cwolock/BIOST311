@@ -377,7 +377,7 @@ Data sourced from the \href{https://childmortality.org/data}{\color{cyan} UN Int
 
 \vspace{0.3cm} 
 
-\textit{We'll refer to this dataset as the GHI dataset.}
+\textit{We'll refer to this dataset as the GHI dataset.} Available on the Canvas site as \color{blue} ghindicators.csv
 
 \end{frame}
 
@@ -512,15 +512,267 @@ Why do we need descriptive statistics?
 	\item Checking data quality
 	\begin{itemize}
 		\item Values outside reasonable range (e.g., height = 9')
-		\item Implausible combinations of variables (e.g.,)
+		\item Implausible combinations of variables (e.g., positive test for cervical cancer for a person without a cervix)
+	\end{itemize}
+	\item Observe distribution of variables in dataset
+	\begin{itemize}
+		\item Measures of center and spread
+	\end{itemize}
+	\item Start to understand direction and strength of association
+	\begin{itemize}
+		\item Descriptive statistics and inferential statistics should contribute to the same story
 	\end{itemize}
 \end{itemize}
 
 \end{frame}
 
+\begin{frame}{Descriptive Statistics}
+Appropriate descriptive statistics will vary depending on what how many variables you want to describe at once, and whether or not you want numerical or graphical summaries.
+
+\vspace{0.3cm}
+
+Outline:
+\begin{itemize}
+	\item Univariate
+	\begin{itemize}
+		\item Numerical (categorical variables)
+		\item Numerical (quantitative variables)
+	\end{itemize}
+	\item Stratified/Bivariate
+	\begin{itemize}
+		\item Numerical summaries, broken down by group
+		\item Graphical
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
 \subsubsection{Univariate}
 
+\begin{frame}{Univariate Descriptive Statistics: Categorical}
+\textcolor{blue}{Example:} In our GHI dataset, we have information on the urban population of each country (the proportion of people living in urban areas vs. rural areas). We consider the following three categories for a country in a given year:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item Highly urban: 70\% or more
+	\item Somewhat urban: 40\% to 69\%
+	\item Not very urban: 0\% to 39\%
+\end{itemize}
+
+\vspace{0.3cm}
+
+Suppose we are interested in knowing how many countries fall into each group in 2014. How would we summarize this data?
+
+\end{frame}
+
+\begin{frame}{Univariate Descriptive Statistics: Categorical}
+
+We could begin by counting up the number of countries that fall in each category:
+
+\vspace{0.3cm}
+
+\begin{table}
+	\centering
+	\begin{tabular}{l|r}
+		\textbf{Urbanicity} & \textbf{Number of Countries} \\
+		\hline
+		High & 64\\
+		\hline
+		Medium & 78\\
+		\hline
+		Low & 50\\
+		\hline 
+		NA & 1
+	\end{tabular}
+\end{table}
+
+
+\vspace{0.3cm}
+
+Note that one country (Eritrea) in our dataframe does not have any urbanicity information in 2014!
+
+\end{frame}
+
+\begin{frame}{Univariate Descriptive Statistics: Categorical}
+We can also report the proportion of countries that fall in each group:
+
+\vspace{0.3cm}
+
+\begin{table}
+	\centering
+	\begin{tabular}{l|r}
+		\textbf{Urbanicity }& \textbf{Proportion of Countries (No.)} \\
+		\hline
+		High & 33.3\% (64)\\
+		\hline
+		Medium & 40.6\% (78)\\
+		\hline
+		Low & 26.0\% (50)\\
+		\hline 
+		NA & 0.5\% (1)
+	\end{tabular}
+\end{table}
+
+\end{frame}
+
+\begin{frame}{Univariate Descriptive Statistics: Categorical}
+Summary should include:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item Number and percent in each group
+	\item If binary, only need to summarize one group
+	\begin{itemize}
+		\item The other can be inferred (for example, if 30\% of the population have a genetic variant, 100 - 30 = 70\% do not.)
+	\end{itemize}
+	\item Also good to summarize missing data
+	\begin{itemize}
+		\item e.g., \# and proportion of missing values
+	\end{itemize}
+\end{itemize}	
+\end{frame}
+
+\begin{frame}{Univariate Descriptive Statistics: Quantitative}
+
+\textcolor{blue}{Example:} Rather than considering three groups for urbanicity, we could consider urban proportion as a quantitative measure ranging from 0\% to 100\%. The dataset for the year 2014 looks like \dots
+
+\vspace{0.3cm}
+
+\begin{table}
+	\centering
+	\begin{tabular}{l|r}
+		\textbf{Country} & \textbf{Urban \%} \\
+		\hline
+		Afghanistan & 24.587\\
+		\hline
+		Angola & 62.731\\
+		\hline
+		Albania & 56.423 \\
+		\hline 
+		\vdots & \vdots \\
+		\hline
+		South Africa & 64.312 \\
+		\hline 
+		Zambia & 41.382 \\
+		Zimbabwe & 32.504
+	\end{tabular}
+\end{table}
+
+\vspace{0.3cm}
+
+What information may be useful to know?
+
+\end{frame}
+
+\begin{frame}{Univariate Descriptive Statistics: Quantitative}
+
+How many countries are in our dataset?
+
+\begin{itemize}
+	\item[] \textcolor{blue}{There are 193 countries in our dataset.}
+\end{itemize}
+
+Do any countries have missing values for percent urban?
+
+\begin{itemize}
+	\item[] \textcolor{blue}{1 country has missing information for percent urban in 2014 (Eritrea).}
+\end{itemize}
+
+Measures of center?
+
+\begin{itemize}
+	\item[] \textcolor{blue}{Mean percent urban is 57.8\%}
+	\item[] \textcolor{blue}{Median percent urban is 57.6\%} 
+\end{itemize}
+
+Measures of spread?
+
+\begin{itemize}
+	\item[] \textcolor{blue}{Sample standard deviation is 23.1\%}
+	\item[] \textcolor{blue}{Interquartile range (IQR) is (39.5\%, 76.9\%) (Q1, Q3)}
+	\item[] \textcolor{blue}{Range is (11.8\%, 100\%) (Burundi has the lowest percent urban, Kuwait, Monaco, Nauru, and Singapore are tied for the highest percent urban)}
+\end{itemize}
+
+
+\end{frame}
+	
+\begin{frame}{Univariate Descriptive Statistics: Quantitative}
+Summary should include (some of):
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item Sample size / number of observations
+	\item Number of missing observations
+	\item Measures of center:
+	\begin{itemize}
+		\item Sample mean
+		\item Sample median
+	\end{itemize}
+	\item Measures of spread:
+	\begin{itemize}
+		\item Sample standard deviation
+		\item Interquartile range (IQR): (Q1, Q3) or (Q3 - Q1)
+		\item Range: (Min, Max) or (Max - Min)
+	\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Univariate Descriptive Statistics: Graphical}
+For categorical variables, we can make barplots:
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.4]{urban_barplot.pdf}
+
+\end{frame}
+
+\begin{frame}{Univariate Descriptive Statistics: Graphical}
+For quantitative variables, we can make histograms and boxplots. Histograms are useful for describing the shape of the distribution of a variable, and boxplots are useful for seeing central tendancy (and sometimes outliers):
+
+\vspace{0.4cm}
+
+\begin{figure}
+	\centering
+	\includegraphics[scale=0.2]{urban_hist.pdf}
+	\hspace{0.2cm}
+	\includegraphics[scale=0.2]{urban_box.pdf}
+\end{figure}
+
+\end{frame}
+
 \subsubsection{Stratified/Bivariate}
+
+\begin{frame}{Stratified Descriptive Statistics: Graphical}
+Sometimes we're interested in the distribution of a variable within certain subgroups, rather than across all the data:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item e.g., how does the distribution of percent urban differ between years in our GHI dataset?
+\end{itemize}
+
+\vspace{0.3cm}
+
+Stratified descriptive statistics can help us:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item Understand the role of the stratification variable
+	\item Begin to demonstrate the association between the two variables
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Stratified Descriptive Statistics: Graphical}
+
+How does the distribution of percent urban differ between years in our GHI dataset? We can make histograms for the years 2000, 2005, 2010, and 2015, and 2020:
+
+
+\end{frame}
 
 \section{Statistical inference}
 
