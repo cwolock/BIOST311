@@ -253,18 +253,18 @@ In our running example:
 \begin{frame}
 	\frametitle{Simple linear regression: Type A personality and CHD}
 	\vspace{-0.5cm}
-	Let $C$ be a binary variable denoting CHD ($C = 1$ means someone had CHD) and $A$ a binary variable indicating Type A behavior ($A = 1$ means someone demonstrates Type A behavior).
+	In our \texttt{wcgs} dataset, \texttt{chd} is a binary variable indicating CHD over follow-up, and \texttt{tabp} is a binary variable indicating Type A behavior. 
 	\\ ~\
 	
-	We can fit the linear regression model $E[C \mid A] = \beta_0 + \beta_1A $.
+	We can fit the linear regression model $E[\texttt{chd} \mid \texttt{tabp}] = \beta_0 + \beta_1\texttt{tabp} $.
 	
 	How do we interpret the regression coefficients? \vspace{-0.2cm}
 	
 	\begin{itemize}
 		\item \color{blue} $\beta_0$: \pause the probability of CHD among those without Type A behavior \pause \color{black}\vspace{-0.2cm}
-		\item[] \ \ \begin{scriptsize} (the average value of $C$ among those with $A = 0$) \end{scriptsize} \pause
+		\item[] \ \ \begin{scriptsize} (the average value of $C$ among those with $\texttt{tabp} = 0$) \end{scriptsize} \pause
 		\item \color{blue} $\beta_1$: \pause the difference in probability of CHD between those with and without Type A behavior \pause \color{black} \vspace{-0.2cm}
-		\item[] \ \ \begin{scriptsize}(the difference in average value of $C$ between $A = 1$ and $A = 0$ groups) \pause \end{scriptsize}
+		\item[] \ \ \begin{scriptsize}(the difference in average value of $C$ between $A\texttt{tabp} = 1$ and $\texttt{tabp} = 0$ groups) \pause \end{scriptsize}
 	\end{itemize}
 	
 	\vspace{-0.2cm}
@@ -295,12 +295,14 @@ In our running example:
 	\end{itemize}
 \end{frame}
 
-\begin{frame}
-	\frametitle{Linear regression with binary outcomes: inference}
-	\begin{center} $E[Y|X_1,\cdots,X_p] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots \beta_p X_p$ \end{center}
+\begin{frame}{Linear regression with binary outcomes: inference}
+	\vspace{-1.5cm}
+	\begin{align*} 
+		E[Y|X_1,\cdots,X_p] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots \beta_p X_p 
+	\end{align*}
 	
-	\vspace{-0.6cm}
-	\color{blue} Inference: \vspace{-0.3cm} \color{black}
+	\vspace{-0.2cm}
+	\color{blue} Inference:  \color{black}
 	\begin{itemize}
 		\item Identify the regression coefficient of interest, $\beta$. \pause % which one(s) answer(s) our scientific Q?
 		\item Report an estimate of $\beta$, and interpret: \textit{We estimate that the difference in probabilities between two groups...} \pause
@@ -311,12 +313,14 @@ In our running example:
 	% they'll fill in the blanks on HW this week
 \end{frame}
 
-\section{Prediction}
-\begin{frame}
-	\frametitle{Linear regression with binary outcomes}
-	\begin{center} $E[Y|X_1,\cdots,X_p] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots \beta_p X_p$ \end{center}
+\begin{frame}{Linear regression with binary outcomes: Prediction}
+	\vspace{-2cm}
+	\begin{align*} 
+		E[Y|X_1,\cdots,X_p] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots \beta_p X_p 
+	\end{align*}
 	
-	\color{blue} Prediction:\vspace{-0.3cm} \color{black}
+	\vspace{-0.2cm}
+	\color{blue} Prediction: \color{black}
 	\begin{itemize} \itemsep +5pt
 		\item Get estimates for each regression coefficient: $\hat\beta_0, \cdots, \hat\beta_p$ \pause
 		\item Plug in those estimates, along with the covariate values for the new individual: $\hat\beta_0 + \hat\beta_1 x_1 + \cdots \hat\beta_p x_p$ \pause
@@ -329,51 +333,60 @@ In our running example:
 \end{frame}
 
 % graphical support: scatterplot
-\begin{frame}
-	\frametitle{Linear regression with binary outcomes}
-	\begin{center} $E[Y|X_1,\cdots,X_p] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots \beta_p X_p$ \end{center}
+\begin{frame}{Linear regression with binary outcomes: Graphical support}
+		Another variable in \texttt{wcgs} is \texttt{chol} (cholesterol).
+	\begin{align*} 
+		E[\texttt{chd}|\texttt{chol}] = \beta_0 + \beta_1 \texttt{chol}  
+	\end{align*}
 	
 	\color{blue} Graphical support: \color{black} scatterplot
-	\vspace{-0.55cm}
-	%\center
-	%\includegraphics[width=0.7\textwidth]{./figs/scatterplot}
+	
+	\begin{center}
+	\includegraphics[width=0.7\textwidth]{./figs/scatter}
+	\end{center}
 \end{frame}
 
-
-\begin{frame}
-	\frametitle{Linear regression with binary outcomes}
-	\begin{center} $E[Y|X_1,\cdots,X_p] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots \beta_p X_p$ \end{center}
+% graphical support: scatterplot
+\begin{frame}{Linear regression with binary outcomes: Graphical support}
+	We can plot the linear regression fit for this model.
+	\begin{align*} 
+		E[\texttt{chd}|\texttt{chol}] = \beta_0 + \beta_1 \texttt{chol}  
+	\end{align*}
 	
-	\color{blue} Graphical support: \color{black} scatterplot + linear regression line
-	\vspace{-0.55cm}
-	%	\center
-	%	\includegraphics[width=0.7\textwidth]{./figs/scatterplot_lm}
+	\color{blue} Graphical support: \color{black} scatterplot with least squares line
+	
+	\begin{center}
+		\includegraphics[width=0.7\textwidth]{./figs/scatter_lm}
+	\end{center}
 \end{frame}
 
-\begin{frame}[noframenumbering]
-	\frametitle{Linear regression with binary outcomes}
-	\begin{center} $E[Y|X_1,\cdots,X_p] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots \beta_p X_p$ \end{center}
+\begin{frame}{Linear regression with binary outcomes: Graphical support}
+	\vspace{-1cm}
+	\begin{align*} 
+		E[\texttt{chd}|\texttt{chol}] = \beta_0 + \beta_1 \texttt{chol}  
+	\end{align*}
+	What is the predicted probability of CHD for someone with cholesterol of 120 mg/dL?
 	
-	\color{blue} Graphical support: \color{black} \textit{What is $\hat{Y}$ for someone with $X = 10$?}
-	\vspace{-0.55cm}
-	%	\center
-	%	\includegraphics[width=0.7\textwidth]{./figs/scatterplot_lm}
+	\begin{center}
+		\includegraphics[width=0.7\textwidth]{./figs/scatter_lm}
+	\end{center}
 \end{frame}
 
-\section{Pros and Cons}
-\begin{frame}
-	\frametitle{Linear regression with binary outcomes}
-	\begin{center} $E[Y|X_1,\cdots,X_p] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots \beta_p X_p$ \end{center}
+\begin{frame}{Linear regression with binary outcomes: pros and cons}
+	\vspace{-2cm}
+	\begin{align*} 
+		E[Y|X_1,\cdots,X_p] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \cdots \beta_p X_p 
+	\end{align*}
 	
-	Pros: \vspace{-0.3cm}
+	Pros: 
 	\begin{itemize}
 		\item Easy to interpret (differences in probabilities)
 	\end{itemize}
 	
-	Cons: \vspace{-0.3cm}
+	Cons: 
 	\begin{itemize}
-		\item Predicted/fitted values can be outside the (0,1) range
-		\item Our mean model might not be correct (particularly the linearity piece)% is one of the assumptions for linear regression that actually is important
+		\item Predicted/fitted values can be outside the (0,1) range (as we just saw in the cholesterol example)
+		\item Our mean model might not be correct (particularly the linearity assumption)% is one of the assumptions for linear regression that actually is important
 	\end{itemize}
 	
 	What can we do instead?
