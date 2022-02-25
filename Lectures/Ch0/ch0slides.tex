@@ -359,26 +359,34 @@ Suppose you are interested in determining whether or not there is an association
 
 
 \begin{frame}{Motivating Dataset}
-Throughout this chapter (and the next), we'll be exploring a dataset containing information on global health indicators by country and year, including:
+Throughout this chapter (and the next), we'll be exploring data containing a random sample of 2500 singleton births in King County in 2001. In 1989, Seattle and King County started a program called \href{https://kingcounty.gov/depts/health/child-teen-health/maternity-support-infant-case-management.aspx}{\textcolor{cyan}{First Steps}} which provides free pre-natal care to low-income, pregnant individuals. 
 
 \vspace{0.3cm}
 
+The goal of the program is to improve birth outcomes, including increased birthweights in King County. Low infant birthweight is one of the most important factors affecting neonatal mortality. 
+
+\end{frame}
+
+\begin{frame}{Motivating Dataset}
+Variables in the dataset include:
+
+\vspace{0.3cm}
+
+
 \begin{itemize}
-	\item Infant Mortality Rate (per 1000 live births)
-	\item Fertility rate (births per individual)
-	\item HIV incidence
-	\item GDP per capita (current US\$)
-	\item A handful of other health outcomes!
+	\item Participation in First Steps (yes/no)
+	\item Birth parent's age at time of birth (years)
+	\item Marital status of birth parent (married yes/no)
+	\item Child's gestational age at birth (weeks)
+	\item Parity (number of children in family)
+	\item Smoking during pregnancy (yes/no)
+	\item Drinking during pregnancy (yes/no)
+	\item And more!
 \end{itemize}
 
 \vspace{0.3cm} 
 
-Data sourced from the \href{https://childmortality.org/data}{\color{cyan} UN Inter-agency Group for Child Mortality Estimation} and the \href{https://databank.worldbank.org/databases}{\color{cyan} World Bank}
-
-\vspace{0.3cm} 
-
-\textit{We'll refer to this dataset as the GHI dataset.} Available on the Canvas site as \color{blue} ghindicators.csv
-
+\textit{We'll refer to this dataset as the \textcolor{blue}{births} dataset.} Available on the Canvas site as \color{blue} births.csv
 \end{frame}
 
 \subsection{Types of Variables}
@@ -549,67 +557,51 @@ Outline:
 \subsubsection{Univariate}
 
 \begin{frame}{Univariate Descriptive Statistics: Categorical}
-\textcolor{blue}{Example:} In our GHI dataset, we have information on the urban population of each country (the proportion of people living in urban areas vs. rural areas). We consider the following three categories for a country in a given year:
+\textcolor{blue}{Example:} In our births dataset, we have an indicator variable for whether or not an individual particpated in the First Steps program or not.
 
 \vspace{0.3cm}
 
-\begin{itemize}
-	\item Highly urban: 70\% or more
-	\item Somewhat urban: 40\% to 69\%
-	\item Not very urban: 0\% to 39\%
-\end{itemize}
-
-\vspace{0.3cm}
-
-Suppose we are interested in knowing how many countries fall into each group in 2014. How would we summarize this data?
+Suppose we are interested in knowing how many individuals fall into each group. How would we summarize this data?
 
 \end{frame}
 
 \begin{frame}{Univariate Descriptive Statistics: Categorical}
 
-We could begin by counting up the number of countries that fall in each category:
+We could begin by counting up the number of individuals that fall in each category:
 
 \vspace{0.3cm}
 
 \begin{table}
 	\centering
 	\begin{tabular}{l|r}
-		\textbf{Urbanicity} & \textbf{Number of Countries} \\
+		\textbf{First Steps participation} & \textbf{Number of Individuals} \\
 		\hline
-		High & 64\\
+		Yes & 403\\
 		\hline
-		Medium & 78\\
-		\hline
-		Low & 50\\
-		\hline 
-		NA & 1
+		No & 2097
 	\end{tabular}
 \end{table}
 
 
 \vspace{0.3cm}
 
-Note that one country (Eritrea) in our dataframe does not have any urbanicity information in 2014!
+*Note that no one in our dataset had a missing value for First Steps participation. If we did have any missing values, we could include this information as an additional ``NA" row in our table
 
 \end{frame}
 
 \begin{frame}{Univariate Descriptive Statistics: Categorical}
-We can also report the proportion of countries that fall in each group:
+We can also report the proportion of individuals that fall in each group:
 
 \vspace{0.3cm}
 
 \begin{table}
 	\centering
 	\begin{tabular}{l|r}
-		\textbf{Urbanicity }& \textbf{Proportion of Countries (No.)} \\
+		\textbf{First Steps participation} & \textbf{Proportion of Individuals (No.)} \\
 		\hline
-		High & 33.3\% (64)\\
+		Yes & 16.1\% (403)\\
 		\hline
-		Medium & 40.6\% (78)\\
-		\hline
-		Low & 26.0\% (50)\\
-		\hline 
-		NA & 0.5\% (1)
+		No & 83.9\% (2097)
 	\end{tabular}
 \end{table}
 
@@ -624,7 +616,7 @@ Summary should include:
 	\item Number and percent in each group
 	\item If binary, only need to summarize one group
 	\begin{itemize}
-		\item The other can be inferred (for example, if 30\% of the population have a genetic variant, 100 - 30 = 70\% do not.)
+		\item The other can be inferred (for example, we had 16.1\% of individuals participate in First Steps, so 100 - 16.1 = 83.9\% did not.)
 	\end{itemize}
 	\item Also good to summarize missing data
 	\begin{itemize}
@@ -635,27 +627,27 @@ Summary should include:
 
 \begin{frame}{Univariate Descriptive Statistics: Quantitative}
 
-\textcolor{blue}{Example:} Rather than considering three groups for urbanicity, we could consider urban proportion as a quantitative measure ranging from 0\% to 100\%. The dataset for the year 2014 looks like \dots
+\textcolor{blue}{Example:} The primary outcome of interest in our births dataset is birthweight, recorded in grams. The data for birthweight looks like \dots
 
 \vspace{0.3cm}
 
 \begin{table}
 	\centering
 	\begin{tabular}{l|r}
-		\textbf{Country} & \textbf{Urban \%} \\
+		\textbf{Individual ID} & \textbf{Birthweight (grams)} \\
 		\hline
-		Afghanistan & 24.587\\
+		1 & 3118\\
 		\hline
-		Angola & 62.731\\
+		2 & 3466\\
 		\hline
-		Albania & 56.423 \\
+		3 & 3147 \\
 		\hline 
 		\vdots & \vdots \\
 		\hline
-		South Africa & 64.312 \\
+		2498 & 3005 \\
 		\hline 
-		Zambia & 41.382 \\
-		Zimbabwe & 32.504
+		2499 & 1644 \\
+		2500 & 3317
 	\end{tabular}
 \end{table}
 
@@ -667,31 +659,31 @@ What information may be useful to know?
 
 \begin{frame}{Univariate Descriptive Statistics: Quantitative}
 
-How many countries are in our dataset?
+How many individuals are in our dataset?
 
 \begin{itemize}
-	\item[] \textcolor{blue}{There are 193 countries in our dataset.}
+	\item[] \textcolor{blue}{There are 2500 individuals in our dataset.}
 \end{itemize}
 
-Do any countries have missing values for percent urban?
+Do any individuals have missing values for birthweight?
 
 \begin{itemize}
-	\item[] \textcolor{blue}{1 country has missing information for percent urban in 2014 (Eritrea).}
+	\item[] \textcolor{blue}{No!}
 \end{itemize}
 
 Measures of center?
 
 \begin{itemize}
-	\item[] \textcolor{blue}{Mean percent urban is 57.8\%}
-	\item[] \textcolor{blue}{Median percent urban is 57.6\%} 
+	\item[] \textcolor{blue}{Mean birthweight is 3414 grams.}
+	\item[] \textcolor{blue}{Median percent urban is 3444 grams.} 
 \end{itemize}
 
 Measures of spread?
 
 \begin{itemize}
-	\item[] \textcolor{blue}{Sample standard deviation is 23.1\%}
-	\item[] \textcolor{blue}{Interquartile range (IQR) is (39.5\%, 76.9\%) (Q1, Q3)}
-	\item[] \textcolor{blue}{Range is (11.8\%, 100\%) (Burundi has the lowest percent urban, Kuwait, Monaco, Nauru, and Singapore are tied for the highest percent urban)}
+	\item[] \textcolor{blue}{Sample standard deviation is 559 grams.}
+	\item[] \textcolor{blue}{Interquartile range (IQR) is (3096 grams, 3766 grams) (Q1, Q3)}
+	\item[] \textcolor{blue}{Range is (255 grams, 5175 grams) (The smallest baby to ever survive weighed around 212 grams)}
 \end{itemize}
 
 
@@ -725,7 +717,7 @@ For categorical variables, we can make barplots:
 
 \vspace{0.3cm}
 
-\centering \includegraphics[scale=0.4]{urban_barplot.png}
+\centering \includegraphics[scale=0.4]{fs_bar.png}
 
 \end{frame}
 
@@ -736,9 +728,9 @@ For quantitative variables, we can make histograms and boxplots. Histograms are 
 
 \begin{figure}
 	\centering
-	\includegraphics[scale=0.2]{urban_hist.png}
+	\includegraphics[scale=0.2]{fs_hist.png}
 	\hspace{0.2cm}
-	\includegraphics[scale=0.2]{urban_box.png}
+	\includegraphics[scale=0.2]{fs_box.png}
 \end{figure}
 
 \end{frame}
@@ -751,7 +743,7 @@ Sometimes we're interested in the distribution of a variable within certain subg
 \vspace{0.3cm}
 
 \begin{itemize}
-	\item e.g., how does the distribution of percent urban differ between years in our GHI dataset?
+	\item e.g., how does the distribution of birthweights differ between individuals who pariticipated in First Steps and those who did not?
 \end{itemize}
 
 \vspace{0.3cm}
@@ -769,28 +761,28 @@ Stratified descriptive statistics can help us:
 
 \begin{frame}{Stratified Descriptive Statistics: Graphical}
 
-How does the distribution of percent urban differ between years in our GHI dataset? We can make histograms for the years 2000, 2005, 2010, and 2015, and 2020:
+How does the distribution of birthweights differ between individuals who pariticipated in First Steps and those who did not? We can make histograms for each category of individuals:
 
 \vspace{0.3cm}
 
-\centering \includegraphics[scale=0.3]{urban_hist_years.png}
+\centering \includegraphics[scale=0.3]{fs_hist_firstep.png}
 
 \end{frame}
 
 \begin{frame}{Stratified Descriptive Statistics: Graphical}
-We can also use side-by-side boxplots rather than side-by-side histograms. It may be easier to see the slightly increasing trend in mean percentage urban over year:
+We can also use side-by-side boxplots rather than side-by-side histograms. It may be easier to see the median birthweight is slightly lower in individuals who participated in First Steps:
 
 \vspace{0.3cm}
 
-\centering \includegraphics[scale=0.3]{urban_box_years.png}
+\centering \includegraphics[scale=0.3]{fs_box_firstep.png}
 \end{frame}
 
 \begin{frame}{Stratified Descriptive Statistics: Graphical}
-Scatters are a useful tool for summarizing the relationship between two quantitative variables. Below we plot median percent urban over all countries from years 2000 to 2020:
+Scatterplots are a useful tool for summarizing the relationship between two quantitative variables. Below we plot age in years vs. birthweight in pounds for all individuals in our births dataset:
 
 \vspace{0.3cm}
 
-\centering \includegraphics[scale=0.3]{urban_scatter.png}
+\centering \includegraphics[scale=0.3]{fs_scatter.png}
 
 \end{frame}
 
@@ -810,15 +802,218 @@ You’ll also get practice on homework assignments and your data analysis projec
 \section{Statistical inference}
 
 \begin{frame}{Descriptive statistics vs. Inferential statistics}
-content...
+Some terms you should know:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textcolor{blue}{Descriptive} statistics: summarize or \textcolor{blue}{describe} what's happening \textcolor{blue}{\textit{in our sample}}
+	\item \textcolor{orange}{Inferential} statistics: use our data to \textcolor{orange}{infer} something about \textcolor{orange}{\textit{our population of interest}}
+\end{itemize}
+
+\vspace{0.3cm}
+
+Often when people talk about ``doing statistics," they're talking about inferential statistics.
+
+\vspace{0.3cm}
+
+But statistics is much more than that. In fact, \textbf{the most important part of statistics} (and often the hardest) \textbf{is translating your scientific question into a statistics question.} Once you've done this, the rest follows.
+
 \end{frame}
 
-\begin{frame}{Motivating example}
-Kelsey and Brian have quite a few slides on FEV... we should use something else here
+\begin{frame}{Statistical Inference}
+Why do we do statistics?
+
+\begin{itemize}
+	\item We can't (usually) measure everyone in our \textbf{population}
+	\begin{itemize}
+		\item \textit{Example}: all pregnant individuals in King County
+	\end{itemize}
+	\item Instead, we take a \textbf{sample}
+	\begin{itemize}
+		\item \textit{Example}: 2500 pregnant individuals with singleton births
+		\item Note: important to sample well so that the sample truly reflects (is \textit{representative} of) our population of interest
+	\end{itemize}
+	\item We hope that what we estimate from the sample also applies to the population
+	\begin{itemize}
+		\item The process of translating from the \textit{sample} to the \textit{population} is \textbf{statistical inference}
+		\item What we estimate in the sample = \textbf{estimate} or \textbf{statistic}
+		\item Corresponding value in population = \textbf{parameter}
+	\end{itemize}
+\end{itemize}
 \end{frame}
 
-\begin{frame}{Precision vs. Accuracy}
-Not sure why these slides are here. Is this the best fitting place for them?
+\begin{frame}[c]{Statistical Inference: Work Flow}
+\centering \includegraphics[scale=0.4]{statinference_workflow.png}
+\end{frame}
+
+\begin{frame}{Statistical Inference: Motivating example}
+
+Consider our births dataset. We're interesting in knowing whether the First Steps program improves birth outcomes in King County.
+
+\vspace{0.1cm}
+
+\begin{itemize}
+	\item \textbf{Scientific question:} what is the \textcolor{orange}{typical}  \textcolor{blue}{birth outcome} for an individual?
+
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: Motivating example}
+
+Consider our births dataset. We're interesting in knowing whether the First Steps program improves birth outcomes in King County.
+
+\vspace{0.1cm}
+
+\begin{itemize}
+	\item \textbf{Scientific question:} what is the \textcolor{orange}{typical}  \textcolor{blue}{birth outcome} for an individual?
+	\item \textbf{Statistical question:} what is the \textcolor{orange}{mean} \textcolor{blue}{birth weight} for an individual?
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: Motivating example}
+
+Consider our births dataset. We're interesting in knowing whether the First Steps program improves birth outcomes in King County.
+
+\vspace{0.1cm}
+
+\begin{itemize}
+	\item \textbf{Scientific question:} what is the \textcolor{orange}{typical}  \textcolor{blue}{birth outcome} for an individual?
+	\item \textbf{Statistical question:} what is the \textcolor{orange}{mean} \textcolor{blue}{birth weight} for an individual?
+	\item \textbf{Population of interest:} all babies born in King County
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: Motivating example}
+
+Consider our births dataset. We're interesting in knowing whether the First Steps program improves birth outcomes in King County.
+
+\vspace{0.1cm}
+
+\begin{itemize}
+	\item \textbf{Scientific question:} what is the \textcolor{orange}{typical}  \textcolor{blue}{birth outcome} for an individual?
+	\item \textbf{Statistical question:} what is the \textcolor{orange}{mean} \textcolor{blue}{birth weight} for an individual?
+	\item \textbf{Population of interest:} all babies born in King County
+	\begin{itemize}
+		\item \textbf{Parameter:} population mean
+	\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: Motivating example}
+
+Consider our births dataset. We're interesting in knowing whether the First Steps program improves birth outcomes in King County.
+
+\vspace{0.1cm}
+
+\begin{itemize}
+	\item \textbf{Scientific question:} what is the \textcolor{orange}{typical}  \textcolor{blue}{birth outcome} for an individual?
+	\item \textbf{Statistical question:} what is the \textcolor{orange}{mean} \textcolor{blue}{birth weight} for an individual?
+	\item \textbf{Population of interest:} all babies born in King County
+	\begin{itemize}
+		\item \textbf{Parameter:} population mean
+	\end{itemize}
+	\item \textbf{Sample:} 2500 singleton births in King County in 2001
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: Motivating example}
+
+Consider our births dataset. We're interesting in knowing whether the First Steps program improves birth outcomes in King County.
+
+\vspace{0.1cm}
+
+\begin{itemize}
+	\item \textbf{Scientific question:} what is the \textcolor{orange}{typical}  \textcolor{blue}{birth outcome} for an individual?
+	\item \textbf{Statistical question:} what is the \textcolor{orange}{mean} \textcolor{blue}{birth weight} for an individual?
+	\item \textbf{Population of interest:} all babies born in King County
+	\begin{itemize}
+		\item \textbf{Parameter:} population mean
+	\end{itemize}
+	\item \textbf{Sample:} 2500 singleton births in King County in 2001
+	\begin{itemize}
+		\item \textbf{Statistics/estimate:} sample mean (3414 grams)
+	\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: Motivating example}
+
+Consider our births dataset. We're interesting in knowing whether the First Steps program improves birth outcomes in King County.
+
+\vspace{0.1cm}
+
+\begin{itemize}
+	\item \textbf{Scientific question:} what is the \textcolor{orange}{typical}  \textcolor{blue}{birth outcome} for an individual?
+	\item \textbf{Statistical question:} what is the \textcolor{orange}{mean} \textcolor{blue}{birth weight} for an individual?
+	\item \textbf{Population of interest:} all babies born in King County
+	\begin{itemize}
+		\item \textbf{Parameter:} population mean
+	\end{itemize}
+	\item \textbf{Sample:} 2500 singleton births in King County in 2001
+	\begin{itemize}
+		\item \textbf{Statistics/estimate:} sample mean (3414 grams)
+	\end{itemize}
+\end{itemize}
+
+\vspace{0.1cm}
+
+\small \textbf{Next step:} consider what conclusions can be drawn from our sample estimate about our population parameter. Was our sample representative? Are there implications (statistical, ethical) to generalizing our result to our population?
+
+\end{frame}
+
+\begin{frame}{Precision and Accuracy}
+Using descriptive statistics, we can get sample estimates
+\vspace{0.3cm}
+\begin{itemize}
+	\item e.g., the \textbf{mean} birthweight for singleton births in King County in 2001 was 3414 grams
+\end{itemize}
+\vspace{0.3cm}
+We want to use these sample estimates to infer something about the population 
+\vspace{0.3cm}
+
+To assess how well these estimates represent the population of interest, we need to know how \textbf{accurate} and \textbf{precise} they are
+
+\vspace{0.3cm}
+\begin{itemize}
+	\item Accuracy: are we estimating the right thing?
+	\item Precision: how variable are our estimates?
+\end{itemize}
+\vspace{0.3cm}
+\textit{Just like we want to describe the center and spread of variables when we summarize our data, we also want to understand the center (accuracy) and spread (precision) of our estimates.}
+\end{frame}
+
+\begin{frame}[c]{Precision and Accuracy}
+\centering \includegraphics[scale=0.38]{accuracy.jpg}
+\end{frame}
+
+\begin{frame}{Precision, Accuracy, and Inference}
+How do we know how precise or accurate our statistic is?
+
+\vspace{0.1cm}
+
+\begin{itemize}
+	\item We need to know how our statistic (estimated from a sample) would vary in \textit{repeated samples}
+	\begin{itemize}
+		\item i.e., if we went out and collected another sample from this population, how different would the estimate be? And if we did this a third time, or a fourth time, or...?
+	\end{itemize}
+	\item Our statistics are \textit{random}: the value you get will change depending on which sample you've ended up with
+	\begin{itemize}
+		\item The \textbf{distribution} of a random quantity describes how that random quantity behaves
+		\item If we know the distribution of our statistic, the center tells us about the (possible${}^1$) accuracy and the spread tells us about the precision of our statistic
+	\end{itemize}
+\end{itemize}
+
+\vspace{0.1cm}
+
+\small ${}^1$ we only know how accurate our statistic is if we know the population parameter, but we can often judge whether our statistics are very \textit{inaccurate} based on whether our sample is representative of the population or not
+
 \end{frame}
 
 \subsection{Normal/t distributions}
