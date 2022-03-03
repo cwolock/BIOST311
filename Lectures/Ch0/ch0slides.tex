@@ -799,6 +799,10 @@ You’ll also get practice on homework assignments and your data analysis projec
 
 \end{frame}
 
+\begin{frame}[c]
+\centering \huge Any Questions?
+\end{frame}
+
 \section{Statistical inference}
 
 \begin{frame}{Descriptive statistics vs. Inferential statistics}
@@ -1016,13 +1020,630 @@ How do we know how precise or accurate our statistic is?
 
 \end{frame}
 
-\subsection{Normal/t distributions}
+\subsection{Normal/t distributions, Sampling distributions}
 
-\subsection{Central Limit Theorem}
+\begin{frame}{Probability distributions}
+The \textcolor{blue}{distribution} of a random quantity tells you what values that quantity can take and how likely it is to take each of those values.
 
-\section*{References}
-\begin{frame}
-% to enforce entries in the table of contents
+\begin{figure}
+	\centering \includegraphics[scale=0.5]{Normal-density.jpg}
+\end{figure}
+
+\textcolor{blue}{Figure:} \textcolor{orange}{Area under curve} = probability that our random quantity takes values between 0.5 and 3
+
+\end{frame}
+
+\begin{frame}{Probability distributions: normal distribution}
+
+\begin{figure}
+	\centering \includegraphics[scale=0.5]{Normal.jpg}
+\end{figure}
+
+\textcolor{blue}{Useful property:} if a random quantity is normally distributed $(~N(\mu, \sigma^2))$, then 95\% of the time that quantity will take values within 1.96 standard deviations $(\sigma)$ of its mean $(\mu)$
+
+\vspace{0.3cm}
+
+\small \textcolor{blue}{Many of the random quantities we care about have a normal distribution!} 
+\end{frame}
+
+\begin{frame}{Probability distributions: $t$ distribution}
+\begin{figure}
+	\centering \includegraphics[scale=0.5]{tdistn.png}
+\end{figure}
+
+The $t$ distribution is similar to a normal distribution, but with heavier tails. How close it is to a normal distribution depends on the \textit{degrees of freedom}.
+
+\end{frame}
+
+\begin{frame}{Sampling distributions}
+
+\textbf{Sampling distribution}: the distribution of an estimate/statistic
+
+\vspace{0.3cm}
+
+The \textcolor{orange}{Central Limit Theorem} tells us the sampling distribution of some statistics that we care about \textit{for large samples}:
+
+\begin{itemize}
+	\item \textbf{Mean:} \textcolor{blue}{the sampling distribution of the sample mean is approximately normal:} $\bar{X} \sim N(\mu, \sigma^2 / n)$
+	\begin{itemize}
+		\item $\mu$ = population mean
+		\item $\sigma^2$ = population variance
+		\item $n$ = sample size
+	\end{itemize}
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sampling distributions}
+
+\textbf{Sampling distribution}: the distribution of an estimate/statistic
+
+\vspace{0.3cm}
+
+The \textcolor{orange}{Central Limit Theorem} tells us the sampling distribution of some statistics that we care about \textit{for large samples}:
+
+\begin{itemize}
+	\item \textbf{Mean:} \textcolor{blue}{the sampling distribution of the sample mean is approximately normal:} $\bar{X} \sim N(\mu, \sigma^2 / n)$
+	\begin{itemize}
+		\item $\mu$ = population mean
+		\item $\sigma^2$ = population variance
+		\item $n$ = sample size
+	\end{itemize}
+	\item \textbf{Proportion:} \textcolor{blue}{the sampling distribution of the sample proportion is approximately normal:} $ \hat{p} \sim N(p, p(1-p)/n)$
+	\begin{itemize}
+		\item $p$ = population proportion
+		\item $n$ = sample size / number of trials
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sampling distributions}
+
+\textbf{Sampling distribution}: the distribution of an estimate/statistic
+
+\vspace{0.3cm}
+
+The \textcolor{orange}{Central Limit Theorem} tells us the sampling distribution of some statistics that we care about \textit{for large samples}:
+
+\begin{itemize}
+	\item \textbf{Mean:} \textcolor{blue}{the sampling distribution of the sample mean is approximately normal:} $\bar{X} \sim N(\mu, \sigma^2 / n)$
+	\begin{itemize}
+		\item $\mu$ = population mean
+		\item $\sigma^2$ = population variance
+		\item $n$ = sample size
+	\end{itemize}
+	\item \textbf{Proportion:} \textcolor{blue}{the sampling distribution of the sample proportion is approximately normal:} $ \hat{p} \sim N(p, p(1-p)/n)$
+	\begin{itemize}
+		\item $p$ = population proportion
+		\item $n$ = sample size / number of trials
+	\end{itemize}
+\end{itemize}
+Another statistic that we often care about $\frac{\bar{X} - \mu}{s} \sim t_{n - 1}$
+\begin{itemize}
+	\item $s$ = sample standard deviation
+\end{itemize}
+
+\end{frame}
+
+\subsection{Uncertainty: Standard errors, confidence intervals, p-values}
+
+\begin{frame}{Standard error}
+\textbf{Sampling distribution}: the distribution of an estimate/statistic
+\textbf{Standard error}: the standard deviation of an estimate/statistic
+
+\vspace{0.3cm} 
+
+Once we know the sampling distribution of our estimate, it's fairly straightforward to figure out how \textit{precise} it is. 
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Example:} Suppose we have to estimates. The first has sampling distribution $N(2, 5)$ and the second has sampling distribution $N(2, 1)$. \textit{Which of these estimates is more precise?}
+
+\vspace{0.3cm}
+
+\small (Hint: precision and variance are inversely related)
+
+
+\end{frame}
+
+\begin{frame}{Standard error}
+\textbf{Sampling distribution}: the distribution of an estimate/statistic
+\textbf{Standard error}: the standard deviation of an estimate/statistic
+
+\vspace{0.3cm} 
+
+Once we know the sampling distribution of our estimate, it's fairly straightforward to figure out how \textit{precise} it is. 
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Example:} Suppose we have to estimates. The first has sampling distribution $N(2, 5)$ and the second has sampling distribution $N(2, 1)$. \textit{Which of these estimates is more precise?}
+
+\vspace{0.3cm}
+
+\small (Hint: precision and variance are inversely related)
+
+\vspace{0.3cm}
+
+\normalsize \textcolor{blue}{Answer:} We typically describe the precision of an estimate via its standard error. Estimates with \textit{smaller} standard error are \textit{more} precise. Therefore, the estimate with sampling distribution $N(2, 1)$ is more precise.
+\end{frame}
+
+\begin{frame}{Reporting uncertainty: Motivating example}
+Recall our motivating example for statistical inference:
+
+\vspace{0.3cm}
+
+We're interesting in knowing whether the First Steps program improves birth outcomes in King County.
+
+\vspace{0.1cm}
+
+\begin{itemize}
+	\item \textbf{Scientific question:} what is the \textcolor{orange}{typical}  \textcolor{blue}{birth outcome} for an individual?
+	\item \textbf{Statistical question:} what is the \textcolor{orange}{mean} \textcolor{blue}{birth weight} for an individual?
+	\item \textbf{Population of interest:} all babies born in King County
+	\begin{itemize}
+		\item \textbf{Parameter:} population mean
+	\end{itemize}
+	\item \textbf{Sample:} 2500 singleton births in King County in 2001
+	\begin{itemize}
+		\item \textbf{Statistics/estimate:} sample mean (3414 grams)
+	\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Reporting uncertainty: Motivating example}
+We can convert this outline into general steps for a statistical inference procedure:
+
+\vspace{0.3cm}
+
+\begin{enumerate}
+	\item Start with a \textbf{scientific question:} what is the typical birth outcome for an individual?
+	\item Convert to a \textbf{statistical question:} what is the mean birth weight for an individual?
+	\begin{itemize}
+		\item Identify the \textbf{population} (all babies born in King County) and \textbf{parameter} (population mean) of interest
+	\end{itemize}
+	\item Take a \textbf{sample} from the population: 2500 singleton births in King County in 2001
+	\item Perform \textit{statistical inference}:
+	\begin{itemize}
+		\item Calculate the corresponding \textbf{statistics} (sample mean): 3414 grams
+		\item Quantify the uncertainty in your statistic
+	\end{itemize}
+	\item Make conclusions about your original scientific and statistical questions
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Reporting uncertainty: Motivating example}
+We can convert this outline into general steps for a statistical inference procedure:
+
+\vspace{0.3cm}
+
+\begin{enumerate}
+	\item Start with a \textbf{scientific question:} what is the typical birth outcome for an individual?
+	\item Convert to a \textbf{statistical question:} what is the mean birth weight for an individual?
+	\begin{itemize}
+		\item Identify the \textbf{population} (all babies born in King County) and \textbf{parameter} (population mean) of interest
+	\end{itemize}
+	\item Take a \textbf{sample} from the population: 2500 singleton births in King County in 2001
+	\item Perform \textit{statistical inference}:
+	\begin{itemize}
+		\item Calculate the corresponding \textbf{statistics} (sample mean): 3414 grams
+		\item Quantify the uncertainty in your statistic \textcolor{blue}{$\leftarrow$ \textbf{two options}}
+	\end{itemize}
+	\item Make conclusions about your original scientific and statistical questions
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Reporting uncertainty: Motivating example}
+We've calculated our statistic: average birthweight = 3414 grams
+
+\vspace{0.3cm}
+
+Now we need to quantify our uncertainty in this estimate.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Option 1:} use the standard error
+
+\textit{We estimate that the average birthweight is 3414 grams, with standard error 0.224.}
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Option 1:} use a 95\% confidence interval (est $\pm 1.96 \times SE$)
+
+\textit{We estimate that the average birthweight is 3414 grams. Based on a 95\% confidence interval, this observed average would not be considered unusual if the true average birthweight were between 3413.6 and  3414.5 grams.}
+
+\end{frame}
+
+\begin{frame}{Confidence Intervals}
+What does a 95\% confidence interval really mean, and how do we correctly interpret it?
+
+\vspace{0.3cm}
+
+The procedure of creating a 95\% confidence interval (est $\pm 1.96 \times SE$) gives us a range of values based on our sample.
+
+\centering \includegraphics[scale=0.4]{ci1.png}
+
+\end{frame}
+
+\begin{frame}{Confidence Intervals}
+What does a 95\% confidence interval really mean, and how do we correctly interpret it?
+
+\vspace{0.3cm}
+
+The procedure of creating a 95\% confidence interval (est $\pm 1.96 \times SE$) gives us a range of values based on our sample.
+
+\centering \includegraphics[scale=0.4]{ci2.png}
+
+\end{frame}
+
+\begin{frame}{Confidence Intervals}
+What does a 95\% confidence interval really mean, and how do we correctly interpret it?
+
+\vspace{0.3cm}
+
+The procedure of creating a 95\% confidence interval (est $\pm 1.96 \times SE$) gives us a range of values based on our sample.
+
+\centering \includegraphics[scale=0.4]{ci3.png}
+
+\end{frame}
+
+\begin{frame}{Confidence Intervals}
+The particular range of values that we get depends on the sample data, and will change if we go collect a second sample \dots
+
+\centering \includegraphics[scale=0.4]{ci4.png}
+
+\end{frame}
+
+\begin{frame}{Confidence Intervals}
+\dots or a third sample \dots
+
+\centering \includegraphics[scale=0.4]{ci5.png}
+
+\end{frame}
+
+\begin{frame}{Confidence Intervals}
+Over (hypothetical) \textbf{repeated sampling}, 95\% \textit{of these intervals} will cover the truth.
+
+\centering \includegraphics[scale=0.4]{ci6.png}
+
+\end{frame}
+
+\begin{frame}{Confidence Intervals}
+
+\begin{figure}
+\centering \includegraphics[scale=0.4]{ci6.png}
+\end{figure}
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Important:} it is not \textit{our interval} that contains the truth 95\% of the time. Our interval either contains the truth, or it doesn't (as the image above shows). It is the \textit{procedure} of computing confidence intervals over \textit{repeated sampling} that gives us 95\% coverage of the truth.
+
+\end{frame}
+
+\begin{frame}{Interpreting Confidence Intervals: Example}
+95\% CI for mean birthweight in grams is: (3413.6, 3414.5)
+
+\vspace{0.3cm}
+
+Which of these is the correct interpretation?
+
+\vspace{0.3cm}
+
+\begin{enumerate}
+	\item 95\% of children have birthweights between 3413.6 and 3414.5 grams.
+	\item Our observed sample mean of 3414 grams would not be considered unusual if the true population mean birthweight were between 3413.6 and 3414.5 grams.
+	\item There is a 95\% change that the true population mean birthweight is between 3413.6 and 3414.5 grams.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Interpreting Confidence Intervals: Example}
+95\% CI for mean birthweight in grams is: (3413.6, 3414.5)
+
+\vspace{0.3cm}
+
+Which of these is the correct interpretation?
+
+\vspace{0.3cm}
+
+\begin{enumerate}
+	\item 95\% of children have birthweights between 3413.6 and 3414.5 grams.
+	\item \textcolor{blue}{Our observed sample mean of 3414 grams would not be considered unusual if the true population mean birthweight were between 3413.6 and 3414.5 grams.}
+	\item There is a 95\% change that the true population mean birthweight is between 3413.6 and 3414.5 grams.*
+\end{enumerate}
+
+\small *this is a common mistake, and is \textit{not} the correct interpretation of a confidence interval!
+
+\end{frame}
+
+\begin{frame}{Interpreting Confidence Intervals: How-to}
+Confidence intervals should always be interpreted \textit{in context}.
+
+\vspace{0.3cm}
+
+When interpreting confidence intervals, it may be useful to have a ``word formula" to refer back to. An example of this is:
+
+\vspace{0.3cm}
+
+Our observed sample \textcolor{orange}{estimate} of \_\_\_ \textcolor{orange}{units} would not be considered unusual if the true population \textcolor{orange}{parameter} were between \_\_\_ and \_\_\_ \textcolor{orange}{units}.
+
+\end{frame}
+
+\begin{frame}{Interpreting Confidence Intervals: How-to}
+Confidence intervals should always be interpreted \textit{in context}.
+
+\vspace{0.3cm}
+
+When interpreting confidence intervals, it may be useful to have a ``word formula" to refer back to. An example of this is:
+
+\vspace{0.3cm}
+
+Our observed sample \textcolor{orange}{estimate} of \_\_\_ \textcolor{orange}{units} would not be considered unusual if the true population \textcolor{orange}{parameter} were between \_\_\_ and \_\_\_ \textcolor{orange}{units}.
+
+\vspace{0.3cm}
+
+Replacing the \textcolor{orange}{orange} words and filling in the blanks for our example, we get:
+
+\vspace{0.3cm}
+
+Our observed sample \textcolor{orange}{mean} of 3414 \textcolor{orange}{grams} would not be considered unusual if the true population \textcolor{orange}{mean birthweight} were between 3413.6 and 3414.5 \textcolor{orange}{grams}.
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: New Example}
+
+\begin{enumerate}
+	\item \textbf{Scientific question:} do birth parents in King County who participated in First Steps (FS) have \textcolor{orange}{different} \textcolor{blue}{birth outcomes}?
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: New Example}
+
+\begin{enumerate}
+	\item \textbf{Scientific question:} do birth parents in King County who participated in First Steps (FS) have \textcolor{orange}{different} \textcolor{blue}{birth outcomes}?
+	\item \textbf{Statistical question:} is there a \textcolor{orange}{difference in average} \textcolor{blue}{birthweight} between birth parents in FS and those not in the program?
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: New Example}
+
+\begin{enumerate}
+	\item \textbf{Scientific question:} do birth parents in King County who participated in First Steps (FS) have \textcolor{orange}{different} \textcolor{blue}{birth outcomes}?
+	\item \textbf{Statistical question:} is there a \textcolor{orange}{difference in average} \textcolor{blue}{birthweight} between birth parents in FS and those not in the program?
+	\begin{itemize}
+		\item \textbf{Population} = all babies born in King County, \textbf{parameter} = difference in population means (between babies born to parents in FS vs. not)
+	\end{itemize}
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: New Example}
+
+\begin{enumerate}
+	\item \textbf{Scientific question:} do birth parents in King County who participated in First Steps (FS) have \textcolor{orange}{different} \textcolor{blue}{birth outcomes}?
+	\item \textbf{Statistical question:} is there a \textcolor{orange}{difference in average} \textcolor{blue}{birthweight} between birth parents in FS and those not in the program?
+	\begin{itemize}
+		\item \textbf{Population} = all babies born in King County, \textbf{parameter} = difference in population means (between babies born to parents in FS vs. not)
+	\end{itemize}
+	\item Take a \textbf{sample} from the population: 2500 singleton births in King County in 2001
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: New Example}
+
+\begin{enumerate}
+	\item \textbf{Scientific question:} do birth parents in King County who participated in First Steps (FS) have \textcolor{orange}{different} \textcolor{blue}{birth outcomes}?
+	\item \textbf{Statistical question:} is there a \textcolor{orange}{difference in average} \textcolor{blue}{birthweight} between birth parents in FS and those not in the program?
+	\begin{itemize}
+		\item \textbf{Population} = all babies born in King County, \textbf{parameter} = difference in population means (between babies born to parents in FS vs. not)
+	\end{itemize}
+	\item Take a \textbf{sample} from the population: 2500 singleton births in King County in 2001
+	\item Perform \textit{statistical inference}:
+	\begin{itemize}
+		\item Calculate the corresponding \textbf{statistic} (difference in sample means between FS vs. not)
+		\item Quantify the uncertainty in our statistic
+		\item Perform a hypothesis test
+	\end{itemize}
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: New Example}
+
+\begin{enumerate}
+	\item \textbf{Scientific question:} do birth parents in King County who participated in First Steps (FS) have \textcolor{orange}{different} \textcolor{blue}{birth outcomes}?
+	\item \textbf{Statistical question:} is there a \textcolor{orange}{difference in average} \textcolor{blue}{birthweight} between birth parents in FS and those not in the program?
+	\begin{itemize}
+		\item \textbf{Population} = all babies born in King County, \textbf{parameter} = difference in population means (between babies born to parents in FS vs. not)
+	\end{itemize}
+	\item Take a \textbf{sample} from the population: 2500 singleton births in King County in 2001
+	\item Perform \textit{statistical inference}:
+	\begin{itemize}
+		\item Calculate the corresponding \textbf{statistic} (difference in sample means between FS vs. not)
+		\item Quantify the uncertainty in our statistic
+		\item Perform a hypothesis test
+	\end{itemize}
+	\item Make conclusions in context of original questions
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: New Example}
+To perform statistical inference, we need:
+
+\vspace{0.3cm}
+
+A \textbf{statistic}: difference in average birthweight between babies born to parents in FS vs. not in FS
+
+\vspace{0.3cm}
+
+\textbf{Uncertainty} in our statistic: 95\% confidence interval for difference in average birthweight
+
+\vspace{0.3cm}
+
+To perform a \textbf{hypothesis test:}
+
+\begin{itemize}
+	\item \textbf{Null and alternative hypotheses}:
+	\begin{itemize}
+		\item $H_0$: $\mu_{\text{FS}} - \mu_{\text{no FS}} = 0$
+		\item $H_1$: $\mu_{\text{FS}} - \mu_{\text{no FS}} \neq 0$
+	\end{itemize}
+	\item \textbf{Choice of test}: two-sample t-test
+	\begin{itemize}
+		\item Test if the averages in two independent groups are equal
+		\item Assume variance in birthweight is the same in babies born to parents in FS vs. not in FS (\textit{equal variances})*
+	\end{itemize}
+\end{itemize}
+
+\small *This is an assumption we can relax, which we will talk about much later in the course!
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: New Example}
+
+We can conduct a two-sample t-test to answer this question in \texttt{R}:
+
+\vspace{0.3cm}
+
+\begin{figure}
+\centering \includegraphics[scale=0.5]{ttest1.png}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: New Example}
+\begin{figure}
+	\centering \includegraphics[scale=0.5]{ttest2.png}
+\end{figure}
+
+\begin{itemize}
+	\item The observed difference in means is $3424.687-  3358.506 \approx 66$ grams, with group $0$ having the higher mean
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: New Example}
+\begin{figure}
+	\centering \includegraphics[scale=0.5]{ttest3.png}
+\end{figure}
+
+\begin{itemize}
+	\item The observed difference in means is $3424.687-  3358.506 \approx 66$ grams, with group $0$ having the higher mean
+	\item The 95\% confidence interval for the difference in means is $(1.96, 130.42)$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: New Example}
+\begin{figure}
+	\centering \includegraphics[scale=0.5]{ttest4.png}
+\end{figure}
+
+\begin{itemize}
+	\item The observed difference in means is $3424.687-  3358.506 \approx 66$ grams, with group $0$ having the higher mean
+	\item The 95\% confidence interval for the difference in means is $(1.96, 130.42)$
+	\item The p-value corresponding to this test is $0.04$
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Interpreting p-values}
+\textbf{Definition:} a \textit{p-value} is the probability of obtaining a test statistic \textit{as or more extreme} than the observed test statistic (computed from your data) under the null hypothesis
+
+\begin{itemize}
+	\item[] \textcolor{red}{Not} the probability that the alternative hypothesis is true! 
+\end{itemize}
+
+\vspace{0.3cm} 
+
+(A less official definition): a \textit{p-value} is a number between 0 and 1 that quantifies the statistical strength of your evidence against the null hypothesis
+
+\vspace{0.3cm}
+
+Values closer to 0 correspond to stronger evidence
+\begin{itemize}
+	\item Reject $H_0$ if p-value ($p$) is smaller than some pre-specified threshold $\alpha$ (usually 0.05)
+	\item If $p < \alpha$ we declare``statistical significance" and reject $H_0$
+	\item \textcolor{red}{We never accept the null hypothesis:} our options are to ``reject $H_0$" or ``fail to reject $H_0$"
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: New Example}
+Interpreting our results:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textit{Statistic:} We estimate that the difference in mean birthweight between babies born to mothers in FS vs. those not in FS is 66 grams (with those not in FS having higher mean birthweight).
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: New Example}
+Interpreting our results:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textit{Statistic:} We estimate that the difference in mean birthweight between babies born to mothers in FS vs. those not in FS is 66 grams (with those not in FS having higher mean birthweight).
+	\item \textit{Uncertainty:} Based on a 95\% confidence interval, this observed difference would not be surprising if the true difference were between 1.96 and 130.42 grams.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: New Example}
+Interpreting our results:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textit{Statistic:} We estimate that the difference in mean birthweight between babies born to mothers in FS vs. those not in FS is 66 grams (with those not in FS having higher mean birthweight).
+	\item \textit{Uncertainty:} Based on a 95\% confidence interval, this observed difference would not be surprising if the true difference were between 1.96 and 130.42 grams.
+	\item \textit{Hypothesis test p-value:} These data provide statistically significant evidence that the difference in mean birthweight between groups is different from zero ($p < 0.05$).
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: New Example}
+Interpreting our results:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textit{Statistic:} We estimate that the difference in mean birthweight between babies born to mothers in FS vs. those not in FS is 66 grams (with those not in FS having higher mean birthweight).
+	\item \textit{Uncertainty:} Based on a 95\% confidence interval, this observed difference would not be surprising if the true difference were between 1.96 and 130.42 grams.
+	\item \textit{Hypothesis test p-value:} These data provide statistically significant evidence that the difference in mean birthweight between groups is different from zero ($p < 0.05$).
+	\item \textit{Conclusion:} These data provide statistically significant evidence to suggest that First Steps participation is associated with birthweight in children.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Statistical Inference: New Example}
+Interpreting our results:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textit{Statistic:} We estimate that the difference in mean birthweight between babies born to mothers in FS vs. those not in FS is 66 grams (with those not in FS having higher mean birthweight).
+	\item \textit{Uncertainty:} Based on a 95\% confidence interval, this observed difference would not be surprising if the true difference were between 1.96 and 130.42 grams.
+	\item \textit{Hypothesis test p-value:} These data provide statistically significant evidence that the difference in mean birthweight between groups is different from zero ($p < 0.05$).
+	\item \textit{Conclusion:} These data provide statistically significant evidence to suggest that First Steps participation is associated with birthweight in children.
+\end{itemize}
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Always give 4 numbers:} point estimate, confidence interval (lower, upper), p-value (even when not significant!)
+
+\end{frame}
+
+\begin{frame}[c]
+\centering \huge Any Questions?
 \end{frame}
 
 \end{document}
