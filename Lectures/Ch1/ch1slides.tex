@@ -1,0 +1,66 @@
+% Create a Table of Contents in Beamer
+\documentclass[10pt,t]{beamer}
+% Theme choice:
+\usetheme{Singapore}
+\usecolortheme{whale}
+\setbeamercolor{titlelike}{fg=blue,bg=white}
+\setbeamercolor{frametitle}{fg=blue,bg=white}
+\setbeamertemplate{frametitle}[default][left]
+\setbeamertemplate{navigation symbols}{}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+% Title page details: 
+\title{Chapter 1: Linear Regression} 
+\author{Taylor Okonek \& Charlie Wolock}
+\date{\today}
+
+
+\begin{document}
+	% Title page frame
+	\begin{frame}
+	\titlepage 
+\end{frame}
+
+\begin{frame}{Learning objectives}
+By the end of Chapter 1, you should be able to:
+\end{frame}
+
+% Outline frame
+\begin{frame}{Outline}
+\tableofcontents
+\end{frame}
+
+\AtBeginSection[ ]
+{
+\begin{frame}{Outline}
+\tableofcontents[currentsection]
+\end{frame}
+}
+
+% Presentation structure
+\section{Simple Linear Regression}
+
+\subsection{Interpretation}
+
+\subsection{Assumptions \& diagnostics}
+
+\subsection{Transformations}
+
+\section{Multiple Linear Regression}
+
+\subsection{Adjusting for covariates}
+
+\subsubsection{Confounding (and causal diagrams)}
+
+\subsubsection{Precision variables}
+
+\subsubsection{Effect modification}
+
+\section{Prediction}
+
+\end{document}
