@@ -261,7 +261,7 @@ summary(under20)
 
 The `summary()` function you just used displays simple descriptive statistics. This is a great way to get a quick snapshot of the data, and make sure they have been read in correctly. Look at the descriptive statistics for `wgain`. Do you notice anything interest about this variable? What are its largest and smallest values?
 
-REPLACE WITH YOUR ANSWER TO THIS QUESTION
+*One interesting thing about the `wgain` variable is that the minimum value in the dataset is exactly 0. This should make us ask whether or not it's possible to have a negative value (i.e., how would the data be recorded if someone lost weight during pregnancy?). In fact, if we were to look more closely, we'd see that 19 individuals in this dataset had recorded weight gain of exactly 0. To me, this suggests that negative weight gain was recorded as 0.*
 
 ### Creating a new variable
 
