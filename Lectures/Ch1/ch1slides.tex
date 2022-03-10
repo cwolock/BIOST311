@@ -236,6 +236,37 @@ Why is this the correct interpretation? Let's do some algebra\dots
 
 \begin{itemize}
 	\item $E[Y \mid X = x] = \beta_0 + \beta_1 x$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Interpreting slopes: mathematical explanation}
+For a regression model $E[Y \mid X] = \beta_0 + \beta_1 X$, we noted that the interpretation of the slope $\beta_1$ is the difference in mean value of $Y$ comparing two groups that differ by one unit in $X$. 
+
+\vspace{0.3cm}
+
+Why is this the correct interpretation? Let's do some algebra\dots
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item $E[Y \mid X = x] = \beta_0 + \beta_1 x$
+	\item $E[Y \mid X = (x + 1)] = \beta_0 + \beta_1 (x + 1) = \beta_0 + \beta_1 x + \beta_1$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Interpreting slopes: mathematical explanation}
+For a regression model $E[Y \mid X] = \beta_0 + \beta_1 X$, we noted that the interpretation of the slope $\beta_1$ is the difference in mean value of $Y$ comparing two groups that differ by one unit in $X$. 
+
+\vspace{0.3cm}
+
+Why is this the correct interpretation? Let's do some algebra\dots
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item $E[Y \mid X = x] = \beta_0 + \beta_1 x$
 	\item $E[Y \mid X = (x + 1)] = \beta_0 + \beta_1 (x + 1) = \beta_0 + \beta_1 x + \beta_1$
 	\item $E[Y \mid X = (x + 1)] - E[Y \mid X = x] = \beta_1$
 \end{itemize}
@@ -362,6 +393,342 @@ In which example(s) is there \textbf{no} association between age and birthweight
 \centering \includegraphics[scale=0.35]{zeroslopes.png}
 
 \end{frame}
+
+\begin{frame}{Why do we care about the slope?}
+In which example(s) is there \textbf{no} association between age and birthweight?
+
+\vspace{0.3cm}
+
+\begin{figure}
+\centering \includegraphics[scale=0.35]{zeroslopes.png}
+\end{figure}
+
+\vspace{0.3cm}
+
+\textit{What is the slope in those cases?}
+
+\end{frame}
+
+\begin{frame}{Why do we care about the slope?}
+When
+\begin{itemize}
+	\item $\beta_1 = 0$: there is no linear association between $X$ and $Y$
+	\item $\beta_1 > 0$: there is a positive linear association between $X$ and $Y$
+	\item $\beta_1 < 0$: there is a negative linear association between $X$ and $Y$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Why do we care about the slope?}
+When
+\begin{itemize}
+	\item $\beta_1 = 0$: there is no linear association between $X$ and $Y$
+	\item $\beta_1 > 0$: there is a positive linear association between $X$ and $Y$
+	\item $\beta_1 < 0$: there is a negative linear association between $X$ and $Y$
+\end{itemize}
+
+\vspace{0.3cm}
+
+Consider the \textbf{scientific question:} \textit{is there an association between birth outcomes and age of birth parent?}
+
+\vspace{0.3cm}
+
+We can use linear regression to answer this question:
+
+\begin{enumerate}
+	\item Fit the model $E[\text{bwt} \mid \text{age}] = \beta_0 + \beta_1 \times \text{age}$
+	\item Check whether or not $\beta_1 = 0$ \textcolor{blue}{(estimate, CI, p-value)}*
+\end{enumerate}
+
+\vspace{0.3cm}
+
+* Note: our \textbf{null hypothesis} here (that there is \textit{no} association between birth outcomes and age of birth parent) can be written as $H_0: \beta_1 = 0$
+
+\end{frame}
+
+\begin{frame}{Why do we care about the slope?}
+When
+\begin{itemize}
+	\item $\beta_1 = 0$: there is no linear association between $X$ and $Y$
+	\item $\beta_1 > 0$: there is a positive linear association between $X$ and $Y$
+	\item $\beta_1 < 0$: there is a negative linear association between $X$ and $Y$
+\end{itemize}
+
+\vspace{0.3cm}
+
+Consider the \textbf{scientific question:} \textit{is there an association between birth outcomes and age of birth parent?}
+
+\vspace{0.3cm}
+
+We can use linear regression to answer this question:
+
+\begin{enumerate}
+	\item Fit the model $E[\text{bwt} \mid \text{age}] = \beta_0 + \beta_1 \times \text{age}$
+	\item Check whether or not $\beta_1 = 0$ \textcolor{blue}{(estimate, CI, p-value)}
+\end{enumerate}
+
+\vspace{0.3cm}
+
+What \textbf{statistical question} are we answering? \textit{Is there an association between birthweight and age, where association is quantified by the difference in mean birthweight between age groups}
+
+\end{frame}
+
+\begin{frame}{Hypothesis tests}
+Consider the regression model:
+$$
+E[Y \mid X] = \beta_0 + \beta_1 X
+$$
+We know that $\beta_1$ quantifies the association between $X$ and $Y$.
+
+\vspace{0.3cm}
+
+To test whether there is a \textit{statistically significant} association between $X$ and $Y$, \textcolor{blue}{we need to test whether $\beta_1 = 0$:}
+
+\begin{itemize}
+	\item $H_0: \beta_1 = 0$
+	\item $H_1: \beta_1 \neq 0$
+\end{itemize}
+
+
+
+\end{frame}
+
+\begin{frame}{Hypothesis tests}
+Consider the regression model:
+$$
+E[Y \mid X] = \beta_0 + \beta_1 X
+$$
+We know that $\beta_1$ quantifies the association between $X$ and $Y$.
+
+\vspace{0.3cm}
+
+To test whether there is a \textit{statistically significant} association between $X$ and $Y$, \textcolor{blue}{we need to test whether $\beta_1 = 0$:}
+
+\begin{itemize}
+	\item $H_0: \beta_1 = 0$
+	\item $H_1: \beta_1 \neq 0$
+\end{itemize}
+
+\vspace{0.3cm}
+
+Interpret the $p$-value as we have before in Chapter 0:
+\begin{itemize}
+	\item $p < \alpha$: \textbf{reject} $H_0$, ``we have evidence to suggest that $X$ is associated with $Y$"
+	\item $p > \alpha$: \textbf{fail to reject} $H_0$, ``we do not have enough evidence to support the hypothesis that $X$ is associated with $Y$"
+\end{itemize}
+
+\end{frame}
+
+\subsection{Quantifying uncertainty}
+
+\begin{frame}{Standard errors (SEs) and confidence intervals}
+When we estimate regression coefficients, we also want to quantify the \textit{uncertainty} in these estimates. Once we have our standard error, we can calculate a 95\% confidence interval.
+
+
+\end{frame}
+
+\begin{frame}{Standard errors (SEs) and confidence intervals}
+
+We have two options for 95\% confidence intervals:
+\begin{enumerate}
+	\item $\hat{\beta} \pm 1.96 \times \hat{SE}(\hat{\beta})$
+	\item $\hat{\beta} \pm t_{n-2} \times \hat{SE}(\hat{\beta})$
+	\begin{itemize}
+		\item If $n = 10$, $t_{n-2} = 2.31$
+		\item If $n = 100$, $t_{n-2} = 1.98$
+		\item If $n = 1000$, $t_{n-2} = 1.96$
+	\end{itemize}
+\end{enumerate}
+
+\small (\textit{Recall that the $t$-distribution is defined by it's \textit{degrees of freedom}, which is $n-2$ in the case of simple linear regression with a single predictor})
+
+\vspace{0.3cm}
+
+\normalsize The first option is what we are used to seeing. The latter is what is commonly provided in statistical software. The key takeaway for this course is that \textbf{when n} (our sample size) \textbf{is large}, there is little difference between the confidence intervals from options 1 and 2, and the interpretation of the confidence interval remains the same. If you'd like more details on why statistical software typically provides confidence intervals based on a $t$-distribution, please come ask in office hours!
+
+\end{frame}
+
+\begin{frame}{Interpreting 95\% confidence intervals}
+Returning to our example of using linear regression to assess the association between birthweight and birth parent's age, suppose we estimate the slope to be 8.6, with a 95\% confidence interval (4.97, 12.25).
+
+\vspace{0.3cm}
+
+We already interpreted the slope previously:
+
+\vspace{0.3cm}
+
+\textit{Comparing two groups of birth parents who differ by one year in age, the difference in average child's birthweight will be 8.6 grams, with the higher average birthweight in the older of the two groups.}
+
+\vspace{0.3cm}
+
+How would we interpret the confidence interval for this slope estimate? % have them chat with a partner
+
+\end{frame}
+
+\begin{frame}{Interpreting 95\% confidence intervals}
+Returning to our example of using linear regression to assess the association between birthweight and birth parent's age, suppose we estimate the slope to be 8.6, with a 95\% confidence interval (4.97, 12.25).
+
+\vspace{0.3cm}
+
+Confidence interval interpretation:
+
+\vspace{0.3cm}
+
+\textit{Comparing two groups of birth parents who differ by one year in age, the difference in average child's birthweight will be 8.6 grams, with the higher average birthweight in the older of the two groups. \textcolor{blue}{Based on a 95\% confidence interval, this estimated difference would not be judged unusual if the true difference were between 4.97 and 12.25 grams.}}
+
+\vspace{0.3cm}
+
+\small Note that this is the same language as the confidence interval interpretation for a mean or difference in means, as in Chapter 0!
+
+\end{frame}
+
+\begin{frame}{Connection between confidence intervals and $p$-values}
+\textcolor{blue}{Question:} Suppose we have access to the estimate of the slope (8.6) and a 95\% confidence interval to go with it (4.97, 12.25), as before, where our null hypothesis was that the slope was $0$. What can we say about the $p$-value for this hypothesis test?
+
+\vspace{0.3cm}
+
+\begin{enumerate}
+	\item $p < 0.05$
+	\item $p = 0.05$
+	\item $p > 0.05$
+	\item $p < 0.95$
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Connection between confidence intervals and $p$-values}
+\textcolor{blue}{Question:} Suppose we have access to the estimate of the slope (8.6) and a 95\% confidence interval to go with it (4.97, 12.25), as before, where our null hypothesis was that the slope was $0$. What can we say about the p-value for this hypothesis test?
+
+\vspace{0.3cm}
+
+\begin{enumerate}
+	\item \textcolor{blue}{$p < 0.05$}
+	\item \sout{$p = 0.05$}
+	\item \sout{$p > 0.05$}
+	\item \sout{$p < 0.95$}
+\end{enumerate}
+
+\vspace{0.3cm}
+
+The 95\% confidence interval does not contain the null hypothesis of $0$, so we reject the null hypothesis. We know that we reject $H_0$ if the p-value is smaller than some pre-specified threshold $\alpha$, which in this case is $1 - 0.95 = 0.05$ since we have a 95\% confidence interval.
+
+\end{frame}
+
+
+\begin{frame}{Putting it all together \dots}
+We've now completed a linear regression ``recipe." After translating a scientific question into a statistical one, the ingredients include:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item Determine the \textbf{hypotheses}: $H_0$, $H_1$
+	\item Obtain an \textbf{estimate/statistic}: estimated regression coefficient
+	\item \textbf{Quantify uncertainty}: 95\% confidence interval for regression coefficient
+	\item Perform a \textbf{hypothesis test}: reject, or fail to reject, the null hypothesis based on p-value for regression coefficient
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: birthweight and age}
+\begin{enumerate}
+	\item \textbf{Scientific question:} is there an \textcolor{orange}{association} between birth outcomes and age of birth parent?
+	\item \textbf{Statistical question:} is there a \textcolor{orange}{difference in average} birthweight comparing groups of birth parents that differ in age?
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Example: birthweight and age}
+\begin{enumerate}
+	\item \textbf{Scientific question:} is there an \textcolor{orange}{association} between birth outcomes and age of birth parent?
+	\item \textbf{Statistical question:} is there a \textcolor{orange}{difference in average} birthweight comparing groups of birth parents that differ in age?
+	\begin{itemize}
+		\item \textbf{Population:} all babies born in King County
+		\item \textbf{Parameter:} population linear regression slope (diff. in means comparing groups that differ by one year in age)
+	\end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Example: birthweight and age}
+\begin{enumerate}
+	\item \textbf{Scientific question:} is there an \textcolor{orange}{association} between birth outcomes and age of birth parent?
+	\item \textbf{Statistical question:} is there a \textcolor{orange}{difference in average} birthweight comparing groups of birth parents that differ in age?
+	\begin{itemize}
+		\item \textbf{Population:} all babies born in King County
+		\item \textbf{Parameter:} population linear regression slope (diff. in means comparing groups that differ by one year in age)
+	\end{itemize}
+	\item Take a \textbf{sample} from the population: 2500 singleton births in King County in 2001, and their birth parents
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Example: birthweight and age}
+\begin{enumerate}
+	\item \textbf{Scientific question:} is there an \textcolor{orange}{association} between birth outcomes and age of birth parent?
+	\item \textbf{Statistical question:} is there a \textcolor{orange}{difference in average} birthweight comparing groups of birth parents that differ in age?
+	\begin{itemize}
+		\item \textbf{Population:} all babies born in King County
+		\item \textbf{Parameter:} population linear regression slope (diff. in means comparing groups that differ by one year in age)
+	\end{itemize}
+	\item Take a \textbf{sample} from the population: 2500 singleton births in King County in 2001, and their birth parents
+	\item Perform \textit{statistical inference}:
+	\begin{itemize}
+		\item Calculate the corresponding \textbf{statistic}: sample linear regression slope (estimated diff. in means comparing groups that differ by one year in age)
+	\end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Example: birthweight and age}
+\begin{enumerate}
+	\item \textbf{Scientific question:} is there an \textcolor{orange}{association} between birth outcomes and age of birth parent?
+	\item \textbf{Statistical question:} is there a \textcolor{orange}{difference in average} birthweight comparing groups of birth parents that differ in age?
+	\begin{itemize}
+		\item \textbf{Population:} all babies born in King County
+		\item \textbf{Parameter:} population linear regression slope (diff. in means comparing groups that differ by one year in age)
+	\end{itemize}
+	\item Take a \textbf{sample} from the population: 2500 singleton births in King County in 2001, and their birth parents
+	\item Perform \textit{statistical inference}:
+	\begin{itemize}
+		\item Calculate the corresponding \textbf{statistic}: sample linear regression slope (estimated diff. in means comparing groups that differ by one year in age)
+		\item Quantify the uncertainty in your statistic
+		\item Perform a hypothesis text
+	\end{itemize}
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Example: birthweight and age}
+\begin{enumerate}
+	\item \textbf{Scientific question:} is there an \textcolor{orange}{association} between birth outcomes and age of birth parent?
+	\item \textbf{Statistical question:} is there a \textcolor{orange}{difference in average} birthweight comparing groups of birth parents that differ in age?
+	\begin{itemize}
+		\item \textbf{Population:} all babies born in King County
+		\item \textbf{Parameter:} population linear regression slope (diff. in means comparing groups that differ by one year in age)
+	\end{itemize}
+	\item Take a \textbf{sample} from the population: 2500 singleton births in King County in 2001, and their birth parents
+	\item Perform \textit{statistical inference}:
+	\begin{itemize}
+		\item Calculate the corresponding \textbf{statistic}: sample linear regression slope (estimated diff. in means comparing groups that differ by one year in age)
+		\item Quantify the uncertainty in your statistic
+		\item Perform a hypothesis text
+	\end{itemize}
+	\item Make conclusions in context of original question
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Example: birthweight and age}
+To fit the regression model $E[\text{bwt} \mid \text{age}] = \beta_0 + \beta_1 \times \text{age}$ in \texttt{R} we use the \texttt{lm} function, and the \texttt{confint} function to get confidence intervals (you'll get more practice with this in the HW and discussion section):
+
+\vspace{0.15cm}
+
+\centering \includegraphics[scale=0.35]{lm_bwt_age.png}
+
+\end{frame}
+
+\begin{frame}{Example: birthweight and age}
+The necessary pieces we need to extract from this output are (1) the estimate/statistic, (2) the p-value, and (3) the 95\% confidence interval:
+
+\vspace{0.15cm}
+
+\centering \includegraphics[scale=0.35]{lm_bwt_age2.png}
+
+\end{frame}
+
 
 \subsection{Assumptions \& diagnostics}
 
