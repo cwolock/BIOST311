@@ -729,6 +729,176 @@ The necessary pieces we need to extract from this output are (1) the estimate/st
 
 \end{frame}
 
+\begin{frame}{Example: birthweight and age}
+Interpreting our results:
+\begin{itemize}
+	\item \textit{Statistic}: We estimate that the difference in mean birthweight comparing two groups of birth parents that differ by one year in age is 8.6 grams, with heigher average birthweight in the older of the two groups.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: birthweight and age}
+Interpreting our results:
+\begin{itemize}
+	\item \textit{Statistic}: We estimate that the difference in mean birthweight comparing two groups of birth parents that differ by one year in age is 8.6 grams, with heigher average birthweight in the older of the two groups.
+	\item \textit{Uncertainty}: Based on a 95\% confidence interval, this estimated difference would not be judged unusual if the true difference were between 4.97 and 12.25 grams.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: birthweight and age}
+Interpreting our results:
+\begin{itemize}
+	\item \textit{Statistic}: We estimate that the difference in mean birthweight comparing two groups of birth parents that differ by one year in age is 8.6 grams, with heigher average birthweight in the older of the two groups.
+	\item \textit{Uncertainty}: Based on a 95\% confidence interval, this estimated difference would not be judged unusual if the true difference were between 4.97 and 12.25 grams.
+	\item \textit{Hypothesis test / p-value}: These data provide strong evidence that the difference in mean birthweight between groups of birth parents that differ by one year in age is significantly different from zero (p $<$ 0.001).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: birthweight and age}
+Interpreting our results:
+\begin{itemize}
+	\item \textit{Statistic}: We estimate that the difference in mean birthweight comparing two groups of birth parents that differ by one year in age is 8.6 grams, with heigher average birthweight in the older of the two groups.
+	\item \textit{Uncertainty}: Based on a 95\% confidence interval, this estimated difference would not be judged unusual if the true difference were between 4.97 and 12.25 grams.
+	\item \textit{Hypothesis test / p-value}: These data provide strong evidence that the difference in mean birthweight between groups of birth parents that differ by one year in age is significantly different from zero (p $<$ 0.001).
+	\item \textit{Conclusion}: These data provide evidence to suggest that older birth parents tend to give birth to babies with higher birthweight.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: birthweight and age}
+\textit{Why haven't we said anything about the intercept?}
+\end{frame}
+
+\begin{frame}{Example: birthweight and age}
+\textit{Why haven't we said anything about the intercept?}
+\vspace{0.3cm}
+\begin{itemize}
+	\item Interpretation: We estimate that the average birthweight among birth parents of age $0$ is $3162$ grams
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: birthweight and age}
+\textit{Why haven't we said anything about the intercept?}
+\vspace{0.3cm}
+\begin{itemize}
+	\item Interpretation: We estimate that the average birthweight among birth parents of age $0$ is $3162$ grams
+	\item But\dots
+	\begin{itemize}
+		\item \textit{Is this scientifically relevant?} No, newborn children cannot have children themselves
+		\item Most importantly, \textcolor{blue}{the intercept has nothing to do with our scientific question} (is birthweight associated with age of birth parent)
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: birthweight and age}
+\textit{Why haven't we said anything about the intercept?}
+\vspace{0.3cm}
+\begin{itemize}
+	\item Interpretation: We estimate that the average birthweight among birth parents of age $0$ is $3162$ grams
+	\item But\dots
+	\begin{itemize}
+		\item \textit{Is this scientifically relevant?} No, newborn children cannot have children themselves
+		\item Most importantly, \textcolor{blue}{the intercept has nothing to do with our scientific question} (is birthweight associated with age of birth parent)
+	\end{itemize}
+	\item Since the intercept is not relevant to our primary scientific question, we don't care about the CI or p-value
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: birthweight and age}
+\textit{Why haven't we said anything about the intercept?}
+\vspace{0.3cm}
+\begin{itemize}
+	\item Interpretation: We estimate that the average birthweight among birth parents of age $0$ is $3162$ grams
+	\item But\dots
+	\begin{itemize}
+		\item \textit{Is this scientifically relevant?} No, newborn children cannot have children themselves
+		\item Most importantly, \textcolor{blue}{the intercept has nothing to do with our scientific question} (is birthweight associated with age of birth parent)
+	\end{itemize}
+	\item Since the intercept is not relevant to our primary scientific question, we don't care about the CI or p-value
+	\item \textit{Would we ever care about the intercept?} If the intercept answers your scientific question (rare) and is relevant (sometimes, see HW), then yes!
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: birthweight and First Steps participation}
+In Chapter 0 we considered the following set of questions:
+
+\vspace{0.3cm}
+
+\begin{enumerate}
+	\item \textbf{Scientific question:} do birth parents in King County who participated in First Steps (FS) have different birth outcomes than those not in the program?
+	\item \textbf{Statistical question:} is there a difference in average birthweight between birth parents in FS and those not in the program?
+\end{enumerate}
+
+\vspace{0.3cm} We previously used a two-sample t-test to address this question, but we can also use linear regression!
+
+\end{frame}
+
+\begin{frame}{Example: birthweight and First Steps participation}
+We fit the regression model $E[\text{bwt} \mid \text{FS}] = \beta_0 + \beta_1 \times \text{FS}$ in \texttt{R} using the \texttt{lm} function, and the \texttt{confint} function to get confidence interval\dots
+
+\vspace{0.2cm}
+
+\centering \includegraphics[scale=0.35]{lm_bwt_fs.png}
+\end{frame}
+
+\begin{frame}{Example: birthweight and First Steps participation}
+\dots and we extract the necessary information from the output\dots
+
+\vspace{0.2cm}
+
+\centering \includegraphics[scale=0.35]{lm_bwt_fs2.png}
+\end{frame}
+
+\begin{frame}{Example: birthweight and First Steps participation}
+Our linear regression results:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textit{Statistic}: We estimate the difference in mean birthweight between babies born to parents in FS vs. those not is 66.18 grams (with those in FS tending to have the lower mean birthweight).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: birthweight and First Steps participation}
+Our linear regression results:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textit{Statistic}: We estimate the difference in mean birthweight between babies born to parents in FS vs. those not is 66.18 grams (with those in FS tending to have the lower mean birthweight).
+	\item \textit{Uncertainty}: Based on a 95\% confidence interval, this observed difference would not be judged unusual if the true difference were between 6.7 and 125.8 grams.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: birthweight and First Steps participation}
+Our linear regression results:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textit{Statistic}: We estimate the difference in mean birthweight between babies born to parents in FS vs. those not is 66.18 grams (with those in FS tending to have the lower mean birthweight).
+	\item \textit{Uncertainty}: Based on a 95\% confidence interval, this observed difference would not be judged unusual if the true difference were between 6.7 and 125.8 grams.
+	\item \textit{Hypothesis test / p-value}: These data provide strong evidence to suggest the difference in mean birthweight between groups is different from zero ()p $<$ 0.05).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: birthweight and First Steps participation}
+Our linear regression results:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textit{Statistic}: We estimate the difference in mean birthweight between babies born to parents in FS vs. those not is 66.18 grams (with those in FS tending to have the lower mean birthweight).
+	\item \textit{Uncertainty}: Based on a 95\% confidence interval, this observed difference would not be judged unusual if the true difference were between 6.7 and 125.8 grams.
+	\item \textit{Hypothesis test / p-value}: These data provide strong evidence to suggest the difference in mean birthweight between groups is different from zero ()p $<$ 0.05).
+	\item \textit{Conclusion}: These data provide evidence to suggest that babies born to birth parents in FS tend to have lower birthweights.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: birthweight and First Steps participation}
+Comparing our linear regression results to our t-test results from Chapter 0:
+
+
+\end{frame}
+
 
 \subsection{Assumptions \& diagnostics}
 
