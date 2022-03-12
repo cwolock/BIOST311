@@ -149,7 +149,7 @@ Our example with heights and widths of leaves had a quantitative outcome \textit
 We can also do simple linear regression with other types of predictors, such as binary or categorical (the illustrative plots just don't look quite as nice). In HW2 you'll get the chance to explore some of this!
 \end{frame}
 
-\subsection{Interpretation}
+\subsection{Estimation \& Interpretation}
 
 
 \begin{frame}{Coefficient interpretation}
@@ -519,8 +519,6 @@ Interpret the $p$-value as we have before in Chapter 0:
 
 \end{frame}
 
-\subsection{Quantifying uncertainty}
-
 \begin{frame}{Standard errors (SEs) and confidence intervals}
 When we estimate regression coefficients, we also want to quantify the \textit{uncertainty} in these estimates. Once we have our standard error, we can calculate a 95\% confidence interval.
 
@@ -853,7 +851,18 @@ Our linear regression results:
 \vspace{0.3cm}
 
 \begin{itemize}
-	\item \textit{Statistic}: We estimate the difference in mean birthweight between babies born to parents in FS vs. those not is 66.18 grams (with those in FS tending to have the lower mean birthweight).
+	\item \textit{Statistic}: We estimate the difference in mean birthweight between babies born to parents in FS vs. those not is 66 grams (with those in FS tending to have the lower mean birthweight).
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Example: birthweight and First Steps participation}
+Our linear regression results:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textit{Statistic}: We estimate the difference in mean birthweight between babies born to parents in FS vs. those not is 66 grams (with those in FS tending to have the lower mean birthweight).
+	\item \textit{Uncertainty}: Based on a 95\% confidence interval, this observed difference would not be judged unusual if the true difference were between 6.57 and 125.79 grams.
 \end{itemize}
 \end{frame}
 
@@ -864,7 +873,8 @@ Our linear regression results:
 
 \begin{itemize}
 	\item \textit{Statistic}: We estimate the difference in mean birthweight between babies born to parents in FS vs. those not is 66.18 grams (with those in FS tending to have the lower mean birthweight).
-	\item \textit{Uncertainty}: Based on a 95\% confidence interval, this observed difference would not be judged unusual if the true difference were between 6.7 and 125.8 grams.
+	\item \textit{Uncertainty}: Based on a 95\% confidence interval, this observed difference would not be judged unusual if the true difference were between 6.57 and 125.79 grams.
+	\item \textit{Hypothesis test / p-value}: These data provide strong evidence to suggest the difference in mean birthweight between groups is different from zero (p $<$ 0.05).
 \end{itemize}
 \end{frame}
 
@@ -875,20 +885,8 @@ Our linear regression results:
 
 \begin{itemize}
 	\item \textit{Statistic}: We estimate the difference in mean birthweight between babies born to parents in FS vs. those not is 66.18 grams (with those in FS tending to have the lower mean birthweight).
-	\item \textit{Uncertainty}: Based on a 95\% confidence interval, this observed difference would not be judged unusual if the true difference were between 6.7 and 125.8 grams.
-	\item \textit{Hypothesis test / p-value}: These data provide strong evidence to suggest the difference in mean birthweight between groups is different from zero ()p $<$ 0.05).
-\end{itemize}
-\end{frame}
-
-\begin{frame}{Example: birthweight and First Steps participation}
-Our linear regression results:
-
-\vspace{0.3cm}
-
-\begin{itemize}
-	\item \textit{Statistic}: We estimate the difference in mean birthweight between babies born to parents in FS vs. those not is 66.18 grams (with those in FS tending to have the lower mean birthweight).
-	\item \textit{Uncertainty}: Based on a 95\% confidence interval, this observed difference would not be judged unusual if the true difference were between 6.7 and 125.8 grams.
-	\item \textit{Hypothesis test / p-value}: These data provide strong evidence to suggest the difference in mean birthweight between groups is different from zero ()p $<$ 0.05).
+	\item \textit{Uncertainty}: Based on a 95\% confidence interval, this observed difference would not be judged unusual if the true difference were between 6.57 and 125.79 grams.
+	\item \textit{Hypothesis test / p-value}: These data provide strong evidence to suggest the difference in mean birthweight between groups is different from zero (p $<$ 0.05).
 	\item \textit{Conclusion}: These data provide evidence to suggest that babies born to birth parents in FS tend to have lower birthweights.
 \end{itemize}
 \end{frame}
@@ -896,6 +894,79 @@ Our linear regression results:
 \begin{frame}{Example: birthweight and First Steps participation}
 Comparing our linear regression results to our t-test results from Chapter 0:
 
+\vspace{0.3cm}
+
+\begin{table}[]
+	\begin{tabular}{l|ll}
+		& Linear regression & T-test         \\ \hline
+		Estimate & 66.18             & 66.18          \\ \hline
+		95\% CI  & (6.57, 125.79)    & (6.57, 125.79) \\ \hline
+		p-value  & 0.0296            & 0.0296        
+	\end{tabular}
+\end{table}
+
+\end{frame}
+
+\begin{frame}{Example: birthweight and First Steps participation}
+Comparing our linear regression results to our t-test results from Chapter 0:
+
+\vspace{0.3cm}
+
+\begin{table}[]
+	\begin{tabular}{l|ll}
+		& Linear regression & T-test         \\ \hline
+		Estimate & 66.18             & 66.18          \\ \hline
+		95\% CI  & (6.57, 125.79)    & (6.57, 125.79) \\ \hline
+		p-value  & 0.0296            & 0.0296        
+	\end{tabular}
+\end{table}
+
+\vspace{0.3cm}
+
+They're the same!
+
+\end{frame}
+
+\begin{frame}{Least squares estimation}
+What is \texttt{R} doing \textit{under the hood} to get these regression coefficient estimates?
+\end{frame}
+
+\begin{frame}{Least squares estimation}
+What is \texttt{R} doing \textit{under the hood} to get these regression coefficient estimates?
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.45]{linear-regr.jpg}
+\end{frame}
+
+\begin{frame}{Least squares estimation}
+\textit{Least squares}: minimize the sum of the squared distances from the observed points to the fitted line
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.45]{linear-regr-ls.jpg}
+
+\end{frame}
+
+\begin{frame}{Least squares estimation: technical details \includegraphics[scale=0.01]{chilipepper.png}}
+\textit{Least squares}: minimize the sum of the squared distances from the observed points to the fitted line
+
+\vspace{0.3cm}
+
+Breaking this down\dots
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item The distance from an observed point for an individual $i$ to the fitted line is $Y_i - [\beta_0 + \beta_1 X_i]$
+	\item Squaring the distance we get $(Y_i - [\beta_0 + \beta_1 X_i])^2$
+	\item Summing the squared distances over all observations we get $\sum_{i = 1}^n (Y_i - [\beta_0 + \beta_1 X_i])^2$
+	\item Minimizing we get $$\underset{\beta_0, \beta_1}{\text{argmin}} \sum_{i = 1}^n (Y_i - [\beta_0 + \beta_1 X_i])^2$$
+\end{itemize}
+
+\vspace{0.3cm}
+
+\small This has a closed form solution given by $\hat{\beta}_0 =  \bar{Y} - \hat{\beta}_1 \bar{X}$, $\hat{\beta}_1 = \frac{\sum_i (X_i - \bar{X}) (Y_i - \bar{Y})}{\sum_i (X_i - \bar{X})^2}$
 
 \end{frame}
 
