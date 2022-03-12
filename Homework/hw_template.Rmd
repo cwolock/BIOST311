@@ -1,0 +1,37 @@
+---
+title: "Homework"
+author: "Taylor Okonek and Charlie Wolock"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output: pdf_document
+header-includes:
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+---
+
+## Instructions
+
+This assignment should be submitted on Canvas as a .pdf by 12:30pm on the due date. You are welcome to work together on the homework; however, final solutions should be written up individually. 
+
+Make sure you update the document header to reflect the assignment number (e.g., "Homework 1"), your name ("Taylor Okonek and Charlie Wolock" > "Your Name"). Unedited software output in the body of your assignment is not acceptable. Please round numerical values to 2--3 significant digits, and include your R code (if applicable) in the same document. See the "How to Write a Proper Homework" document on Canvas for additional guidelines.  
+
+Each homework assignment is worth 20 points total. Problems are graded for correctness, according to the number of points given in the problem statement. 
+
+## 1. (XX points)
+
+Type your answer to this problem here.
+
+```{r code-for-prob-1, echo = TRUE, results = "hide"}
+## This is a sample code chunk! 
+## Fill this in with code executing the R commands you need for this problem
+## Comment your code so that you (and us, if necessary) know what you're doing
+## The options on this code chunk will include the code in your finished file, but not the raw output
+```
+
+## 2. (YY points)
+
+Type your answer to this problem here.
+
+```{r code-for-prob-2, echo = TRUE, results = "hide"}
+## Fill this in with code executing the R commands you need for this problem
+## Comment your code so that you (and us, if necessary) know what you're doing
+```
