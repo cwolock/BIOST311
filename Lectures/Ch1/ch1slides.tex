@@ -14,6 +14,7 @@
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{ulem}
+\usepackage{listings}
 
 % Title page details: 
 \title{Chapter 1: Linear Regression} 
@@ -970,8 +971,307 @@ Breaking this down\dots
 
 \end{frame}
 
-
 \subsection{Assumptions \& diagnostics}
+
+\begin{frame}{Linear regression form}
+We've hinted at a few necessary assumptions for linear regression, but now we spell them out in detail. So far we've been writing our regression as
+$$
+E[Y \mid X] = \beta_0 + \beta_1 X
+$$
+When we have multiple observations, it is common to label them as $i = 1, \dots, n$, where $n$ is the total number of observations in our data. Then we can write
+$$
+E[Y_i \mid X_i] = \beta_0 + \beta_1 X_i
+$$
+for each individual $i$. 
+\end{frame}
+
+\begin{frame}{Linear regression form}
+Note that so far, we've always seen the conditional expectation of $Y$ given $X$ on the left hand side of our regression equation. Instead of writing it this way, it is common to instead write,
+$$
+Y_i = \beta_0 + \beta_1 X_i + \epsilon_i
+$$
+where $\epsilon_i$ are error terms with mean zero, for each individual. 
+
+\vspace{0.3cm}
+
+To recap, we can write linear regression models in two equivalent ways:
+\begin{enumerate}
+	\item $E[Y_i \mid X_i] = \beta_0 + \beta_1 X_i$ for $i = 1, \dots, n$
+	\item $Y_i = \beta_0 + \beta_1 X_i + \epsilon_i$ for $i = 1, \dots, n$, with $E[\epsilon_i] = 0$ for all $i$
+\end{enumerate}
+
+\end{frame}
+
+
+
+\begin{frame}{Linear regression assumptions}
+We can write the \textit{classical} linear regression assumptions under the following model as follows:
+
+$$
+Y_i = \beta_0 + \beta_1 X_i + \epsilon_i \text{ for } i = 1, \dots n
+$$
+
+\begin{itemize}
+	\item \textcolor{red}{L}inearity: There is a linear relationship between $X_i$ and the true population conditional mean $Y_i \mid X_i$
+	\begin{itemize}
+		\item i.e. $E[Y_i \mid X_i] = \beta_0 + \beta_1 X_i$
+	\end{itemize}
+	\item \textcolor{red}{I}ndependence: The errors $\epsilon_i$ are independent of each other
+	\item \textcolor{red}{N}ormality: $\epsilon_i$ are normally distributed
+	\item \textcolor{red}{E}qual variance: $\epsilon_i$ have the same variance
+	\begin{itemize}
+		\item $\epsilon_i \sim N(0, \sigma^2)$, where $\sigma^2$ does not depend on $i$
+	\end{itemize}
+\end{itemize}
+
+\vspace{0.3cm}
+
+These are commonly called the \textcolor{red}{LINE} assumptions, which should hopefully make them easier to remember!
+\end{frame}
+
+\begin{frame}{Linear regression assumptions}
+We can write the \textit{classical} linear regression assumptions under the following model as follows:
+
+$$
+Y_i = \beta_0 + \beta_1 X_i + \epsilon_i \text{ for } i = 1, \dots n
+$$
+
+\begin{itemize}
+	\item \textcolor{red}{L}inearity: There is a linear relationship between $X_i$ and the true population conditional mean $Y_i \mid X_i$
+	\begin{itemize}
+		\item i.e. $E[Y_i \mid X_i] = \beta_0 + \beta_1 X_i$
+	\end{itemize}
+	\item \textcolor{red}{I}ndependence: The errors $\epsilon_i$ are independent of each other
+	\item \textcolor{red}{N}ormality: $\epsilon_i$ are normally distributed
+	\item \textcolor{red}{E}qual variance: $\epsilon_i$ have the same variance
+	\begin{itemize}
+		\item $\epsilon_i \sim N(0, \sigma^2)$, where $\sigma^2$ does not depend on $i$
+	\end{itemize}
+\end{itemize}
+
+\vspace{0.3cm}
+
+We will come back to the \textcolor{blue}{normality} and \textcolor{blue}{equal variance} assumptions later in the course, because (as we'll find out) we may not actually need them!
+\end{frame}
+
+\begin{frame}{Linearity assumption}
+\textcolor{blue}{Linearity assumption}: The true population conditional mean is a linear function of the predictor, i.e. $E[Y \mid X] = \beta_0 + \beta_1 X$
+
+\vspace{0.3cm}
+
+What does it \textit{mean} for this assumption to be violated?
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item[] Violating the linearity assumption means that we have incorrectly specified our \textit{mean model} (so called because we're modeling the conditional mean as a linear function of predictor(s)). For simple linear regression, this is relatively straightforward: it means that the true population conditional mean is \textit{not} a linear function of the predictor.
+\end{itemize}
+
+\vspace{0.3cm}
+
+ \textcolor{blue}{We will revisit this assumption for multiple linear regression, and discuss ways in which we could incorrectly specify the mean model in that case later!}
+
+\end{frame}
+
+\begin{frame}{Linearity assumption: violations}
+
+What could a nonlinear assocation between $X$ and $Y$ look like? Lots of things! But here's an example\dots
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.4]{quadratic.png}
+
+\end{frame}
+
+\begin{frame}{Linearity assumption: violations}
+
+\dots and here's a \textit{real world} example of the nonlinear relationship between age and mortality (commonly referred to as the Nike swoosh in demography):
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.1]{mortality_curve.png}
+
+\end{frame}
+
+\begin{frame}{Linearity assumption: diagnostics}
+How do we assess whether or not the linearity assumption is violated?
+
+\vspace{0.3cm}
+
+We can plot \textcolor{blue}{residuals} vs. \textcolor{blue}{fitted values} using our linear regression output, and diagnose the assumption based on a scatter plot comparing the two.
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item A \textcolor{blue}{fitted value} is the value of the response predicted from your regression, $\hat{\beta}_0 + \hat{\beta}_1 X$
+	\item A \textcolor{blue}{residual} is the difference between the observed value of the response variable $Y$ and the fitted value
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Linearity assumption: diagnostics in \texttt{R}}
+To plot residuals vs. fitted values in \texttt{R}, we can use the following code for a given linear model object \texttt{mod}:
+
+\vspace{0.2cm}
+
+\begin{lstlisting}
+resids <- residuals(mod)
+fittedvals <- predict(mod)
+data.frame(resids = resids,
+           fittedvals = fittedvals) %>%
+	ggplot(aes(fittedvals, resids)) +
+		geom_point() +
+		geom_hline(yintercept = 0, col = "red") 
+\end{lstlisting}
+
+% \centering \includegraphics[scale=0.4]{fitted_resids.png}
+
+\end{frame}
+
+\begin{frame}{Linearity assumption: diagnostics in \texttt{R}}
+And we get a plot (for our example of a nonlinear association) that looks like this:
+
+\centering \includegraphics[scale=0.3]{fitted_resids.png}
+
+\end{frame}
+
+\begin{frame}{Linearity assumption: diagnostics in \texttt{R}}
+In this plot, what are we looking for?
+
+\vspace{0.3cm}
+
+If the linearity assumption is \textit{not} violated, then we expect the residuals to fall roughly in a straight line at the y intercept (at $y = 0$), the red line in the plot on the previous slide. Another way to put this, is that if we were to draw a curve through the points on the graph, we should end up with a flat line at $y = 0$.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Question:} Do you think the linearity assumption is violated for the example on the previous slide?
+
+\end{frame}
+
+\begin{frame}{Linearity assumption: diagnostics in \texttt{R}}
+In this plot, what are we looking for?
+
+\vspace{0.3cm}
+
+If the linearity assumption is \textit{not} violated, then we expect the residuals to fall roughly in a straight line at the y intercept (at $y = 0$), the red line in the plot on the previous slide. Another way to put this, is that if we were to draw a curve through the points on the graph, we should end up with a flat line at $y = 0$.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Question:} Do you think the linearity assumption is violated for the example on the previous slide?
+
+\end{frame}
+
+\begin{frame}{Linearity assumption: diagnostics in \texttt{R}}
+In this plot, what are we looking for?
+
+\vspace{0.3cm}
+
+If the linearity assumption is \textit{not} violated, then we expect the residuals to fall roughly in a straight line at the y intercept (at $y = 0$), the red line in the plot on the previous slide. Another way to put this, is that if we were to draw a curve through the points on the graph, we should end up with a flat line at $y = 0$.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Question:} Do you think the linearity assumption is violated for the example on the previous slide?
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Answer:} The linearity assumption is violated because the residuals do not fall roughly in a straight line at the y intercept (not even close!)
+
+\end{frame}
+
+
+\begin{frame}{Linearity assumption: diagnostics}
+\textcolor{blue}{Question:} Do you think the linearity assumption is violated for models $1$ through $4$, based on the plots of fitted values vs. residuals?
+
+\centering \includegraphics[scale=0.25]{lin_diagnostics_example.png}
+
+\end{frame}
+
+\begin{frame}{Linearity assumption: diagnostics}
+\textcolor{blue}{Question:} Do you think the linearity assumption is violated for models $1$ through $4$, based on the plots of fitted values vs. residuals?
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Answer:} Models 1 and 3 both appear to violate the linearity assumption, but Models 2 and 4 appear okay (the assumption seemingly holds). Diagnostic plots are not a perfect tool for assessing assumptions, and they are subject to (subjective) interpretation! 
+\end{frame}
+
+% include a frame about what we can do if linearity is violated, or no???? ask Charlie
+
+\begin{frame}{Independence assumption}
+\textcolor{blue}{Independence assumption:} The errors $\epsilon_i$, $i = 1, \dots, n$ are independent of each other.
+
+\vspace{0.3cm}
+
+What does it \textit{mean} for this assumption to be violated?
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item[] Violating the independence assumption means that our observations are sampled in a way such that their responses are \textit{dependent}. Here are a few examples of when this might happen:
+	\begin{itemize}
+		\item We observe multiple individuals over time, and collect data on their outcomes at multiple time points. We expect the responses for a given individual to be \textit{dependent} over time (e.g. my weight tomorrow \textit{depends} on my weight today)
+		\item We collect standardized test scores from individuals in multiple schools. We expect students within the same to school (perhaps) to score similarly, as they've had similar educational experiences
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Independence assumption: diagnostics}
+How do we assess whether or not the linearity assumption is violated?
+
+\vspace{0.3cm}
+
+Think about how your data was collected! There are no diagnostic plots for this assumption.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Question:} For our births dataset, we have data from a random sample of birth parent's in King County. Do you think the independence assumption is violated for our simple linear regression example, with First Steps participation as the predictor and birthweight as the response? Why or why not?
+
+\end{frame}
+
+\begin{frame}{Independence assumption: diagnostics}
+How do we assess whether or not the linearity assumption is violated?
+
+\vspace{0.3cm}
+
+Think about how your data was collected! There are no diagnostic plots for this assumption.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Question:} For our births dataset, we have data from a random sample of birth parent's in King County. Do you think the independence assumption is violated for our simple linear regression example, with First Steps participation as the predictor and birthweight as the response? Why or why not?
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Answer:} The independence assumption is likely satisfied for this model. There is no reason to believe that the birthweight of a baby born to one birth parent would depend on the birthweight of a baby born to a different birth parent.
+
+\end{frame}
+
+\begin{frame}{Independence assumption: diagnostics}
+How do we assess whether or not the linearity assumption is violated?
+
+\vspace{0.3cm}
+
+Think about how your data was collected! There are no diagnostic plots for this assumption.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Question:} Suppose instead we had information for all previous births for every individual in our dataset as well, so for each birth parent, there may be more than one of their births present in the dataset. Do you think the independence assumption is violated for a simple linear regression, with First Steps participation as the predictor and birthweight as the response? Why or why not?
+
+\end{frame}
+
+\begin{frame}{Independence assumption: diagnostics}
+How do we assess whether or not the linearity assumption is violated?
+
+\vspace{0.3cm}
+
+Think about how your data was collected! There are no diagnostic plots for this assumption.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Question:} Suppose instead we had information for all previous births for every individual in our dataset as well, so for each birth parent, there may be more than one of their births present in the dataset. Do you think the independence assumption is violated for a simple linear regression, with First Steps participation as the predictor and birthweight as the response? Why or why not?
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Answer:} The independence assumption is likely violated. It is reasonable to expect that the birthweight of a future child may be dependent on the birthweight of a past one. For example, it is known that having one premature birth puts you at increased risk for another premature birth in a future pregnancy, and babies born prematurely tend to have lower weights. 
+
+\end{frame}
 
 \subsection{Transformations}
 

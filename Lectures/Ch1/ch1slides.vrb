@@ -1,0 +1,17 @@
+\frametitle{Linearity assumption: diagnostics in \texttt {R}}
+To plot residuals vs. fitted values in \texttt{R}, we can use the following code for a given linear model object \texttt{mod}:
+
+\vspace{0.2cm}
+
+\begin{lstlisting}
+resids <- residuals(mod)
+fittedvals <- predict(mod)
+data.frame(resids = resids,
+           fittedvals = fittedvals) %>%
+	ggplot(aes(fittedvals, resids)) +
+		geom_point() +
+		geom_hline(yintercept = 0, col = "red")
+\end{lstlisting}
+
+% \centering \includegraphics[scale=0.4]{fitted_resids.png}
+
