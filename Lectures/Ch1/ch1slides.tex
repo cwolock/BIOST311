@@ -1051,7 +1051,7 @@ $$
 
 \vspace{0.3cm}
 
-We will come back to the \textcolor{blue}{normality} and \textcolor{blue}{equal variance} assumptions later in the course, because (as we'll find out) we may not actually need them!
+We will come back to the \textcolor{blue}{normality} and \textcolor{blue}{equal variance} assumptions shortly, because (as we'll find out) we may not actually need them!
 \end{frame}
 
 \begin{frame}{Linearity assumption}
@@ -1105,6 +1105,9 @@ We can plot \textcolor{blue}{residuals} vs. \textcolor{blue}{fitted values} usin
 \begin{itemize}
 	\item A \textcolor{blue}{fitted value} is the value of the response predicted from your regression, $\hat{\beta}_0 + \hat{\beta}_1 X$
 	\item A \textcolor{blue}{residual} is the difference between the observed value of the response variable $Y$ and the fitted value
+	\begin{itemize}
+		\item[] Residuals are our best guess at what the error terms $\epsilon_i$ for our model may look like, which is why we use them for diagnostic plots!
+	\end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -1119,8 +1122,8 @@ fittedvals <- predict(mod)
 data.frame(resids = resids,
            fittedvals = fittedvals) %>%
 	ggplot(aes(fittedvals, resids)) +
-		geom_point() +
-		geom_hline(yintercept = 0, col = "red") 
+	geom_point() +
+	geom_hline(yintercept = 0, col = "red") 
 \end{lstlisting}
 
 % \centering \includegraphics[scale=0.4]{fitted_resids.png}
@@ -1190,7 +1193,11 @@ If the linearity assumption is \textit{not} violated, then we expect the residua
 
 \vspace{0.3cm}
 
-\textcolor{blue}{Answer:} Models 1 and 3 both appear to violate the linearity assumption, but Models 2 and 4 appear okay (the assumption seemingly holds). Diagnostic plots are not a perfect tool for assessing assumptions, and they are subject to (subjective) interpretation! 
+\textcolor{blue}{Answer:} Models 1 and 3 both appear to violate the linearity assumption, but Models 2 and 4 appear okay (the assumption seemingly holds). 
+
+\vspace{0.3cm}
+
+\textbf{Diagnostic plots are not a perfect tool for assessing assumptions, and they are subject to (subjective) interpretation!} (this is true for all diagnostic plots covered in this chapter)
 \end{frame}
 
 % include a frame about what we can do if linearity is violated, or no???? ask Charlie
@@ -1214,7 +1221,7 @@ What does it \textit{mean} for this assumption to be violated?
 \end{frame}
 
 \begin{frame}{Independence assumption: diagnostics}
-How do we assess whether or not the linearity assumption is violated?
+How do we assess whether or not the independence assumption is violated?
 
 \vspace{0.3cm}
 
@@ -1227,7 +1234,7 @@ Think about how your data was collected! There are no diagnostic plots for this 
 \end{frame}
 
 \begin{frame}{Independence assumption: diagnostics}
-How do we assess whether or not the linearity assumption is violated?
+How do we assess whether or not the independence assumption is violated?
 
 \vspace{0.3cm}
 
@@ -1244,7 +1251,7 @@ Think about how your data was collected! There are no diagnostic plots for this 
 \end{frame}
 
 \begin{frame}{Independence assumption: diagnostics}
-How do we assess whether or not the linearity assumption is violated?
+How do we assess whether or not the independence assumption is violated?
 
 \vspace{0.3cm}
 
@@ -1257,7 +1264,7 @@ Think about how your data was collected! There are no diagnostic plots for this 
 \end{frame}
 
 \begin{frame}{Independence assumption: diagnostics}
-How do we assess whether or not the linearity assumption is violated?
+How do we assess whether or not the independence assumption is violated?
 
 \vspace{0.3cm}
 
@@ -1271,6 +1278,360 @@ Think about how your data was collected! There are no diagnostic plots for this 
 
 \textcolor{blue}{Answer:} The independence assumption is likely violated. It is reasonable to expect that the birthweight of a future child may be dependent on the birthweight of a past one. For example, it is known that having one premature birth puts you at increased risk for another premature birth in a future pregnancy, and babies born prematurely tend to have lower weights. 
 
+\end{frame}
+
+\begin{frame}{Normality assumption}
+\textcolor{blue}{Normality assumption:} The errors $\epsilon_i$, $i = 1, \dots, n$ are normally distributed.
+
+\vspace{0.3cm}
+
+What does it \textit{mean} for this assumption to be violated?
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item[] Violating the normality assumption means that our errors are not normally distributed. We like our errors to be normally distributed because it means that our regression estimator $\hat{\beta}$ will the ``best" estimator \textcolor{blue}{asymptotically} (as our sample size goes to infinity). By ``best" we mean that out of all unbiased estimates (where $E[\hat{\beta}]$ is equal to the true population $\beta$), $\hat{\beta}$ is the one with the smallest variance.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Normality assumption}
+\textcolor{blue}{Normality assumption:} The errors $\epsilon_i$, $i = 1, \dots, n$ are normally distributed.
+
+\vspace{0.3cm}
+
+What does it \textit{mean} for this assumption to be violated?
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item[] Violating the normality assumption means that our errors are not normally distributed. We like our errors to be normally distributed because it means that our regression estimator $\hat{\beta}$ will the ``best" estimator \textcolor{blue}{asymptotically} (as our sample size goes to infinity). By ``best" we mean that out of all unbiased estimates (where $E[\hat{\beta}]$ is equal to the true population $\beta$), $\hat{\beta}$ is the one with the smallest variance.
+\end{itemize}
+
+\vspace{0.3cm} 
+\textcolor{red}{Question:} But what about the Central Limit Theorem? We know from the CLT that the sampling distribution of the sample mean is approximately normal in large samples\dots does the CLT also apply to regression coefficients?
+
+\end{frame}
+
+\begin{frame}{Normality assumption: do we need it?}
+
+\textcolor{blue}{Question:} Does the CLT also apply to regression coefficients, and what does this have to do with the normality assumption for linear regression?
+
+\vspace{0.3cm} 
+
+\textcolor{blue}{Answer:} The CLT \textit{does} apply to regression coefficients. The sampling distribution of a sample regression coefficient $\hat{\beta}$ is approximately normal \textcolor{red}{in large samples}, and is unbiased ($E[\hat{\beta}] = \beta$), \textbf{even if} the errors $\epsilon_i$ are not normally distributed!
+
+
+\end{frame}
+
+\begin{frame}{Normality assumption: do we need it?}
+
+\textcolor{blue}{Question:} Does the CLT also apply to regression coefficients, and what does this have to do with the normality assumption for linear regression?
+
+\vspace{0.3cm} 
+
+\textcolor{blue}{Answer:} The CLT \textit{does} apply to regression coefficients. The sampling distribution of a sample regression coefficient $\hat{\beta}$ is approximately normal \textcolor{red}{in large samples}, and is unbiased ($E[\hat{\beta}] = \beta$), \textbf{even if} the errors $\epsilon_i$ are not normally distributed!
+
+\vspace{0.3cm} 
+
+\textcolor{blue}{Key Takeaway:} 
+\begin{itemize}
+	\item If our sample size is large, we do not need the normality assumption for linear regression because the Central Limit Theorem will kick in.
+	\item If our sample size is small, we do need the normality assumption for linear regression.
+\end{itemize}
+
+\small What sample size is considered ``large" enough? Many statistics courses / textbooks will say $n = 30$ or more is large enough for the CLT to kick in. %ask charlie how he feels about this
+
+\end{frame}
+
+\begin{frame}{Normality assumption: diagnostics}
+In settings where we have a small sample size and need the normality assumption to hold, how do we assess whether not the normality assumption is voilated?
+
+\vspace{0.3cm}
+
+We can make a histogram of \textcolor{blue}{residuals} to see if they look approximately normally distributed. If they look close to normal (a bell shaped curve), then the normality assumption is likely not violated.
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item[] Reminder: a \textcolor{blue}{residual} is the difference between the observed value of the response variable $Y$ and the fitted value 
+\end{itemize}
+
+\vspace{0.3cm}
+
+\small You may also hear people refer to \textcolor{blue}{qq plots} for diagnosing the normality assumption, but we will not focus on those in this course (and you will not be tested on them)
+
+\end{frame}
+
+\begin{frame}[fragile]{Normality assumption: diagnostics in \texttt{R}}
+To plot make a histogram of residuals in \texttt{R}, we can use the following code for a given linear model object \texttt{mod}:
+
+\vspace{0.3cm}
+
+\begin{lstlisting}
+resids <- residuals(mod)
+data.frame(resids = resids) %>%
+    ggplot(aes(resids)) +
+    geom_histogram(bins = 10, col = "black")
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Normality assumption: diagnostics in \texttt{R}}
+And we get plots that look something like this:
+
+	
+\begin{figure}
+	\centering 
+	\includegraphics[scale=0.2]{hist_resid1.png} \\
+    \includegraphics[scale=0.2]{hist_resid2.png}
+\end{figure}
+
+\textcolor{blue}{Question:} Do the residuals look close to normally distributed in either of these plots?
+
+\end{frame}
+
+\begin{frame}{Normality assumption: diagnostics in \texttt{R}}
+
+\textcolor{blue}{Question:} Do the residuals look close to normally distributed in either of these plots?
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Answer:} The residuals in the lower plot seem to be approximately normally distributed, but not the residuals in the upper plot.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Note:} Diagnostic plots are not perfect, and it can be difficult to judge whether or not residuals look close ``enough" to normal state that the normally assumption is satisfied. This is one reason why having large sample sizes (and not needing to worry about this assumption) is so nice!
+
+\end{frame}
+
+\begin{frame}{Equal variance assumption}
+\textcolor{blue}{Equal variance assumption:} The errors $\epsilon_i$, $i = 1, \dots, n$ all have the same variance.
+
+\vspace{0.3cm}
+
+What does it \textit{mean} for this assumption to be violated?
+
+\begin{itemize}
+	\item[] Violating the equal variance assumption means that our in reality, our errors have different variances. This assumption is often easier to visualize graphically (which we do on the next slide)
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Equal variance assumption}
+
+The top plot shows an example of constant variance, and the bottom an example of nonconstant variance:
+
+\vspace{0.3cm}
+
+\centering
+
+\includegraphics[scale=0.2]{constvar.png}
+
+\includegraphics[scale=0.2]{nonconstvar.png}
+
+\end{frame}
+
+\begin{frame}{Equal variance assumption}
+How can we tell by looking at a scatterplot of our outcome ($y$) vs. our predictor ($x$)?
+
+\vspace{0.3cm}
+
+If our errors $\epsilon_i$ have equal variance, the spread of the $y$ values should be equal, across all values of $x$.
+% draw here on ipad
+
+\vspace{0.3cm}
+\centering
+
+\includegraphics[scale=0.3]{constvar.png}
+
+\end{frame}
+
+\begin{frame}{Equal variance assumption}
+How can we tell by looking at a scatterplot of our outcome ($y$) vs. our predictor ($x$)?
+
+\vspace{0.3cm}
+
+If our errors $\epsilon_i$ have \textit{unequal} variance, the spread of the $y$ values should be \textit{unequal}, across values of $x$.
+
+\vspace{0.3cm}
+% draw here on ipad
+\centering
+
+\includegraphics[scale=0.3]{nonconstvar.png}
+
+\end{frame}
+
+\begin{frame}{Equal variance assumption: diagnostics}
+Looking at scatterplots is useful, but how do we more clearly assess whether or not the equal variance assumption is violated?
+
+\vspace{0.3cm}
+
+We can plot \textcolor{blue}{residuals} vs. \textcolor{blue}{fitted values} using our linear regression output, and diagnose the assumption based on a scatter plot comparing the two.
+
+\vspace{0.3cm}
+
+Note that this is the same diagnostic plot we use to assess the linearity assumption, but we look for something slightly different:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item Linearity: assumption holds if residuals fall in a straight line at $y = 0$
+	\item Equal variance: assumption holds if residuals have a roughly even spread above and below the line $y = 0$ across different fitted values
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Equal variance assumption: diagnostics in \texttt{R}}
+The code for plotting residuals vs. fitted values in \texttt{R} is the same as for the linearity assumption (since it's the same plot!). Our residual plots then look like\dots
+
+\centering
+
+\includegraphics[scale=0.2]{eqvar_resids1.png}
+
+\includegraphics[scale=0.2]{eqvar_resids2.png}
+
+\end{frame}
+
+\begin{frame}{Equal variance assumption: diagnostics in \texttt{R}}
+The code for plotting residuals vs. fitted values in \texttt{R} is the same as for the linearity assumption (since it's the same plot!). Our residual plots then look like\dots
+
+\centering
+
+\includegraphics[scale=0.2]{eqvar_resids1.png}
+
+\includegraphics[scale=0.2]{eqvar_resids2.png}
+
+\textcolor{blue}{Question:} Do you think the equal variance assumption holds for either of the models that generated these diagnostic plots?
+
+\end{frame}
+
+\begin{frame}{Equal variance assumption: diagnostics}
+\textcolor{blue}{Question:} Do you think the equal variance assumption holds for either of the models that generated these diagnostic plots?
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Answer:} The equal variance assumption seems to hold for the bottom plot, but not the top plot. The spread of residuals around the line $y = 0$ is much wider for larger fitted values in the top plot. 
+\end{frame}
+
+\begin{frame}{Equal variance assumption: do we need it?}
+We previously mentioned that we may not always need the equal variance assumption for linear regression:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item Assumption needed: when using \textbf{naive} standard errors 
+	\item Assumption not needed: when using \textbf{robust} standard errors
+\end{itemize}
+
+\vspace{0.3cm}
+
+Naive standard errors are what we've used so far in the course, and will continue to use throughout (this is what the \texttt{lm} function in \texttt{R} returns by default). Robust standard errors are a statistical tool that allow us to relax the assumption of equal variance. \textit{We will not be going into detail in this course on robust standard errors.}
+
+\vspace{0.3cm}
+
+\small \textcolor{blue}{What you need to know:} For everything we do in this course, we are using \textit{naive} standard errors, and so we need the equal variance assumption to hold. More advanced statistical tools exist (specifically, robust standard errors) that can allow us to relax this assumption, even though we won't be using them in this course.
+
+\end{frame}
+
+\begin{frame}{Linear regression assumptions: Recap}
+The \textit{classical} linear regression (\textcolor{red}{LINE}) assumptions are:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textcolor{red}{L}inearity: There is a linear relationship between $X_i$ and the true population conditional mean $Y_i \mid X_i$
+	\item \textcolor{red}{I}ndependence: The errors are independent of each other
+	\item \textcolor{red}{N}ormality: The errors are normally distributed
+	\item \textcolor{red}{E}qual variance: The errors have the same variance
+\end{itemize}
+
+
+\end{frame}
+
+\begin{frame}{Linear regression assumptions: Recap}
+The \textit{classical} linear regression (\textcolor{red}{LINE}) assumptions are:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textcolor{red}{L}inearity: There is a linear relationship between $X_i$ and the true population conditional mean $Y_i \mid X_i$
+	\item \textcolor{red}{I}ndependence: The errors are independent of each other
+	\item \textcolor{red}{N}ormality: The errors are normally distributed
+	\item \textcolor{red}{E}qual variance: The errors have the same variance
+\end{itemize}
+
+\vspace{0.3cm}
+
+Diagnostics for each of these assumptions are:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textcolor{red}{L}inearity: Scatterplot of fitted values vs. residuals
+	\item \textcolor{red}{I}ndependence: Think about the data collection!
+	\item \textcolor{red}{N}ormality: Histogram of residuals
+	\item \textcolor{red}{E}qual variance: Scatterplot of fitted values vs. residuals
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Linear regression assumptions: Recap}
+The \textit{classical} linear regression (\textcolor{red}{LINE}) assumptions are:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textcolor{red}{L}inearity: There is a linear relationship between $X_i$ and the true population conditional mean $Y_i \mid X_i$
+	\item \textcolor{red}{I}ndependence: The errors are independent of each other
+	\item \textcolor{red}{N}ormality: The errors are normally distributed
+	\item \textcolor{red}{E}qual variance: The errors have the same variance
+\end{itemize}
+
+\vspace{0.3cm}
+
+The assumptions we need (in this course) when we have \textit{large} samples are:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textcolor{red}{L}inearity
+	\item \textcolor{red}{I}ndependence
+	\item \sout{\textcolor{red}{N}ormality}
+	\item \textcolor{red}{E}qual variance
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Linear regression assumptions: Recap}
+The \textit{classical} linear regression (\textcolor{red}{LINE}) assumptions are:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textcolor{red}{L}inearity: There is a linear relationship between $X_i$ and the true population conditional mean $Y_i \mid X_i$
+	\item \textcolor{red}{I}ndependence: The errors are independent of each other
+	\item \textcolor{red}{N}ormality: The errors are normally distributed
+	\item \textcolor{red}{E}qual variance: The errors have the same variance
+\end{itemize}
+
+\vspace{0.3cm}
+
+The assumptions we need when we have \textit{large} samples and use \textit{robust standard errors}:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textcolor{red}{L}inearity
+	\item \textcolor{red}{I}ndependence
+	\item \sout{\textcolor{red}{N}ormality}
+	\item \sout{\textcolor{red}{E}qual variance}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}
+content...
 \end{frame}
 
 \subsection{Transformations}
