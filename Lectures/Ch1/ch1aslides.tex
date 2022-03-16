@@ -1653,8 +1653,148 @@ The assumptions we need when we have \textit{large} samples and use \textit{robu
 
 \section{Transformations}
 
-\begin{frame}{}
-content...
+\begin{frame}{Interpreting coefficients (no transformation)}
+In the previous section we learned how to interpret $\beta_0$ and $\beta_1$ in a linear regression model:
+
+$$
+E[Y \mid X] = \beta_0 + \beta_1 X
+$$
+
+\vspace{0.2cm}
+
+$\beta_0$ is the mean value of $Y$ among subjects with $X = 0$
+
+\vspace{0.3cm}
+
+$\beta_1$ is the difference in mean value of $Y$ comparing two groups that differ by one unit in $X$
+
+
+\end{frame}
+
+\begin{frame}{Interpreting coefficients (no transformation)}
+In the previous section we learned how to interpret $\beta_0$ and $\beta_1$ in a linear regression model \textcolor{blue}{in context}:
+
+$$
+E[\text{bwt} \mid \text{age}] = \beta_0 + \beta_1 \times \text{age}
+$$
+
+\vspace{0.2cm}
+
+$\beta_0$ is the mean value of $Y$ among subjects with $X = 0$
+
+\hspace{0.3cm} \textcolor{blue}{mean birthweight (grams) of babies born to birth parents of age zero}
+
+\vspace{0.3cm}
+
+$\beta_1$ is the difference in mean value of $Y$ comparing two groups that differ by one unit in $X$
+
+\hspace{0.3cm}  \textcolor{blue}{difference in mean birthweight (grams) comparing two groups of birth} 
+	
+\hspace{0.3cm} \textcolor{blue}{parents that differ by one year in age}
+
+\end{frame}
+
+\begin{frame}{Interpreting coefficients after a transformation}
+How do we interpret $\beta_0$ in this linear regression model?
+
+$$
+E[\text{bwt} \mid \textcolor{blue}{(\text{age} - 25)}] = \beta_0 + \beta_1 \times \textcolor{blue}{(\text{age} - 25)}
+$$
+
+\vspace{0.2cm}
+
+$\beta_0$ is the mean value of $Y$ among subjects with $X = 0$
+
+
+\end{frame}
+
+\begin{frame}{Interpreting coefficients after a transformation}
+How do we interpret $\beta_0$ in this linear regression model?
+
+$$
+E[\text{bwt} \mid \textcolor{blue}{(\text{age} - 25)}] = \beta_0 + \beta_1 \times \textcolor{blue}{(\text{age} - 25)}
+$$
+
+\vspace{0.2cm}
+
+$\beta_0$ is the mean value of $Y$ among subjects with $X = 0$
+
+\begin{itemize}
+	\item[] mean birthweight (grams) of babies born to birth parents with $\text{age} - 25 = 0$
+\end{itemize} 
+
+
+\end{frame}
+
+\begin{frame}{Interpreting coefficients after a transformation}
+How do we interpret $\beta_0$ in this linear regression model?
+
+$$
+E[\text{bwt} \mid \textcolor{blue}{(\text{age} - 25)}] = \beta_0 + \beta_1 \times \textcolor{blue}{(\text{age} - 25)}
+$$
+
+\vspace{0.2cm}
+
+$\beta_0$ is the mean value of $Y$ among subjects with $X = 0$
+
+\begin{itemize}
+	\item[] mean birthweight (grams) of babies born to birth parents with $\text{age} - 25 = 0$
+	\item[] \textcolor{blue}{mean birthweight (grams) of babies born to 25 yr. old birth parents }
+\end{itemize} 
+
+
+\end{frame}
+
+\begin{frame}{Interpreting coefficients after a transformation}
+How do we interpret $\beta_0$ in this linear regression model?
+
+$$
+E[\text{bwt} \mid \textcolor{blue}{(\text{age} - 25)}] = \beta_0 + \beta_1 \times \textcolor{blue}{(\text{age} - 25)}
+$$
+
+\vspace{0.2cm}
+
+$\beta_0$ is the mean value of $Y$ among subjects with $X = 0$
+
+\begin{itemize}
+	\item[] mean birthweight (grams) of babies born to birth parents with $\text{age} - 25 = 0$
+	\item[] \textcolor{blue}{mean birthweight (grams) of babies born to 25 yr. old birth parents }
+\end{itemize} 
+
+\vspace{0.3cm}
+
+Why are those last two interpretations equivalent?
+\begin{align*}
+\text{age} - 25 &= 0 \\
+\text{age} & = 25
+\end{align*}
+
+\end{frame}
+
+\begin{frame}{Interpreting coefficients after a transformation}
+How do we interpret $\beta_1$ in this linear regression model?
+
+$$
+E[\text{bwt} \mid \textcolor{blue}{(\text{age} - 25)}] = \beta_0 + \beta_1 \times \textcolor{blue}{(\text{age} - 25)}
+$$
+
+\vspace{0.2cm}
+
+$\beta_1$ is the difference in mean value of $Y$ comparing two groups that differ by one unit in $X$
+
+\begin{itemize}
+	\item[] difference in mean birthweight (grams) comparing two groups of birth parents that differ in (age - 3) by one year
+	\item[] \textcolor{blue}{difference in mean birthweight (grams) comparing two groups of birth parents that differ in age by one year}
+\end{itemize} 
+
+\vspace{0.3cm}
+
+Why are those last two interpretations equivalent?
+\begin{align*}
+\text{age} - 25 = x + 1 & \textcolor{red}{vs}  \text{age} - 25 &= x\\
+\text{age} = x + 26 & \textcolor{red}{vs}  \text{age}  &= x + 25
+\end{align*}
+
 \end{frame}
 
 
