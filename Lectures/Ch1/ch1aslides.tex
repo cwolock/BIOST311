@@ -1791,11 +1791,543 @@ $\beta_1$ is the difference in mean value of $Y$ comparing two groups that diffe
 
 Why are those last two interpretations equivalent?
 \begin{align*}
-\text{age} - 25 = x + 1 & \textcolor{red}{vs}  \text{age} - 25 &= x\\
-\text{age} = x + 26 & \textcolor{red}{vs}  \text{age}  &= x + 25
+\text{age} - 25 = x + 1 \hspace{0.1cm}& \textcolor{red}{vs}  \hspace{0.1cm}\text{age} - 25 = x \\
+\text{age} = x + 26 \hspace{0.1cm}& \textcolor{red}{vs}  \hspace{0.1cm}\text{age}  = x + 25
 \end{align*}
 
 \end{frame}
 
+\begin{frame}{Transformations: Practice}
+With a partner\dots
+
+\vspace{0.3cm}
+
+\begin{enumerate}
+	\item Interpret $\beta_0, \beta_1$ in the following models:
+	\begin{enumerate}
+		\item $E[\text{bwt} \mid \text{age}] = \beta_0 + \beta_1 (\text{age} - \bar{\text{age}})$
+		\item $E[\text{bwt} \mid \text{age}] = \beta_0 + \beta_1 \left( \frac{\text{age}}{5} \right)$
+		\item $E[\text{bwt} \mid \text{age}] = \beta_0 + \beta_1 \left( \frac{\text{age} - 25}{5} \right)$
+	\end{enumerate}
+\item[]
+	\item Interpret $\beta_0, \beta_1$ in the following models:
+	\begin{enumerate}
+		\item $E[(\text{bwt} \times 50) \mid \text{age}] = \beta_0 + \beta_1 (\text{age})$
+		\item $E[(\frac{\text{bwt}}{453.592}) \mid \text{age}] = \beta_0 + \beta_1 (\text{age})$
+		\item[] \tiny (Hint: 1 pound = 453.592 grams)
+	\end{enumerate}
+\end{enumerate}
+
+% give them 15 minutes (?) to work, then discuss as a class
+
+\end{frame}
+
+\subsection{Linear transformations of $X$ and $Y$}
+
+\begin{frame}{Linear transformations of $X$ and $Y$}
+\textcolor{blue}{Linear transformations:} adding, subtracting, multiplying, and/or dividing by some constant
+
+\vspace{0.3cm}
+
+Which transformations change the interpretation of $\beta_0$?
+
+\end{frame}
+
+\begin{frame}{Linear transformations of $X$ and $Y$}
+\textcolor{blue}{Linear transformations:} adding, subtracting, multiplying, and/or dividing by some constant
+
+\vspace{0.3cm}
+
+Which transformations change the interpretation of $\beta_0$?
+\begin{itemize}
+	\item[] Adding (subtracting) a constant to (from) $X$
+	\item[] Any change to $Y$ 
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Linear transformations of $X$ and $Y$}
+\textcolor{blue}{Linear transformations:} adding, subtracting, multiplying, and/or dividing by some constant
+
+\vspace{0.3cm}
+
+Which transformations change the interpretation of $\beta_0$?
+\begin{itemize}
+	\item[] Adding (subtracting) a constant to (from) $X$
+	\item[] Any change to $Y$ 
+\end{itemize}
+
+\vspace{0.3cm}
+
+Which transformations change the interpretation of $\beta_1$?
+
+\end{frame}
+
+\begin{frame}{Linear transformations of $X$ and $Y$}
+\textcolor{blue}{Linear transformations:} adding, subtracting, multiplying, and/or dividing by some constant
+
+\vspace{0.3cm}
+
+Which transformations change the interpretation of $\beta_0$?
+\begin{itemize}
+	\item[] Adding (subtracting) a constant to (from) $X$
+	\item[] Any change to $Y$ 
+\end{itemize}
+
+\vspace{0.3cm}
+
+Which transformations change the interpretation of $\beta_1$?
+\begin{itemize}
+	\item[] Multiplying (dividing) $X$ by a constant
+	\item[] Any change to $Y$ 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Why transform $X$ and/or $Y$?}
+Why might we want to transform our variables?
+
+\begin{itemize}
+	\item Transforming can \textit{make our interpretation of} $\beta_0$ \textit{more scientifically meaningful} (e.g., so we're not talking about the average birthweight of a baby born to a 0 yr. old birth parent)
+	\item Transforming can \textit{change the units of the outcome and/or predictor} (e.g., difference in birthweight in pounds vs. grams, comparing two groups that differ by one year in age)
+\end{itemize}
+\end{frame}
+
+\subsection{Log transformations of $X$ and $Y$}
+
+\begin{frame}{Log transformations: $\beta_0$ interpretation}
+So far we've seen linear transformations. What about log transformations? Consider the model
+$$
+E[\text{bwt} \mid \text{wpre}] = \beta_0 + \beta_1 \log(\text{wpre})
+$$
+where wpre = birth parent's pre-pregnancy weight in pounds.
+
+\vspace{0.3cm}
+
+$\beta_0$ is the mean value of $Y$ among subjects with $X = 0$
+
+\vspace{0.3cm}
+
+\tiny *Note: in statistics (and in \texttt{R}) when we write log, we mean $\text{log}_e = \text{ln}$. If we are using a different base, we'll explicitly write it
+
+\end{frame}
+
+\begin{frame}{Log transformations: $\beta_0$ interpretation}
+So far we've seen linear transformations. What about log transformations? Consider the model
+$$
+E[\text{bwt} \mid \text{wpre}] = \beta_0 + \beta_1 \log(\text{wpre})
+$$
+where wpre = birth parent's pre-pregnancy weight in pounds.
+
+\vspace{0.3cm}
+
+$\beta_0$ is the mean value of $Y$ among subjects with $X = 0$
+
+\begin{itemize}
+	\item[] mean birthweight (grams) of babies born to birth parents with log(wpre) = 0
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Log transformations: $\beta_0$ interpretation}
+So far we've seen linear transformations. What about log transformations? Consider the model
+$$
+E[\text{bwt} \mid \text{wpre}] = \beta_0 + \beta_1 \log(\text{wpre})
+$$
+where wpre = birth parent's pre-pregnancy weight in pounds.
+
+\vspace{0.3cm}
+
+$\beta_0$ is the mean value of $Y$ among subjects with $X = 0$
+
+\begin{itemize}
+	\item[] mean birthweight (grams) of babies born to birth parents with log(wpre) = 0
+	\item[] \textcolor{blue}{mean birthweight (grams) of babies born to birth parents with a pre-pregnancy weight of 1 pound}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Log transformations: $\beta_0$ interpretation}
+
+$\beta_0$ is the mean value of $Y$ among subjects with $X = 0$
+
+\begin{itemize}
+	\item[] mean birthweight (grams) of babies born to birth parents with log(wpre) = 0
+	\item[] \textcolor{blue}{mean birthweight (grams) of babies born to birth parents with a pre-pregnancy weight of 1 pound}
+\end{itemize}
+
+\vspace{0.3cm}
+
+
+Why are those last two interpretations equivalent?
+
+
+\begin{align*}
+\log(\text{wpre}) & = 0 \\
+e^{\log(\text{wpre})} & = e^0 \\
+\text{wpre} & = 1
+\end{align*}
+
+\end{frame}
+
+\begin{frame}{Log transformations: $\beta_1$ interpretation}
+$$
+E[\text{bwt} \mid \text{wpre}] = \beta_0 + \beta_1 \log(\text{wpre})
+$$
+
+\vspace{0.3cm}
+
+$\beta_1$ is the difference in mean value of $Y$ comparing two groups that differ by one unit in $X$
+
+
+\end{frame}
+
+\begin{frame}{Log transformations: $\beta_1$ interpretation}
+$$
+E[\text{bwt} \mid \text{wpre}] = \beta_0 + \beta_1 \log(\text{wpre})
+$$
+
+\vspace{0.3cm}
+
+$\beta_1$ is the difference in mean value of $Y$ comparing two groups that differ by one unit in $X$
+
+\begin{itemize}
+	\item[] difference in mean birthweight (grams) comparing two groups of birth parents that differ in $\log(\text{wpre})$ by one unit
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Log transformations: $\beta_1$ interpretation}
+$$
+E[\text{bwt} \mid \text{wpre}] = \beta_0 + \beta_1 \log(\text{wpre})
+$$
+
+\vspace{0.3cm}
+
+$\beta_1$ is the difference in mean value of $Y$ comparing two groups that differ by one unit in $X$
+
+\begin{itemize}
+	\item[] difference in mean birthweight (grams) comparing two groups of birth parents that differ in $\log(\text{wpre})$ by one unit
+	\item[] \textcolor{blue}{difference in mean birthweight (grams) comparing two groups of birth parents that differ in pre-pregnancy weight by a multiplicative factor of $e$ (2.718\dots)}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Log transformations: $\beta_1$ interpretation}
+
+$\beta_1$ is the difference in mean value of $Y$ comparing two groups that differ by one unit in $X$
+
+\begin{itemize}
+	\item[] difference in mean birthweight (grams) comparing two groups of birth parents that differ in $\log(\text{wpre})$ by one unit
+	\item[] \textcolor{blue}{difference in mean birthweight (grams) comparing two groups of birth parents that differ in pre-pregnancy weight by a multiplicative factor of $e$ (2.718\dots)}
+\end{itemize}
+
+\vspace{0.3cm}
+
+
+Why are those last two interpretations equivalent?
+
+
+\begin{align*}
+\log(\text{wpre})  = x + 1 \hspace{0.1cm} & \textcolor{red}{vs} \hspace{0.1cm} \log(\text{wpre})  = x  \\
+e^{\log(\text{wpre})}  = e^{x + 1}  \hspace{0.1cm} & \textcolor{red}{vs} \hspace{0.1cm} e^{\log(\text{wpre})}  = e^{x}\\
+\text{wpre}  = e^x e \hspace{0.1cm} & \textcolor{red}{vs} \hspace{0.1cm} \text{wpre} = e^x
+\end{align*}
+
+\end{frame}
+
+\begin{frame}{Log transformations: $\beta_1$ interpretation}
+An $e$-fold difference between two groups is not particularly intuitive.
+
+How can we make our interpretation of $\beta_1$ more intuitive?
+
+\vspace{0.3cm}
+
+Option 1: use a different base
+
+\end{frame}
+
+\begin{frame}{Log transformations: $\beta_1$ interpretation}
+An $e$-fold difference between two groups is not particularly intuitive.
+
+How can we make our interpretation of $\beta_1$ more intuitive?
+
+\vspace{0.3cm}
+
+Option 1: use a different base
+
+\begin{itemize}
+	\item $E[\text{bwt} \mid \text{wpre}] = \beta_0 + \beta_1 \textcolor{blue}{\text{log}}_2 (\text{wpre})$
+	\begin{itemize}
+		\item $\beta_0$: mean birthweight among babies born to birth parents with pre-pregnancy weight of 1 pound
+		\item $\beta_1$: difference in mean birthweight comparing groups of birth parents that differ in pre-pregnancy weight by a \textcolor{blue}{multiplicative factor of 2}
+	\end{itemize} 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Log transformations: $\beta_1$ interpretation}
+An $e$-fold difference between two groups is not particularly intuitive.
+
+How can we make our interpretation of $\beta_1$ more intuitive?
+
+\vspace{0.3cm}
+
+Option 1: use a different base
+
+\begin{itemize}
+	\item $E[\text{bwt} \mid \text{wpre}] = \beta_0 + \beta_1 \textcolor{blue}{\text{log}}_2 (\text{wpre})$
+	\begin{itemize}
+		\item $\beta_0$: mean birthweight among babies born to birth parents with pre-pregnancy weight of 1 pound
+		\item $\beta_1$: difference in mean birthweight comparing groups of birth parents that differ in pre-pregnancy weight by a \textcolor{blue}{multiplicative factor of 2}
+	\end{itemize} 
+\item $E[\text{bwt} \mid \text{wpre}] = \beta_0 + \beta_1 \textcolor{blue}{\text{log}}_{10} (\text{wpre})$
+\begin{itemize}
+	\item $\beta_0$: mean birthweight among babies born to birth parents with pre-pregnancy weight of 1 pound
+	\item $\beta_1$: difference in mean birthweight comparing groups of birth parents that differ in pre-pregnancy weight by a \textcolor{blue}{multiplicative factor of 10}
+\end{itemize} 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Log transformations: $\beta_1$ interpretation}
+An $e$-fold difference between two groups is not particularly intuitive.
+
+How can we make our interpretation of $\beta_1$ more intuitive?
+
+\vspace{0.3cm}
+
+Option 2: fit the same model but interpret $c \times \beta_1$ rather than $\beta_1$
+
+
+\end{frame}
+
+\begin{frame}{Log transformations: $\beta_1$ interpretation}
+An $e$-fold difference between two groups is not particularly intuitive.
+
+How can we make our interpretation of $\beta_1$ more intuitive?
+
+\vspace{0.3cm}
+
+Option 2: fit the same model but interpret $c \times \beta_1$ rather than $\beta_1$
+
+\vspace{0.3cm}
+
+\textit{Example}: $\textcolor{blue}{\text{log}(1.1)}\beta_1$ is the difference in average birthweight comparing two groups of birth parents that differ in pre-pregnancy weight by a \textcolor{blue}{multiplicative factor of 1.1} (i.e. a 10\% difference)
+
+
+\end{frame}
+
+\begin{frame}{Log transformations: $\beta_1$ interpretation}
+An $e$-fold difference between two groups is not particularly intuitive.
+
+How can we make our interpretation of $\beta_1$ more intuitive?
+
+\vspace{0.3cm}
+
+Option 2: fit the same model but interpret $c \times \beta_1$ rather than $\beta_1$
+
+\vspace{0.3cm}
+
+\textit{Example}: $\textcolor{blue}{\text{log}(1.1)}\beta_1$ is the difference in average birthweight comparing two groups of birth parents that differ in pre-pregnancy weight by a \textcolor{blue}{multiplicative factor of 1.1} (i.e. a 10\% difference)
+
+\includegraphics[scale=0.01]{chilipepper.png}
+\begin{align*}
+E[\text{bwt} \mid & \log(\text{wpre} = 1.1x)] - E[\text{bwt} \mid \log(\text{wpre} = x)] \\
+& = [\beta_0 + \beta_1 \log(1.1x)] - [\beta_0 + \beta_1 \log(x)] \\
+& = \beta_1 \log(1.1x) - \beta_1 \log(x) \\
+& = \beta_1 (\log(1.1) + \log(x)) - \beta_1 \log(x) \\
+& = \beta_1 \log(1.1)
+\end{align*}
+
+\end{frame}
+
+\begin{frame}{Log transformations: recap}
+Tying it all together\dots
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textcolor{blue}{Regression model:} $E[\text{bwt} \mid X] = \beta_0 + \beta_1 \log(X)$
+	\item \color{blue} $\beta_0$\color{black}: average value of $Y$ among subjects with $X = 1$
+	\item \color{blue}$\log(k) \times \beta_1$\color{black}: difference in average value of $Y$ comparing two groups that differ in $X$ by a multiplicative factor of $k$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Log transformations: recap}
+Tying it all together\dots
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textcolor{blue}{Regression model:} $E[\text{bwt} \mid X] = \beta_0 + \beta_1 \log(X)$
+	\item \color{blue} $\beta_0$\color{black}: average value of $Y$ among subjects with $X = 1$
+	\item \color{blue}$\log(k) \times \beta_1$\color{black}: difference in average value of $Y$ comparing two groups that differ in $X$ by a multiplicative factor of $k$
+\end{itemize}
+
+\vspace{0.3cm}
+
+Why would we want to do this type of transformation?
+
+\begin{itemize}
+	\item Sometimes it is more scientifically relevant to talk about \textit{multiplicative changes} in $X$ rather than \textit{differences} in $X$
+	\item Types of variables that are often log transformed:
+	\begin{itemize}
+		\item Money (e.g., salary, GDP)
+		\item Biological measurements (e.g., prostate specific antigen in prostate cancer, serum creatinine in kindey disease)
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Transformations: $\log(Y)$}
+\begin{center} $E[\log(\text{bwt}) \mid \text{age}] = \beta_0 + \beta_1 \times age$ \end{center}
+$\beta_0$: average value of $Y$ among subjects with $X = 0$\\ \pause
+\begin{itemize}
+	\item[] average log birthweight babies born to 0 yr. old birth parents  \pause
+	\item[] log geometric mean birthweight among babies born to 0 yr. old birth parents \pause
+\end{itemize}
+\color{blue} $e^{\beta_0}$: geometric mean birthweightamong babies born to 0 yr. old birth parents \color{black}\pause
+
+\vspace{0.3cm}
+
+Why are those interpretations equivalent?
+\begin{itemize}
+	\item[] \textit{Arithmetic mean}: $\frac{1}{n} \sum_{i=1}^n a_i$
+	\item[] \textit{Geometric mean}: $\left(\prod_{i=1}^n a_i\right)^{\frac{1}{n}} = e^{\frac{1}{n} \sum_{i=1}^n \log(a_i)}$
+\end{itemize}
+
+\vspace{0.3cm}
+
+\begin{footnotesize}The \color{blue} ``average of $\log(Y)$" \color{black} = $\frac{1}{n}\sum \log(Y_i)$ \ \color{blue} \textit{is the same as} \color{black}\\the \color{blue}``log of the geometric mean of $Y$" \color{black}= $\log(e^{\frac{1}{n}\sum \log(Y_i)} = \frac{1}{n}\sum \log(Y_i)$.\end{footnotesize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Transformations: $\log(Y)$}
+\begin{center} $E[\log(\text{bwt})\mid \text{age}] = \beta_0 + \beta_1 \text{age}$ \end{center}
+$\beta_1$: difference in average values of $Y$ comparing two groups that differ in $X$ by one unit\\ \pause
+\begin{itemize}
+	\item[] difference in average $\log(\text{bwt})$ comparing two ...\pause
+	\item[] difference in log geometric mean birthweight comparing two ... \pause
+\end{itemize}
+\color{blue} $e^{\beta_1}$: ratio of geometric mean birthweight comparing two ... \color{black} \pause
+\vspace{0.3cm}
+
+Why are those interpretations equivalent?
+
+\includegraphics[scale=0.01]{chilipepper.png}
+\begin{align*}
+\beta_1 & = \log(\text{GM}[Y|X=x+1])-\log(\text{GM}[Y|X=x])\\
+& = \log\left(\text{GM}[Y|X=x+1]\div\text{GM}[Y|X=x]\right)\\
+e^{\beta_1} & = \text{GM}[Y|X=x+1]\div\text{GM}[Y|X=x]
+\end{align*}
+\end{frame}
+
+\begin{frame}{Transformations: log(Y) recap}
+Tying it all together\dots
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textcolor{blue}{Regression model:} $E[\log(\text{bwt}) \mid X] = \beta_0 + \beta_1 \log(X)$
+	\item \color{blue} $e^{\beta_0}$\color{black}: geometric mean of $Y$ among subjects with $X = 0$
+	\item \color{blue}$e^{\beta_1}$\color{black}: ratio of geometric means of $Y$ comparing two groups that differ in $X$ by one unit
+\end{itemize} \pause
+
+\vspace{0.3cm}
+
+Why would we want to do this type of transformation?
+
+\begin{itemize}
+	\item Sometimes it is more scientifically relevant to talk about \textit{multiplicative changes} in $X$ rather than \textit{differences} in $X$
+	\item Types of variables that are often log transformed:
+	\begin{itemize}
+		\item Money (e.g., salary, GDP)
+		\item Biological measurements (e.g., prostate specific antigen in prostate cancer, serum creatinine in kindey disease)
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+% hw question maybe where we have both x and y log transformed
+\begin{frame}
+\frametitle{Transformations: polynomial}
+Another common transformation is the quadratic transformation\dots
+\begin{center} $E[\text{bwt} \mid \text{age}] = \beta_0 + \beta_1 \times \text{age} + \beta_2 \times \text{age}^2$ \end{center}
+
+Now we have three coefficients: $\beta_0, \beta_1, \beta_2$\pause
+
+\vspace{0.3cm}
+
+\color{blue} $\beta_0$: average birthweight among babies born to birth parents who are 0 yrs. old \color{black} \pause
+\begin{align*}
+E[\text{bwt} \mid \text{age} = 0] & = \beta_0 + \beta_1 (0) + \beta_2(0)^2 \\
+& = \beta_0 + 0 + 0 \\
+& = \beta_0
+\end{align*}
+\end{frame}
+
+\begin{frame}
+\frametitle{Transformations: polynomial}
+Another common transformation is the quadratic transformation\dots
+\begin{center} $E[\text{bwt} \mid \text{age}] = \beta_0 + \beta_1 \times \text{age} + \beta_2 \times \text{age}^2$ \end{center}
+
+$\beta_1$: \color{red} NOT \color{black} the difference in average birthweight comparing groups of birth parents that differ in age by one year \pause
+\begin{align*}
+E[& \text{bwt} \mid \text{age} = x + 1] -E[\text{bwt} \mid \text{age} = x]\\
+& = \left[\beta_0 + \beta_1 (x+1) + \beta_2(x+1)^2\right] -\left[\beta_0 + \beta_1 (x) + \beta_2(x)^2\right]\\
+& = \beta_1 + \beta_2(2x+1) \\
+\end{align*}\pause
+\color{blue} $\beta_1,\beta_2$: no straightforward interpretation \color{black}
+\end{frame}
+
+\begin{frame}
+\frametitle{Transformations: polynomial recap}
+Tying it all together...
+\begin{itemize}
+	\item \color{blue} Regression model: \color{black} $E[Y|X] = \beta_0 + \beta_1X + \beta_2 X^2 + \cdots$
+	\item \color{blue} $\beta_0$: \color{black} average value of $Y$ when $X = 0$
+	\item \color{blue} $\beta_1, \beta_2, \cdots$: \color{black} no straightforward interpretation
+\end{itemize}\pause
+
+\vspace{0.3cm}
+
+Why would we want to do this type of transformation?
+\begin{itemize}
+	\item Sometimes we might have scientific reason to believe that $Y$ is related to $X^2$ (e.g., area) or $X^3$, rather than just $X$
+	\item Model non-linearity in the relationship between $X$ and $Y$
+	\begin{itemize}
+		\item May be mportant for prediction (we'll return to this later)
+		\item Not necessary for showing associations 
+	\end{itemize}
+\end{itemize}
+
+\vspace{0.3cm}
+
+Real world example:  \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4046865/}{\color{cyan} the log-quad model for mortality estimation}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Summary: why transform $X$ and/or $Y$?}
+Why might we want to transform our variables? \vspace{0.3cm}
+\begin{itemize}
+	\item Scientific motivation
+	\begin{itemize}
+		\item Improve interpretation
+		\item More realistically model the relationships we think exist between variables
+		\begin{itemize}
+			\item Multiplicative (ratio) vs additive (difference)
+			\item Geometric mean vs arithmetic mean
+		\end{itemize}
+	\end{itemize}
+	\item Account for non-linearity 
+	\begin{itemize}
+		\item Important for prediction
+		\item Not necessarily for detecting associations
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[c]
+\centering \huge Any Questions?
+\end{frame}
 
 \end{document}
