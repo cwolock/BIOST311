@@ -17,7 +17,7 @@
 \usepackage{listings}
 
 % Title page details: 
-\title{Chapter 1: Linear Regression} 
+\title{Chapter 1a: Simple Linear Regression} 
 \author{Taylor Okonek \& Charlie Wolock}
 \date{\today}
 
@@ -29,13 +29,13 @@
 \end{frame}
 
 \begin{frame}{Learning objectives}
-By the end of Chapter 1, you should be able to:
+By the end of Chapter 1a, you should be able to:
 \begin{itemize}
 	\item Formulate a regression model, given a scientific or statistical question
-	\item Interpret the coefficients for a (simple or multiple) linear regression model
+	\item Interpret the coefficients for a simple linear regression model
 	\item Interpret confidence intervals and p-values for linear regression coefficients
-	\item Classify variables according to their role in a linear regression model (e.g., outcome, predictor, potential confounder, effect modifier, precision variable)
-	\item Use \texttt{R} to fit a linear regression model (and know where in the output to look for the information we need to interpret results)
+	\item Understand the assumptions required for linear regression
+	\item Use \texttt{R} to fit a simple linear regression model (and know where in the output to look for the information we need to interpret results)
 	\item Create graphs to support your linear regression analysis
 \end{itemize}
 \end{frame}
@@ -53,7 +53,8 @@ By the end of Chapter 1, you should be able to:
 }
 
 % Presentation structure
-\section{Simple Linear Regression}
+
+\section{Simple linear regression models}
 
 \begin{frame}{Simple linear regression}
 
@@ -150,7 +151,7 @@ Our example with heights and widths of leaves had a quantitative outcome \textit
 We can also do simple linear regression with other types of predictors, such as binary or categorical (the illustrative plots just don't look quite as nice). In HW2 you'll get the chance to explore some of this!
 \end{frame}
 
-\subsection{Estimation \& Interpretation}
+\section{Estimation \& Interpretation}
 
 
 \begin{frame}{Coefficient interpretation}
@@ -214,6 +215,8 @@ How do you interpret $\beta_0$ and $\beta_1$?
 \end{itemize}
 
 \end{frame}
+
+\subsection{Slopes and Intercepts}
 
 \begin{frame}{Interpreting slopes: mathematical explanation}
 For a regression model $E[Y \mid X] = \beta_0 + \beta_1 X$, we noted that the interpretation of the slope $\beta_1$ is the difference in mean value of $Y$ comparing two groups that differ by one unit in $X$. 
@@ -474,6 +477,8 @@ What \textbf{statistical question} are we answering? \textit{Is there an associa
 
 \end{frame}
 
+\subsection{Hypothesis tests}
+
 \begin{frame}{Hypothesis tests}
 Consider the regression model:
 $$
@@ -519,6 +524,8 @@ Interpret the $p$-value as we have before in Chapter 0:
 \end{itemize}
 
 \end{frame}
+
+\subsection{Uncertainty}
 
 \begin{frame}{Standard errors (SEs) and confidence intervals}
 When we estimate regression coefficients, we also want to quantify the \textit{uncertainty} in these estimates. Once we have our standard error, we can calculate a 95\% confidence interval.
@@ -614,6 +621,7 @@ The 95\% confidence interval does not contain the null hypothesis of $0$, so we 
 \end{frame}
 
 
+
 \begin{frame}{Putting it all together \dots}
 We've now completed a linear regression ``recipe." After translating a scientific question into a statistical one, the ingredients include:
 
@@ -626,6 +634,8 @@ We've now completed a linear regression ``recipe." After translating a scientifi
 	\item Perform a \textbf{hypothesis test}: reject, or fail to reject, the null hypothesis based on p-value for regression coefficient
 \end{itemize}
 \end{frame}
+
+\subsection{Examples}
 
 \begin{frame}{Example: birthweight and age}
 \begin{enumerate}
@@ -928,6 +938,8 @@ They're the same!
 
 \end{frame}
 
+\subsection{Least squares}
+
 \begin{frame}{Least squares estimation}
 What is \texttt{R} doing \textit{under the hood} to get these regression coefficient estimates?
 \end{frame}
@@ -971,7 +983,7 @@ Breaking this down\dots
 
 \end{frame}
 
-\subsection{Assumptions \& diagnostics}
+\section{Assumptions \& diagnostics}
 
 \begin{frame}{Linear regression form}
 We've hinted at a few necessary assumptions for linear regression, but now we spell them out in detail. So far we've been writing our regression as
@@ -1053,6 +1065,8 @@ $$
 
 We will come back to the \textcolor{blue}{normality} and \textcolor{blue}{equal variance} assumptions shortly, because (as we'll find out) we may not actually need them!
 \end{frame}
+
+\subsection{Linearity}
 
 \begin{frame}{Linearity assumption}
 \textcolor{blue}{Linearity assumption}: The true population conditional mean is a linear function of the predictor, i.e. $E[Y \mid X] = \beta_0 + \beta_1 X$
@@ -1202,6 +1216,8 @@ If the linearity assumption is \textit{not} violated, then we expect the residua
 
 % include a frame about what we can do if linearity is violated, or no???? ask Charlie
 
+\subsection{Independence}
+
 \begin{frame}{Independence assumption}
 \textcolor{blue}{Independence assumption:} The errors $\epsilon_i$, $i = 1, \dots, n$ are independent of each other.
 
@@ -1279,6 +1295,8 @@ Think about how your data was collected! There are no diagnostic plots for this 
 \textcolor{blue}{Answer:} The independence assumption is likely violated. It is reasonable to expect that the birthweight of a future child may be dependent on the birthweight of a past one. For example, it is known that having one premature birth puts you at increased risk for another premature birth in a future pregnancy, and babies born prematurely tend to have lower weights. 
 
 \end{frame}
+
+\subsection{Normality}
 
 \begin{frame}{Normality assumption}
 \textcolor{blue}{Normality assumption:} The errors $\epsilon_i$, $i = 1, \dots, n$ are normally distributed.
@@ -1403,6 +1421,8 @@ And we get plots that look something like this:
 \textcolor{blue}{Note:} Diagnostic plots are not perfect, and it can be difficult to judge whether or not residuals look close ``enough" to normal state that the normally assumption is satisfied. This is one reason why having large sample sizes (and not needing to worry about this assumption) is so nice!
 
 \end{frame}
+
+\subsection{Equal variance}
 
 \begin{frame}{Equal variance assumption}
 \textcolor{blue}{Equal variance assumption:} The errors $\epsilon_i$, $i = 1, \dots, n$ all have the same variance.
@@ -1630,22 +1650,12 @@ The assumptions we need when we have \textit{large} samples and use \textit{robu
 
 \end{frame}
 
-\begin{frame}
+
+\section{Transformations}
+
+\begin{frame}{}
 content...
 \end{frame}
 
-\subsection{Transformations}
-
-\section{Multiple Linear Regression}
-
-\subsection{Adjusting for covariates}
-
-\subsubsection{Confounding (and causal diagrams)}
-
-\subsubsection{Precision variables}
-
-\subsubsection{Effect modification}
-
-\section{Prediction}
 
 \end{document}
