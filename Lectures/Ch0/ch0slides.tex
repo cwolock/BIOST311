@@ -33,7 +33,7 @@ By the end of Chapter 0, you should be able to:
 	\item Identify and describe common study designs
 	\item Classify variables according to their type (e.g., binary)
 	\item Use numerical and graphical tools to summarize data
-	\item Explain features of and calculate probabilities using important probability distributions (Normal, $t$)
+	\item Explain features of and calculate probabilities using important probability distributions (Normal, $t$) \textcolor{red}{Here you using math typesetting for t; in the subsection name you don't}
 	\item Define a sampling distribution
 	\item Understand the importance of the Central Limit Theorem for statistical inference
 	\item Construct and interpret confidence intervals
@@ -60,7 +60,7 @@ By the end of Chapter 0, you should be able to:
 \begin{frame}{Study Design}
 \textit{How you collect data impacts what questions you can (cannot) answer, what statistical methods you can (cannot) use, and what conclusions you can (cannot) draw.} \\~\
 
-\textcolor{blue}{Extreme Example:} Suppose I'm interested in understanding public opinion about biostatistics. I randomly select on individual from our class and ask if they like biostatistics.
+\textcolor{blue}{Extreme Example:} Suppose I'm interested in understanding public opinion about biostatistics. I randomly select an individual from our class and ask if they like biostatistics.
 
 \begin{itemize}
 	\item What questions can I answer using these data?
@@ -70,7 +70,7 @@ By the end of Chapter 0, you should be able to:
 \end{frame}
 
 \begin{frame}{Experimental vs. Observational Studies}
-
+\textcolor{red}{Do we want to throw in one slide here about what an exposure and outcome are? I think this can actually be confusing for students, esp since ``exposures" aren't always exposures in the colloquial sense.}
 \textcolor{blue}{Experimental:} exposure/treatment is \textit{controlled} by the researcher (e.g., randomly assign people to drug or placebo)
 \begin{itemize}
 	\item Randomized controlled trial 
@@ -319,7 +319,7 @@ Examples:
 \end{frame}
 
 \begin{frame}{Study design: Practice}
-You read \href{https://jamanetwork.com/journals/jamaoncology/fullarticle/2569059?resultClick=24}{\color{cyan} this article} (from 2017), interested in the association between androgen deprivation therpy (ADT), a treatment for prostate cancer, and risk of dementia (ADT). \\~\
+You read \href{https://jamanetwork.com/journals/jamaoncology/fullarticle/2569059?resultClick=24}{\color{cyan} this article} (from 2017), interested in the association between androgen deprivation therpy (ADT), a treatment for prostate cancer, and risk of dementia. \\~\
 
 From the article: \textit{In this... study, a text-processing method was used to analyze electronic medical record data from... 1994 to 2013. We identified 9455 individuals with prostate cancer who were 18 years or older at diagnosis with data recorded in the electronic health record and follow-up after diagnosis. We tested the effect of ADT on the risk of dementia.}
 
@@ -520,7 +520,7 @@ Do you notice anything strange about the plot? Does this affect whether or not w
 
 	\vspace{0.3cm}
 
-Considering age to be continuous \textit{or} discrete in this example are both justifiable conclusions! In general, we'll consider age to be continuous in this class, but in specific scenarios it may make more sense to consider age in discrete, ordinal groups.
+Considering age to be continuous \textit{or} discrete in this example are both justifiable conclusions! In general, we'll consider age to be continuous in this class, but in specific scenarios it may make more sense to consider age in discrete, ordinal groups. \textcolor{red}{I think this might be confusing, since ordinal is for categorical but discrete is for quantitative. I know what you mean here, but the terminology might trip people up.}
 
 \end{frame}
 
@@ -691,7 +691,7 @@ Measures of center?
 
 \begin{itemize}
 	\item[] \textcolor{blue}{Mean birthweight is 3414 grams.}
-	\item[] \textcolor{blue}{Median percent urban is 3444 grams.} 
+	\item[] \textcolor{blue}{Median percent urban is 3444 grams. \textcolor{red}{bwt?}} 
 \end{itemize}
 
 Measures of spread?
@@ -738,7 +738,7 @@ For categorical variables, we can make barplots:
 \end{frame}
 
 \begin{frame}{Univariate Descriptive Statistics: Graphical}
-For quantitative variables, we can make histograms and boxplots. Histograms are useful for describing the shape of the distribution of a variable, and boxplots are useful for seeing central tendancy (and sometimes outliers):
+For quantitative variables, we can make histograms and boxplots. Histograms are useful for describing the shape of the distribution of a variable, and boxplots are useful for seeing central tendency (and sometimes outliers):
 
 \vspace{0.4cm}
 
@@ -777,7 +777,7 @@ Stratified descriptive statistics can help us:
 
 \begin{frame}{Stratified Descriptive Statistics: Graphical}
 
-How does the distribution of birthweights differ between individuals who pariticipated in First Steps and those who did not? We can make histograms for each category of individuals:
+How does the distribution of birthweights differ between individuals who participated in First Steps and those who did not? We can make histograms for each category of individuals:
 
 \vspace{0.3cm}
 
@@ -794,7 +794,7 @@ We can also use side-by-side boxplots rather than side-by-side histograms. It ma
 \end{frame}
 
 \begin{frame}{Stratified Descriptive Statistics: Graphical}
-Scatterplots are a useful tool for summarizing the relationship between two quantitative variables. Below we plot age in years vs. birthweight in pounds for all individuals in our births dataset:
+Scatterplots are a useful tool for summarizing the relationship between two quantitative variables. Below we plot age in years vs. birthweight in grams for all individuals in our births dataset:
 
 \vspace{0.3cm}
 
@@ -822,6 +822,7 @@ You’ll also get practice on homework assignments and your data analysis projec
 \section{Statistical inference}
 
 \begin{frame}{Descriptive statistics vs. Inferential statistics}
+	\textcolor{red}{I feel like these terms were used in the previous section, so maybe this slide could be moved up?}
 Some terms you should know:
 
 \vspace{0.3cm}
@@ -1153,7 +1154,7 @@ Once we know the sampling distribution of our estimate, it's fairly straightforw
 
 \vspace{0.3cm}
 
-\textcolor{blue}{Example:} Suppose we have to estimates. The first has sampling distribution $N(2, 5)$ and the second has sampling distribution $N(2, 1)$. \textit{Which of these estimates is more precise?}
+\textcolor{blue}{Example:} Suppose we have two estimates. The first has sampling distribution $N(2, 5)$ and the second has sampling distribution $N(2, 1)$. \textit{Which of these estimates is more precise?}
 
 \vspace{0.3cm}
 
@@ -1201,7 +1202,7 @@ We're interesting in knowing whether the First Steps program improves birth outc
 	\end{itemize}
 	\item \textbf{Sample:} 2500 singleton births in King County in 2001
 	\begin{itemize}
-		\item \textbf{Statistics/estimate:} sample mean (3414 grams)
+		\item \textbf{Statistic/estimate:} sample mean (3414 grams)
 	\end{itemize}
 \end{itemize}
 
@@ -1221,7 +1222,7 @@ We can convert this outline into general steps for a statistical inference proce
 	\item Take a \textbf{sample} from the population: 2500 singleton births in King County in 2001
 	\item Perform \textit{statistical inference}:
 	\begin{itemize}
-		\item Calculate the corresponding \textbf{statistics} (sample mean): 3414 grams
+		\item Calculate the corresponding \textbf{statistic} (sample mean): 3414 grams
 		\item Quantify the uncertainty in your statistic
 	\end{itemize}
 	\item Make conclusions about your original scientific and statistical questions
@@ -1242,7 +1243,7 @@ We can convert this outline into general steps for a statistical inference proce
 	\item Take a \textbf{sample} from the population: 2500 singleton births in King County in 2001
 	\item Perform \textit{statistical inference}:
 	\begin{itemize}
-		\item Calculate the corresponding \textbf{statistics} (sample mean): 3414 grams
+		\item Calculate the corresponding \textbf{statistic} (sample mean): 3414 grams
 		\item Quantify the uncertainty in your statistic \textcolor{blue}{$\leftarrow$ \textbf{two options}}
 	\end{itemize}
 	\item Make conclusions about your original scientific and statistical questions
@@ -1491,7 +1492,7 @@ To perform statistical inference, we need:
 
 \vspace{0.3cm}
 
-A \textbf{statistic}: difference in average birthweight between babies born to parents in FS vs. not in FS
+A \textbf{statistic}: difference in average birthweight between babies born to parents in FS vs. not in FS \textcolor{red}{This sounds a bit similar to the parameter. Maybe ``difference in average birthweight in our sample"?}
 
 \vspace{0.3cm}
 
