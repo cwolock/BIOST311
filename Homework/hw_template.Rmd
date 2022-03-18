@@ -12,7 +12,7 @@ header-includes:
 
 This assignment should be submitted on Canvas as a .pdf by 12:30pm on the due date. You are welcome to work together on the homework; however, final solutions should be written up individually. 
 
-Make sure you update the document header to reflect the assignment number (e.g., "Homework 1"), your name ("Taylor Okonek and Charlie Wolock" > "Your Name"). Unedited software output in the body of your assignment is not acceptable. Please round numerical values to 2--3 significant digits, and include your R code (if applicable) in the same document. See the "How to Write a Proper Homework" document on Canvas for additional guidelines.  
+Make sure you update the document header to reflect the assignment number (e.g., "Homework 1"), your name ("Taylor Okonek and Charlie Wolock" > "Your Name"). Unedited software output in the body of your assignment is not acceptable. Please round numerical values to 2--3 decimal places, and include your R code (if applicable) in the same document. See the "How to Write a Proper Homework" document on Canvas for additional guidelines.  
 
 Each homework assignment is worth 20 points total. Problems are graded for correctness, according to the number of points given in the problem statement. 
 
