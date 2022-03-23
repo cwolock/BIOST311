@@ -34,7 +34,7 @@ By the end of Chapter 0, you should be able to:
 	\item Identify and describe common study designs
 	\item Classify variables according to their type (e.g., binary)
 	\item Use numerical and graphical tools to summarize data
-	\item Explain features of and calculate probabilities using important probability distributions (Normal, $t$) \textcolor{red}{Here you using math typesetting for t; in the subsection name you don't}
+	\item Explain features of and calculate probabilities using important probability distributions (Normal, $t$) 
 	\item Define a sampling distribution
 	\item Understand the importance of the Central Limit Theorem for statistical inference
 	\item Construct and interpret confidence intervals
@@ -70,8 +70,27 @@ By the end of Chapter 0, you should be able to:
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Study Design: language}
+	A quick reminder about language:
+	
+	\vspace{0.3cm}
+	
+	\begin{itemize}
+		\item \textcolor{blue}{Exposure}: an explanatory variable that may be associated with (or causally related to) the outcome of interest. This is not always an exposure in the colloquial sense, such as someone being ``exposed" to a disease!
+		\item \textcolor{blue}{Outcome}: the variable we are primarily interested in measuring or predicting
+	\end{itemize}
+\vspace{0.3cm}
+Examples: 
+\vspace{0.3cm}
+\begin{itemize}
+	\item Vaccination (exposure) and positive COVID test result (outcome)
+	\item Tutoring (exposure) and final course grade (outcome)
+	\item Age (exposure) and cancer occurrence (outcome)
+\end{itemize}
+\end{frame}
+
 \begin{frame}{Experimental vs. Observational Studies}
-\textcolor{red}{Do we want to throw in one slide here about what an exposure and outcome are? I think this can actually be confusing for students, esp since ``exposures" aren't always exposures in the colloquial sense.}
+
 \textcolor{blue}{Experimental:} exposure/treatment is \textit{controlled} by the researcher (e.g., randomly assign people to drug or placebo)
 \begin{itemize}
 	\item Randomized controlled trial 
@@ -94,7 +113,7 @@ In \textit{experimental} studies, we can talk about \color{blue} \textit{causati
 \vspace{0.3cm}
 
 % we'll come back to this when we talk about interpreting results
-A \textit{\textcolor{blue}{confounder}} is a variable that is \textcolor{red}{causally associated EDIT I don't like this phrase} with our outcome and also associated with the exposure in our sample.  \\
+A \textit{\textcolor{blue}{confounder}} is a variable that is \textit{causally related to} our outcome and also \textit{associated with} the exposure in our sample.  \\
 
 \vspace{0.3cm}
 
@@ -158,7 +177,7 @@ Examples:
 	\item \href{https://jamanetwork.com/journals/jama/article-abstract/2613159}{\color{cyan} Effect of Vitamin D and Calcium Supplementation on Cancer Incidence in Older Women}
 	\item \href{http://stroke.ahajournals.org/content/36/8/1764.short}{\color{cyan} Daily Functioning and Quality of Life in a Randomized Controlled Trial of Therapeutic Exercise for Subacute Stroke Survivors}
 \end{itemize}
-\textcolor{red}{maybe update the second link, it's from 2005} 
+
 \end{frame}
 
 
@@ -210,7 +229,7 @@ Examples:
 	\item \href{onlinelibrary.wiley.com/doi/10.1111/add.12623/full}{\color{cyan} Real-world effectiveness of e-cigarettes when used to aid smoking cessation}
 \end{itemize}
 
-\textcolor{red}{first one from 2011, second from 2014}
+
 
 \end{frame}
 
@@ -263,7 +282,7 @@ Examples:
 	\item \href{https://www.medicalnewstoday.com/articles/316565.php}{\color{cyan} Birth control pills may protect against some cancers for decades}
 \end{itemize}
 
-\textcolor{red}{both of these should be updated}
+
 
 \end{frame}
 
@@ -314,8 +333,6 @@ Examples:
 	\item \href{https://www.sciencedirect.com/science/article/pii/S0140673605676635}{\color{cyan}Obesity and the risk of myocardial infarction in 27,000 participants from 52 countries}
 	\item \href{http://www.nejm.org/doi/full/10.1056/NEJMoa065497\#t=article}{\color{cyan}Case control study of human papillomavirus and oropharyngeal cancer}
 \end{itemize}
-
-\color{red} first is a lancet article from 2005, next is from 2007. both should be updated
 
 \end{frame}
 
@@ -452,21 +469,21 @@ We survey parents and record information on whether or not they have any childre
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Types of Variables: Activity}
 
 We survey parents and record information on whether or not they have any children. We record each living child's age, and if any of their children have died, we record the child's age of death. Age at death is recorded monthly from age 0 months to 24 months, and yearly after that. We plot the number of children who died at each age recorded vs. age in months:
 
 \vspace{0.3cm}
 
-\centering \includegraphics[scale=0.3]{u5mr.png}
+\centering \includegraphics[scale=0.25]{u5mr.png}
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Types of Variables: Activity}
 \begin{figure}
-	\centering \includegraphics[scale=0.3]{u5mr.png}
+	\centering \includegraphics[scale=0.25]{u5mr.png}
 \end{figure}
 	
-\vspace{0.3cm}
+\vspace{0.1cm}
 
 \begin{itemize}
 	\item Argue why we should consider age at death to be a continuous variable.
@@ -476,7 +493,7 @@ We survey parents and record information on whether or not they have any childre
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Types of Variables: Activity}
 
 Argue why we should consider age at death to be a continuous variable.
 	
@@ -502,7 +519,7 @@ Argue why we should consider age at death to be a continuous variable.
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}{Types of Variables: Activity}
 
 	
 Do you notice anything strange about the plot? Does this affect whether or not we should consider age at death to be continuous or discrete?
@@ -517,15 +534,37 @@ Do you notice anything strange about the plot? Does this affect whether or not w
 	\item[] \small \textcolor{blue}{This phenomenon is known as ``age-heaping", and often occurs in surveys where parents do not know the exact age their child was when they died, or when surveyers themselves record dates inexactly. This is essentially a rounding error, where many deaths are recorded at 1 year even though they may have occurred at any time between 0 and 2 years. }
 \end{itemize}	
 	
-	
+\end{frame}
 
-	\vspace{0.3cm}
+\begin{frame}{Types of Variables: Activity}
 
-Considering age to be continuous \textit{or} discrete in this example are both justifiable conclusions! In general, we'll consider age to be continuous in this class, but in specific scenarios it may make more sense to consider age in discrete, ordinal groups. \textcolor{red}{I think this might be confusing, since ordinal is for categorical but discrete is for quantitative. I know what you mean here, but the terminology might trip people up.}
+
+Considering age to be continuous \textit{or} discrete in this example are both justifiable conclusions! In general, we'll consider age to be continuous in this class, but in specific scenarios it may make more sense to consider age in discrete groups. 
 
 \end{frame}
 
 \subsection{Descriptive Statistics}
+
+\begin{frame}{Descriptive statistics vs. Inferential statistics}
+
+	Some terms you should know:
+	
+	\vspace{0.3cm}
+	
+	\begin{itemize}
+		\item \textcolor{blue}{Descriptive} statistics: summarize or \textcolor{blue}{describe} what's happening \textcolor{blue}{\textit{in our sample}}
+		\item \textcolor{orange}{Inferential} statistics: use our data to \textcolor{orange}{infer} something about \textcolor{orange}{\textit{our population of interest}}
+	\end{itemize}
+	
+	\vspace{0.3cm}
+	
+	Often when people talk about ``doing statistics," they're talking about inferential statistics.
+	
+	\vspace{0.3cm}
+	
+	But statistics is much more than that. In fact, \textbf{the most important part of statistics} (and often the hardest) \textbf{is translating your scientific question into a statistics question.} Once you've done this, the rest follows.
+	
+\end{frame}
 
 \begin{frame}{Descriptive Statistics}
 Why do we need descriptive statistics?
@@ -692,7 +731,7 @@ Measures of center?
 
 \begin{itemize}
 	\item[] \textcolor{blue}{Mean birthweight is 3414 grams.}
-	\item[] \textcolor{blue}{Median percent urban is 3444 grams. \textcolor{red}{bwt?}} 
+	\item[] \textcolor{blue}{Median birthweight is 3444 grams.}
 \end{itemize}
 
 Measures of spread?
@@ -822,28 +861,7 @@ You’ll also get practice on homework assignments and your data analysis projec
 
 \section{Statistical inference}
 
-\begin{frame}{Descriptive statistics vs. Inferential statistics}
-	\textcolor{red}{I feel like these terms were used in the previous section, so maybe this slide could be moved up?}
-Some terms you should know:
-
-\vspace{0.3cm}
-
-\begin{itemize}
-	\item \textcolor{blue}{Descriptive} statistics: summarize or \textcolor{blue}{describe} what's happening \textcolor{blue}{\textit{in our sample}}
-	\item \textcolor{orange}{Inferential} statistics: use our data to \textcolor{orange}{infer} something about \textcolor{orange}{\textit{our population of interest}}
-\end{itemize}
-
-\vspace{0.3cm}
-
-Often when people talk about ``doing statistics," they're talking about inferential statistics.
-
-\vspace{0.3cm}
-
-But statistics is much more than that. In fact, \textbf{the most important part of statistics} (and often the hardest) \textbf{is translating your scientific question into a statistics question.} Once you've done this, the rest follows.
-
-\end{frame}
-
-\begin{frame}{Statistical Inference}
+\begin{frame}{Statistical Inference} 
 Why do we do statistics?
 
 \begin{itemize}
@@ -1038,7 +1056,7 @@ How do we know how precise or accurate our statistic is?
 
 \end{frame}
 
-\subsection{Normal/t distributions, Sampling distributions}
+\subsection{Normal/$t$ distributions, Sampling distributions}
 
 \begin{frame}{Probability distributions}
 The \textcolor{blue}{distribution} of a random quantity tells you what values that quantity can take and how likely it is to take each of those values.
@@ -1493,7 +1511,7 @@ To perform statistical inference, we need:
 
 \vspace{0.3cm}
 
-A \textbf{statistic}: difference in average birthweight between babies born to parents in FS vs. not in FS \textcolor{red}{This sounds a bit similar to the parameter. Maybe ``difference in average birthweight in our sample"?}
+A \textbf{statistic}: difference in average birthweight \textit{in our sample} between babies born to parents in FS vs. not in FS 
 
 \vspace{0.3cm}
 
