@@ -72,7 +72,7 @@ When you open RStudio for the first time, the window will display three `r colFm
 
 ### The console
 
-The default position of the console is in the upper right-hand pane of RStudio. This pane is your real window into R: any commands that you run in R will appear in the console, and any results that are output by these commands, with the exception of plots, will appear in the console. 
+The default position of the console is in the lower left-hand pane of RStudio. This pane is your real window into R: any commands that you run in R will appear in the console, and any results that are output by these commands, with the exception of plots, will appear in the console. 
 
 To enter a command into the console, move your cursor to the `>` and click. When there is a flashing `|` in the console, you're ready to enter a command. From now on, you'll call the `>` the execution line. Once you've entered a command on the execution line, hit `Enter` to run the command.
 
@@ -125,7 +125,7 @@ The places in the .Rmd file that begin and end with three back-ticks are called 
 
 ### The environment/history pane
 
-The environment/history pane is, by default, located in the lower left-hand panel of RStudio. The `r colFmt("Environment", "orange")` tab shows any functions or data that you have in your `r colFmt("workspace", "blue")`; that is, any objects created by running R code. Up to now, your workspace only includes the function `colFmt()`, which allows me to color text in Rmarkdown.
+The environment/history pane is, by default, located in the upper right-hand panel of RStudio. The `r colFmt("Environment", "orange")` tab shows any functions or data that you have in your `r colFmt("workspace", "blue")`; that is, any objects created by running R code. Up to now, your workspace only includes the function `colFmt()`, which allows me to color text in Rmarkdown.
 
 The `r colFmt("History", "orange")` tab shows all of the commands that have been entered into the console. 
 
@@ -201,6 +201,12 @@ my_vector[3] # this is fine
 my_vector[6] # this returns NA
 ```
 
+You can access multiple values using the `c()` function.
+
+```{r access-multiple-vector, echo = TRUE, include = TRUE}
+my_vector[1,3]
+```
+
 You access values in data frames using the same square brackets---however, since data frames have rows and columns, you access a value in the `i`th row and `j`th column using `[i, j]`. 
 
 For example, access the 3rd element in the 5th column of the births data:
@@ -232,7 +238,7 @@ library("tidyverse")
 
 Using the `tidyverse` package, you can pass the output of one function directly to another --- that way, you don't have to save all the intermediate objects as separate variables. This keeps things much cleaner! To pass output from one function to the next, using the `%>%` operator (referred to as "pipe.") 
 
-For example, suppose we want to take the `age` column of the births dataset, and then look at some rows. We can pick columns using `select()`. The `head()` function will show the first 6 rows, while we can choose arbitrary chunk of rows using `slice()`. The `%>%` operator links these commands together. 
+For example, suppose we want to take the `age` column of the births dataset, and then look at some rows. We can pick columns using `select()`. The `head()` function will show the first 6 rows, while we can choose arbitrary chunk of rows using `slice()`. (Our input to `slice()` is `20:30`, which simply lists all integers from 20 to 30.) The `%>%` operator links these commands together. 
 
 ```{r example-select, echo = TRUE, include = TRUE}
 ## get the names of the data frame
