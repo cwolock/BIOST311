@@ -2,10 +2,11 @@
 \documentclass[10pt,t]{beamer}
 % Theme choice:
 \usetheme{Singapore}
-\usecolortheme{whale}
-\setbeamercolor{titlelike}{fg=blue,bg=white}
-\setbeamercolor{frametitle}{fg=blue,bg=white}
-\setbeamertemplate{frametitle}[default][left]
+\useoutertheme{sidebar}
+\usecolortheme{seahorse}
+\setbeamercolor{titlelike}{bg=white}
+\setbeamercolor{frametitle}{bg=white}
+%\setbeamertemplate{frametitle}[default][left]
 \setbeamertemplate{navigation symbols}{}
 
 \usepackage{graphicx}
@@ -13,6 +14,8 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{amsthm}
+\usepackage{ulem}
+\usepackage{listings}
 
 % Title page details: 
 \title{Introduction to BIOST 311} 
@@ -82,8 +85,19 @@
 \end{frame}
 
 \begin{frame}{Logistics}
-Class sessions times and room (if not on zoom) \\
-Office hours times and room (if not on zoom)
+Lecture: MWF, 12:30 - 1:20pm {\hfill HSE 216}
+
+\vspace{0.3cm}
+
+Discussion: Tuesday, 10:30 - 11:20am  {\hfill HST 359}
+
+\vspace{0.3cm}
+
+Office hours: TBD (fill out the when2meet poll!)*
+
+\vspace{0.3cm}
+
+*office hours also available by appointment
 \end{frame}
 
 \begin{frame}{Learning objectives}
@@ -126,10 +140,14 @@ Instructors will not send same-day responses to messages sent after 8:00pm PST.
 \begin{frame}{Homework}
 
 Homework assignments will be posted on the Canvas website one week 
-prior to the due date. They should be completed in a Word or .pdf document and 
-submitted electronically to the Canvas website by the due date. You are welcome to work together on homework; however, your submitted assignment (including R code, if applicable) should be in your own words. \\~\
+prior to the due date. They should be completed in a .pdf document knit from R 
+Markdown and submitted electronically to the Canvas website by the due date. You are 
+welcome to work together on homework; however, your submitted assignment 
+(including R code) should be in your own words. \\~\
 
-Solution keys and individual feedback will be provided. \textcolor{red}{We have prepared a guide for how to present your assignments which is available on our Canvas page.} The lowest homework score will be dropped.
+Solution keys and individual feedback 
+will be provided. We have prepared a guide for how to present your assignments which 
+is available on our Canvas page. The lowest homework score will be dropped.
 
 \end{frame}
 
@@ -144,18 +162,20 @@ Late homework receives no credit.
 \end{frame}
 
 \begin{frame}{Quizzes}
+
 There will be weekly, open-note Canvas quizzes on Mondays. These quizzes are designed to ensure that you keep up with course material and can recall material from previous weeks. Each quiz will consist of 10 questions, 3 of which will be on information from previous weeks, and 7 of which will be on material from the most recent week of lectures. Questions will be a mix of multiple choice, True/False, and open response. \\~\
 
-Quizzes will be graded Monday evening, and you will have 48 hours from Monday 11:59pm PST to Wednesday 11:59pm PST to complete quiz revisions, for the opportunity to earn back up to 50\% of the points you missed.
+Quizzes will be available from 12:01am PDT Monday until 11:59pm PDT Monday. Quizzes will be graded on Tuesday, and you will have 48 hours from Tuesday 11:59pm PDT to Thursday 11:59pm PDT to complete quiz revisions, for the opportunity to earn back up to 50\% of the points you missed.
+
 \end{frame}
 
 
 \begin{frame}{Discussion section}
-Discussion sections will consist of \textcolor{red}{group activities}, review of class material, discussion of group projects, and practice using R. You will be required to hand in a brief exercise (credit/no credit) at each discussion section. Your discussion section score will be based on completion of these assignments. To receive full credit for discussion section, you can miss at most one of the discussions.
+Discussion sections will consist of group activities, review of class material, discussion of group projects, and practice using R. You will be required to hand in a brief exercise (credit/no credit) at each discussion section. Your discussion section score will be based on completion of these assignments. To receive full credit for discussion section, you can miss at most one of the discussions.
 \end{frame}
 
 \begin{frame}{Final Project}
-There will be a final data analysis project for which you will be given a dataset (or select your own, with approval from the instructors) and asked to develop a appropriate analysis plan, carry out the analysis, and write a short report. Projects will be introduced in the first discussion section. \textcolor{red}{You will complete your project in small groups, assigned by the instructors.}
+There will be a final data analysis project for which you will be given a dataset (or select your own, with approval from the instructors) and asked to develop an appropriate analysis plan, carry out the analysis, and write a short report. A project guidelines document will be provided to you the first week of the quarter. You will complete your project individually.
 \end{frame}
 
 \begin{frame}{Grading}
@@ -184,14 +204,15 @@ Guidelines: http://depts.washington.edu/grading/practices/guidelines.html
 
 \begin{frame}{Course policies}
 \begin{itemize}
-	\item \textbf{Laptops}: You will be expected to have access to a laptop during discussion sections. However, you will not generally need access to a computer during lecture (different if zoom, obviously).
-	\item \textbf{Computing}: Computing in R is an important component of this course. FIND OUT WHERE THEY CAN BORROW COMPUTERS and include here. Please see us if this expectation will cause trouble for you, and we can work out a solution.
+	\item \textbf{Laptops}: You will be expected to have access to a laptop during discussion sections. However, you will not generally need access to a computer during lecture.
+	
+	\item \textbf{Computing}: Computing in R is an important component of this course. You may borrow a computer for either short- or long-term use from the Student Technology Loan Program (stlp.uw.edu). Please see us if this expectation will cause trouble for you, and we can work out a solution.
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Course policies (continued)}
 \begin{itemize}
-	\item \textbf{Collaboration}: You are encouraged to work together on homework assignments, but the final write-up should be done individually. The course project will be a \textcolor{red}{group project}; you will discuss approaches to the project with your group and other classmates during discussion sections, but outside of class you may only discuss your project with your group members and the instructors.
+	\item \textbf{Collaboration}: You are encouraged to work together on homework assignments, but the final write-up should be done individually. The course project will be a individual; you will discuss approaches to the project with your classmates during discussion sections, but outside of class you may only discuss your project with the instructors.
 	\item \textbf{Academic Honesty}: Students are encouraged to familiarize themselves with the academic honesty policies. If you hand in work that is not written in your own words, you will at minimum lose all credit for the problem, and at maximum all credit for the assignment. Issues surrounding academic integrity will be handled in accordance with university policies.
 \end{itemize}
 \end{frame}
@@ -200,6 +221,35 @@ Guidelines: http://depts.washington.edu/grading/practices/guidelines.html
 \begin{itemize}
 	\item \textbf{Grading}: We will have assignments graded in a timely fashion. If you have questions or concerns about the grading, see us. We reserve the right to change or not change the grade.
 \end{itemize}
+\end{frame}
+
+\begin{frame}{COVID-related Expectations}
+Per UW policy, this class will be conducted in person. You should only register for this class if you can attend in person, or if you meet the criteria for an accommodation from Disability Resources for Students (DRS) or a special arrangement approved by the SPH Office of the Dean that allows you to take the course remotely. 
+
+\vspace{0.3cm}
+
+Please contact UW Disability Resources for Students (DRS) directly if you feel you may be eligible for an accommodation based on your status as an immunocompromised individual or based on other diagnosed physical or mental health conditions that might prevent you from being able to take classes in-person. 
+
+\end{frame}
+
+\begin{frame}{COVID-related Expectations: continued}
+If you are a student enrolled in a program in SPH, and you are either living with an individual who is immunocompromised, OR you are unable to obtain a visa to travel to the US, you may be eligible for a “special arrangement” that will allow you to take this course remotely. To further clarify, immunocompromised refers to individuals with no/critically weakened immune response to the vaccines. Immune compromised is not the same as underlying health concerns which may lead to a more severe response to COVID. Requests for special arrangements to take the class remotely should have been submitted to and approved by the Students and Academic Services team in the Office of the Dean before the beginning of the quarter.
+\end{frame}
+
+\begin{frame}{COVID-related Expectations: continued}
+All UW students are expected to complete their vaccine attestation before arriving on campus. Per President Cauce’s message March 8,  following changes to state and local health policies, masks will become optional inside most University facilities starting March 28, the first day of spring quarter. Masks will continue to be required in clinical and other health-care settings and on public transportation, including UW shuttles. We strongly recommend wearing masks indoors during the first two weeks of spring quarter. Please monitor yourself daily for symptoms and stay home if you are sick. It’s also strongly recommended to get tested after travel. Refer to the UW Face Covering Policy for the latest guidance and follow the campus-wide face-covering policy at all times. 
+\end{frame}
+
+\begin{frame}{COVID-related Expectations: continued}
+You are expected to follow state, local, and UW COVID-19 policies and recommendations. If you feel ill or exhibit possible COVID symptoms, you should not come to class. If you need to temporarily quarantine or isolate per CDC guidance and/or campus policy, you are responsible for notifying your instructors as soon as possible by email. If you receive a positive COVID-19 test result, you must report to campus Environmental Health \& Safety (EH\&S) by emailing covidehc@uw.edu or calling 206-616-3344. 
+\end{frame}
+
+\begin{frame}{COVID-related Expectations: continued}
+Please check your email daily BEFORE coming to class. If we need to conduct class remotely because the instructor or a guest speaker is complying with UW policies and unable to attend in person, we will send all registered students an email with a Zoom link for remote instruction.
+\end{frame}
+
+\begin{frame}{Land Acknowledgment}
+Washington State is home to 29 federally recognized and five unrecognized tribes. The University of Washington acknowledges the Coast Salish people of this land, the land which touches the shared waters of all tribes and bands within the Duwamish, Suquamish, Tulalip and Muckleshoot nations.
 \end{frame}
 
 \begin{frame}{Classroom climate}
@@ -226,24 +276,54 @@ The UW School of Public Health (SPH) is committed to upholding standards of acad
 
 \end{frame}
 
+\begin{frame}{Religious Accommodation}
+Washington state law requires that UW develop a policy for accommodation of student absences or significant hardship due to reasons of faith or conscience, or for organized religious activities. The UW’s policy, including more information about how to request an accommodation, is available at Religious Accommodations Policy (https://registrar.washington.edu/staffandfaculty/religious-accommodations-policy/). Accommodations must be requested within the first two weeks of this course using the Religious Accommodations Request form (https://registrar.washington.edu/students/religious-accommodations-request/).
+\end{frame}
+
+\begin{frame}{Inclusion and Diversity}
+Diverse backgrounds, embodiments and experiences are essential to the critical thinking endeavor at the heart of University education. In SPH, we are expected:
+\begin{itemize}
+	\item To respect individual differences, which may include, but are not limited to, age, cultural background, disability, ethnicity, family status, gender identity and expression, citizenship and immigration status, national origin, race, religion, sex, sexual orientation, socioeconomic status and veteran status.
+	\item To engage respectfully in the discussion of diverse worldviews and ideologies embedded in course readings, presentations and artifacts, including those course materials that are at odds with personal beliefs and values. 
+	\item To encourage students with concerns about classroom climate to talk to their instructor, adviser, a member of the departmental or SPH EDI Committee, the Assistant Dean for EDI, or the program’s director.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Pronouns}
+We share our pronouns because we strive to cultivate an inclusive environment where people of all genders feel safe and respected. We cannot assume we know someone’s gender just by looking at them. So, we invite everyone to share their pronouns.
+\end{frame}
+
+\begin{frame}{Bias Concerns}
+The Office of the Dean has a student concern policy, a faculty concern policy and standard HR procedures for staff concerns. Our 2018 climate survey states that most people in SPH do not report bias incidents because they do not know where to go. Students are encouraged to report any incidents of bias to someone they feel comfortable with, including instructors, advisers or department staff. They can email dcinfo@uw.edu for immediate follow up. Bias concerns can be anonymously and confidentially reported at this link: https://sph.washington.edu/about/diversity/bias-concerns. Data is collected by the Assistant Dean for EDI and the Director of Program Operations for Student and Academic Services and tracked for resolution and areas are identified for further training.
+\end{frame}
+
+\begin{frame}{Sexual Harassment}
+Sexual harassment is a form of harassment based on the recipient’s sex that is characterized by:
+\begin{itemize}
+	\item Unwelcome sexual advances, requests for sexual favors, or other verbal or physical conduct of a sexual nature by a person who has authority over the recipient when:
+	\begin{itemize}
+		\item Submission to such conduct is an implicit or explicit condition of the individual’s employment, academic status, or ability to use University facilities and services, or
+		\item Submission to or rejection of the conduct affects tangible aspects of the individual’s employment, academic status, or use of University facilities.
+	\end{itemize}
+\item Unwelcome and unsolicited language or conduct that creates an intimidating, hostile, or offensive working or learning environment, or has the purpose or effect of unreasonably interfering with an individual’s academic or work performance.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Sexual Harassment: continued}
+If you believe that you are being harassed, or have observed harassment, you can report it to SPH using the bias concerns link. The University also has designated offices to help you: SafeCampus; Office of the Ombud; Title IX Investigation Office; and University Complaint Investigation and Resolution Office. 
+\end{frame}
+
 \begin{frame}{First Canvas quiz!}
-Please complete the Canvas quiz by Friday! \textcolor{red}{tbd a bit, but we should do something like this probably} 
+Please complete the Canvas Quiz 1 by Wednesday! 
 
 \vspace{0.3cm}
 
 \begin{itemize}
-	\item Name
-	\item Pronunciation guide
+	\item Preferred name
+	\item Pronouns
 	\item What are you most looking forward to learning this quarter?
 	\item What do you anticipate having the most trouble with this quarter?
-\end{itemize}
-
-\vspace{0.3cm}
-
-Pronunciation guide example:
-\begin{itemize}
-	\item Taylor Okonek
-	\item TAY-lor AH-ke-nik
+	\item Prior coding experience?
 \end{itemize}
 
 \vspace{0.3cm}
@@ -286,12 +366,12 @@ You are \textit{not} expected to have a computing background
 
 \begin{itemize}
 	\item We will demonstrate important functions in lectures and discussion sections
-	\item We will provide helpful resources: templates for homework assignments, \texttt{R} code "cheat sheets" with useful functions, video tutorials (as applicable), etc. \textcolor{red}{We need to make cheat sheets i guess}
+	\item We will provide helpful resources: templates for homework assignments, \texttt{R} code "cheat sheets" with useful functions, etc. 
 \end{itemize}
 
 \vspace{0.3cm}
 
-\textbf{Homework for tonight:} download \texttt{R} and \texttt{R Studio} (see instructions on Canvas) \textcolor{red}{need to make instructions}
+\textbf{Homework for tonight:} download \texttt{R} and \texttt{R Studio} (see instructions on Canvas - Week 1 page - Computing in R link) 
 
 \end{frame}
 
@@ -421,31 +501,31 @@ Why is statistics important?
 \end{frame}
 
 \begin{frame}[c]{Example: Prediction}
-\centering \includegraphics[scale=0.37]{ihme1.png}
+\centering \includegraphics[scale=0.35]{ihme1.png}
 \end{frame}
 
 \begin{frame}[c]{Example: Prediction}
-\centering \includegraphics[scale=0.37]{ihme2.png}
+\centering \includegraphics[scale=0.35]{ihme2.png}
 \end{frame}
 
 \begin{frame}[c]{Example: Prediction}
-\centering \includegraphics[scale=0.37]{ihme3.png}
+\centering \includegraphics[scale=0.35]{ihme3.png}
 \end{frame}
 
 \begin{frame}[c]{Example: Prediction}
-\centering \includegraphics[scale=0.37]{ihme4.png}
+\centering \includegraphics[scale=0.35]{ihme4.png}
 \end{frame}
 
 \begin{frame}[c]{Example: Prediction}
-\centering \includegraphics[scale=0.37]{ihme5.png}
+\centering \includegraphics[scale=0.35]{ihme5.png}
 \end{frame}
 
 \begin{frame}[c]{Example: Prediction}
-\centering \includegraphics[scale=0.37]{ihme6.png}
+\centering \includegraphics[scale=0.35]{ihme6.png}
 \end{frame}
 
 \begin{frame}[c]{Example: Prediction}
-\centering \includegraphics[scale=0.37]{ihme7.png}
+\centering \includegraphics[scale=0.35]{ihme7.png}
 \end{frame}
 
 \begin{frame}{Example: Prediction}
