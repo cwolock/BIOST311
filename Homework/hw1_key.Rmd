@@ -1,0 +1,210 @@
+---
+title: "Homework 1: Key"
+subtitle: "BIOST 311"
+author: "Taylor Okonek and Charlie Wolock"
+date: "March 29th, 2022"
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+---
+
+```{r setup, include=FALSE}
+library(formatR)
+
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(results = "hide")
+```
+
+
+## Instructions
+
+This assignment should be submitted on Canvas as a .pdf by 12:30pm on Friday, April 8th. You are welcome to work together on the homework; however, final solutions should be written up individually. 
+
+Unedited software output in the body of your assignment is not acceptable. Please round numerical values to 2--3 significant digits, and include your R code (if applicable) in the same document. See the "How to Write a Proper Homework" document on Canvas for additional guidelines.  
+
+Each homework assignment is worth 20 points total. Problems are graded for correctness, according to the number of points given in the problem statement. 
+
+
+## 1. Descriptive statistics and data visualization
+
+We will be using the `births` dataset often in the first few weeks of BIOST311. For this question, you will get acquainted with some of the variables in the dataset. 
+
+
+```{r preliminaries}
+library(readr)
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+```
+
+### a. Load the `births` dataset (0 points)
+
+```{r 1a}
+births <- readr::read_csv(url("https://raw.githubusercontent.com/cwolock/BIOST311/main/Datasets/births.csv"))
+```
+
+### b. The `gestation` variable gives the number of weeks gestation for each birth in the dataset. Give relevant descriptive statistics for this variable, and provide one plot of your choice to visualize its distribution. Would you describe the distribtion as roughly symmetric, left skewed, or right skewed? (2 points)
+
+\textcolor{blue}{Descriptive statistics for the gestation times (in weeks) are given in the table below. We chose a standard five number summary (using the `fivenum` function in `R`), which includes minimum, first quartile, median, third quartile, and maximum. Another reasonable option for a continuous variable like `gestation` would be a mean and standard deviation.}
+
+```{r 1b1, results = "markup"}
+desc <- births %>% pull(gestation) %>% fivenum()
+table_df <- data.frame("Min." = desc[1],
+                       "Q1" = desc[2],
+                       "Med." = desc[3],
+                       "Q3" = desc[4],
+                       "Max." = desc[5])
+kable(table_df)
+```
+
+\textcolor{blue}{We also include a boxplot of the gestation times. A histogram would be another reasonable choice.}
+
+```{r 1b2, results = "markup"}
+births %>% ggplot(aes(x = gestation)) + 
+  geom_boxplot() + 
+  theme_bw() + 
+  xlab("gestation (weeks)") +
+  theme(axis.title.y=element_blank(), axis.text.y=element_blank(), axis.ticks.y=element_blank())
+```
+
+### c. Make another plot of gestation times, but this time stratified by birth parent's smoking status. Qualitatively describe how the two distributions look in comparison to one another. 
+
+\textcolor{blue}{The figure below is a boxplot of gestation times stratified by smoking status. For looking at quantitative variables stratified by group, side-by-side boxplots are generally the cleanest option. Interlaced or overlapping histograms could work, but are generally a bit more difficult to analyze visually.}
+
+```{r 1c, results = "markup"}
+births <- births %>% mutate(smokef = factor(smoke, levels = c(0, 1), labels = c("No", "Yes")))
+births %>% ggplot(aes(x = gestation, y = smokef)) + 
+  geom_boxplot() + 
+  theme_bw() + 
+  xlab("gestation (weeks)") + 
+  ylab("smoking status")
+```
+
+\textcolor{blue}{OVerall, the distributions of gestation times for people who smoke vs. those who do not look quite similar. The distribution for those who smoke is a bit more left-skewed, with a lower first quartile. The centers of each distribution are nearly identical, as are the ranges.}
+
+\newpage
+
+## 2. Standard errors and confidence intervals
+
+### a. What is the mean birth parent age in the `births` dataset? Give an estimate of the standard error of the sample mean. Construct a 95\% confidence interval for the population mean age "by hand" (i.e., using `R` for calculations, but not using the `confint` function). Interpret this confidence interval. 
+
+```{r}
+mean_age <- births %>% pull(age) %>% mean()
+se_est <- births %>% pull(age) %>% sd()/sqrt(nrow(births))
+ci_l <- mean_age - 1.96*se_est
+ci_u <- mean_age + 1.96*se_est
+```
+
+\textcolor{blue}{The mean birth parent age is `r round(mean_age, 1)` years. The standard error of the sample mean is $\sqrt{\sigma^2/n}$, where $\sigma^2$ is the variance of birth parent age in the population. We can estimate this using the sample variance, yielding a standard error estimate of `r round(se_est, 2)`. The form of a 95\% confidence interval is est $\pm 1.96\times$SE. If we plug in our sample mean and standard error estimate, we get a confidence interval of  (`r round(ci_l, 1)`, `r round(ci_u, 1)`).} The observed data would not be considered unusual if the true population mean age were between `r round(ci_l, 1)`years and `r round(ci_u, 1)` years. 
+
+### b. Suppose we took another sample of size 2500 from the live births in King County. If the standard deviation of birth parent age were larger in this sample, how would a 95\% confidence interval for mean age differ from what you determined in part (a)? Give one sentence explaining your rationale. 
+
+\textcolor{blue}{The confidence interval from the new sample would be wider. The width of the confidence interval is determined by (1) the confidence level, which has not changed; (2) the sample size, which has not changed; and (3) the sample standard deviation, is larger in the new sample. A larger sample standard deviation leads to a larger standard error estimate, and a correspondigly wider confidence interval.}
+
+### c. What is the proportion of births assigned female sex? Determine the sampling distribution of the sample proportion and costruct a 95\% confidence interval "by hand" (i.e., using `R` for calculations, but not using the `confint` function). Interpret this confidence interval.
+
+```{r}
+births <- births %>% mutate(sexn = ifelse(sex == "F", 1, 0))
+p_female <- births %>% pull(sexn) %>% mean()
+se_est <- sqrt(p_female*(1 - p_female)/nrow(births))
+ci_l <- p_female - 1.96*se_est
+ci_u <- p_female + 1.96*se_est
+```
+
+\textcolor{blue}{The proportion of births assigned female sex in this sample is `r round(p_female, 2)`. The standard error of a sample proportion is $\sqrt{p(1-p)/n}$, where $p$ is the true population proportion. We can estimate this using our sample proportion, yielding a standard error estimate of `r round(se_est, 2)`. The corresponding 95\% confidence interval is (`r round(ci_l, 2)`, `r round(ci_u, 2)`). The observed data would not be considered unusual if the true proportion assigned female sex were between `r round(ci_l, 2)` and `r round(ci_u, 2)`.}
+
+## 3. Simple linear regression with binary predictor
+
+For this question, you will study the association between birthweight and premature birth using the `births` dataset. 
+
+### b. An infant is considered premature if born prior to 37 weeks gestation. Create a new binary variable indicating whether each birth in the dataset was premature. Provide relevant descriptive statistics for this new variable. (2 points)
+
+```{r 2b}
+births <- births %>% mutate(premature = ifelse(gestation < 37, 1, 0))
+births %>% select(premature) %>% table()
+```
+
+\textcolor{blue}{Out of 2,500 live births in the dataset, 278 (11.1\%) were born prior to 37 weeks gestation.}
+
+### c. We are interested in studying the association between premature birth and birthweight. Write a statistical question that will allow us to examine this association through linear regression. What is our population of interest? What is our parameter? (2 points)
+
+\textcolor{blue}{Statistical question: Is there a difference in mean birthweight between premature and non-premature births? Population of interest: All babies born in King County. Parameter: Population linear regression slope (difference in mean birthweight comparing premature and non-premature births).}
+
+### d. Perform a linear regression analysis to answer the statistical question from part (c). Be sure to include a statistic with appropriate uncertainty quantification, as well as a hypothesis test. (3 points)
+
+```{r 2d}
+mod <- lm(bwt ~ premature, data = births)
+summary(mod)
+confint(mod)
+```
+
+\textcolor{blue}{The estimated difference in mean birthweight comparing premature and non-premature births is 823.6 grams (95\% CI 761.7 - 885.4), with premature having a lower birthweight on average. This estimated difference would not be unusual if the true difference were between 761.7 and 885.4 grams. These data provide strong evidence of a difference in mean birthweight between premature and non-premature birhts (p < 0.001).}
+
+### e. Since premature birth is a binary variable, we could also approach this problem without using linear regression. Perform and interpret a t-test (assuming equal variances) comparing the average birthweight in premature vs. non-premature births. (2 points)
+
+```{r 2e}
+t.test(bwt ~ premature, data = births, var.equal = TRUE)
+```
+
+\textcolor{blue}{We estimate a difference in mean birthweight between premature and non-premature births of 823.6 grams, with premature births having the lower mean. The 95\% confidence interval for the difference in means is 761.7 - 885.4, indicating that the data would not be unusual if the true difference were in that interval. Based on a two-sample t-test assuming equal variances, there is strong evidence of a difference in mean birthweight between premature and non-premature births (p < 0.001).}
+
+### f. What do you notice about your results from parts (d) and (e)? Do they agree? (1 point)
+
+\textcolor{blue}{The results (estimated difference in means, confidence interval, and p-value) are all the same! A two-sample t-test assuming equal variances is exactly equivalent to linear regression with a binary predictor.}
+
+\newpage
+
+## 3. Study design
+
+For each of the following scientific questions, propose an appropriate study design. (You may use the same design at most twice.) Provide a one-sentence explanation of your reasoning. 
+
+### a. Among people who are already heavy smokers, can running reduce the effect of smoking on incidence of lung cancer? (1 point)
+
+\color{blue} **Possible Answers:**
+
+- **Randomized controlled trial:** enroll heavy smokers without lung cancer and randomize either to a particular exercise program or to no intervention (participants can do whatever they would do anyway). Follow to see if/when subjects get lung cancer. 
+    - *This would establish causality! If you can get funding for it, this would be our preference. Otherwise, a cohort or case-control study would be reasonable.*
+- Case-control study: enroll people with lung cancer and people without lung cancer who have been heavy smokers at some point in the past [population of interest]. Compare how many runners are in each group. 
+    - *This study design is attractive for rare outcomes like cancer, but would show association rather than causation; also, it may be difficult to find the people in your population of interest (i.e., heavy smokers at some particular point in the past).* 
+- Cohort study: enroll heavy smokers without lung cancer, follow for a set period of time and see whether they get lung cancer, and compare risk of lung cancer between runners and non-runners.
+    - *Easier to define population of interest (current smokers), but would need a large sample to see many cases of the rare disease outcome.*
+- Cross-sectional study: enroll a random sample of heavy smokers. Ask them whether they run or not (either in the present or in the past) and whether they have lung cancer or not. 
+    - *This study design is likely to be inefficient. Lung cancer is rare, so you'd need a very large sample.* 
+
+\color{black}
+
+### b.	How does risk of severe influenza differ between those who received a flu vaccine and those who did not? (1 point)
+
+\color{blue} **Possible Answers:**
+
+- **Cohort study:** enroll adult men and women without flu and see how many get the flu during a set period of time [e.g., one flu season]. 
+    - *This would be our preference, since flu is a common and fairly rapidly-occurring outcome, so it's not terribly difficult or expensive to watch people and record whether they get the flu.* 
+- We can't use an RCT here, since you can't randomize someone to being male or female. 
+- Case-control study: enroll people with and without the flu, then see what proportion of each is male vs. female.
+- Cross-sectional study: enroll people randomly and see what proportion of men vs women has the flu. 
+
+\color{black}
+
+### c. Is a common genetic mutation associated with colon cancer? (1 point)
+
+\color{blue} **Possible Answers:**
+
+- A **case-control study** is your best bet. This gives higher efficiency for the rare outcome, and you still know the temporal sequence of exposure $\rightarrow$ outcome because this genetic mutation is present at birth. 
+- We can't use an RCT here, since you can't randomize someone to have or not have a genetic mutation. 
+- It doesn't really make sense to do a cohort study here; we already know the temporal sequence of genetics $\rightarrow$ colon cancer, so there's no particular advantage and the study would need to be much larger and more expensive.  
+- It doesn't really make sense to do a cross-sectional survey here, since it would be highly inefficient for a rare outcome like colon cancer (and a rare exposure, if the genetic mutation we're interested in is rare). The context in which you'd do a cross-sectional study for genetic association analysis is when you are planning to take a very large sample and look at a wide variety of genetic markers and outcomes/diseases.  
+
+\color{black}
+
+\newpage
+
+
+
+
