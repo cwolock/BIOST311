@@ -57,7 +57,7 @@ By the end of Chapter 1b, you should be able to:
 % Presentation structure
 
 
-\section{Multiple linear regression: motivation}
+\section{Motivation}
 
 \subsection{Linear regression models with multi-level categorical predictors}
 
@@ -288,6 +288,153 @@ A couple things to notice:
 \end{itemize}
 
 \end{frame}
+
+\begin{frame}{Linear regression with a categorical predictor: Example in \texttt{R}}
+
+\begin{figure}
+	\centering \includegraphics[scale=0.3]{multilevel_cat_lm3.png}
+\end{figure}
+
+\vspace{0.1cm}
+
+A couple things to notice:
+\begin{itemize}
+	\item We have multiple p-values! But which p-value is the one associated with our hypothesis test? Let's write it down\dots
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Linear regression with a categorical predictor: Example in \texttt{R}}
+We're interested in whether birthweight is associated with race, in our births dataset. Our regression model has the form:
+$$
+E[\text{bwt} \mid \text{race}] = \beta_0 + \beta_1 \times \text{black} + \beta_2 \times \text{hispanic} + \beta_3 \times \text{other} + \beta_4 \times \text{white}
+$$ \pause
+
+Our null hypthesis (in words) is that there is no association between race and birthweight. This would mean that \textcolor{blue}{all dummy variables for race} are \textit{simultaneously} equal to zero. \pause In math:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item $H_0$: $\beta_1 = \beta_2 = \beta_3 = 0$
+	\item $H_1$: \textit{at least one} of $\beta_1, \beta_2, \beta_3$ is not equal to $0$
+\end{itemize} \pause
+
+\vspace{0.3cm}
+
+How do we do this in \texttt{R}?
+
+\end{frame}
+
+\begin{frame}{Linear regression with a categorical predictor: Example in \texttt{R}}
+In \texttt{R}, we create two linear regression models: one with the race variable and an intercept, and one with only an intercept. We then use the \texttt{anova} function to test whether the race variable as a whole is significantly associated with birthweight.
+
+\vspace{0.3cm}
+
+\texttt{mod1 <- lm(data = df, bwt} $\sim$ \texttt{1) \\
+	mod2 <- lm(data = df, bwt} $\sim$ \texttt{race) \\
+	anova(mod1, mod2)} \pause
+
+\vspace{0.3cm}
+
+Details:
+\begin{itemize}
+	\item \texttt{mod1} is the model with only an intercept (specified with the $1$ on the right hand side of the tilde)
+	\item Inside of the \texttt{anova} function, we put the ``smaller" model first (in this case, the model without the race covariate)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Linear regression with a categorical predictor: Example in \texttt{R}}
+
+Our output from the \texttt{anova} function:
+
+\vspace{0.3cm}
+
+\begin{figure}
+	\centering \includegraphics[scale=0.4]{anova_race.png}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Linear regression with a categorical predictor: Example in \texttt{R}}
+Our output from the \texttt{anova} function:
+
+\vspace{0.3cm}
+
+\begin{figure}
+	\centering \includegraphics[scale=0.4]{anova_race2.png}
+\end{figure}
+
+\vspace{0.3cm}
+
+\textit{This} is the p-value for our hypothesis test. \textit{Not} the individual p-values from our linear regression output. \pause
+
+\vspace{0.3cm}
+
+
+\includegraphics[scale=0.01]{chilipepper.png} \tiny You might notice that the p-value here corresponds to an F statistic, as opposed to a $t$ statistic as with hypothesis tests for single coefficients (e.g., $\beta_1 = 0$ vs. $\beta_1 \neq 0$). The key here is that F tests allow us to test for multiple coefficients being equal to $0$ at once. If you're interested in mathematical details, please ask us!
+
+\end{frame}
+
+\begin{frame}{Linear regression with a categorical predictor: Example in \texttt{R}}
+Key Takeaway(s):
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item The individual p-values for separate categories of a multilevel categorical variable \textit{do not} correspond to the hypothesis test for whether the variable is associatied with the outcome
+	\item We use the \texttt{anova} function in \texttt{R} to get p-values that correspond to hypothesis tests where the null hypothesis involves setting \textit{more than one} coefficient equal to zero
+\end{itemize} \pause
+
+\vspace{0.3cm}
+
+What does this example have to do with multiple linear regression? 
+
+\vspace{0.3cm}
+
+Multiple linear regression involves having \textit{multiple} predictors in your model. Multilevel categorical variables are a preview of multiple linear regression, as they can be framed as multiple dummy variables! \pause
+
+\vspace{0.2cm}
+
+\tiny *note that the polynomial transformation also involved multiple predictors in our model, so you've now had two previews of multiple linear regression
+
+\end{frame}
+
+\subsection{Graphical examples}
+
+\begin{frame}{Multiple linear regression: Motivation}
+So far, we have considered the relationship between the outcome $Y$ and a single covariate/predictor $X$. Some terminology we'll use:
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Predictor of interest}: the covariate whose relationship to the outcome corresponds to our primary scientific/statistical question \pause
+
+\vspace{0.3cm}
+
+In everything we've done so far $X$ has been our predictor of interest, but it also been our \textit{only} predictor. However, there may be other variables that \textit{influence} the association between our predictor of interest and the outcome, by:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textcolor{blue}{Confounding} the association
+	\item \textcolor{blue}{Modifying} the association
+	\item Providing information that \textcolor{blue}{reduces the variability} of our estimates
+\end{itemize}
+
+
+\end{frame}
+
+\section{Adjusting for covariates}
+
+\subsection{Causal diagrams}
+
+\subsection{Stratification}
+
+\subsection{Confounders}
+
+\subsection{Precision variables}
+
+\subsection{Effect modifiers}
+
+
 
 % motivator for multiple linear regression
 % note that also had multiple coefficients with the polynomial transformation
