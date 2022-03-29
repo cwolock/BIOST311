@@ -211,7 +211,7 @@ You access values in data frames using the same square brackets---however, since
 
 For example, access the 3rd element in the 5th column of the births data:
 ```{r example-access-value, echo = TRUE, include = TRUE}
-births[3, 5]
+births[c(3, 5)]
 ```
 
 From your earlier call to the `head()` function, you'll notice that this output corresponds to the 3rd observation on the variable `parity`.
