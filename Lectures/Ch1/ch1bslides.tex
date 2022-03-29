@@ -1,0 +1,300 @@
+% Create a Table of Contents in Beamer
+\documentclass[10pt,t]{beamer}
+% Theme choice:
+\usetheme{Singapore}
+\useoutertheme{sidebar}
+\usecolortheme{seahorse}
+\setbeamercolor{titlelike}{bg=white}
+\setbeamercolor{frametitle}{bg=white}
+%\setbeamertemplate{frametitle}[default][left]
+\setbeamertemplate{navigation symbols}{}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{ulem}
+\usepackage{listings}
+
+% Title page details: 
+\title{Chapter 1b: Multiple Linear Regression} 
+\author{Taylor Okonek \& Charlie Wolock}
+\date{\today}
+
+
+\begin{document}
+	% Title page frame
+	\begin{frame}
+	\titlepage 
+\end{frame}
+
+\begin{frame}{Learning objectives}
+By the end of Chapter 1b, you should be able to:
+\begin{itemize}
+	\item Formulate a regression model, given a scientific or statistical question
+	\item Interpret the coefficients for a multiple linear regression model
+	\item Interpret confidence intervals and p-values for multiple linear regression coefficients
+	\item Classify variables according to their role in a linear regression model (e.g., outcome, predictor, potential confounder, effect modifier, precision variable)
+	\item Describe why you would adjust for certain variables in a regression analysis
+	\item Use \texttt{R} to fit a multiple linear regression model (and know where in the output to look for the information we need to interpret results)
+	\item Create graphs to support your linear regression analysis
+\end{itemize}
+\end{frame}
+
+% Outline frame
+\begin{frame}{Outline}
+\tableofcontents
+\end{frame}
+
+\AtBeginSection[ ]
+{
+\begin{frame}{Outline}
+\tableofcontents[currentsection]
+\end{frame}
+}
+
+% Presentation structure
+
+
+\section{Multiple linear regression: motivation}
+
+\subsection{Linear regression models with multi-level categorical predictors}
+
+\begin{frame}{Linear regression with a categorical predictor}
+So far we've seen examples of simple linear regression with a binary predictor. What if instead our scientific question is about the association between a continuous outcome and a \textit{multilevel} (more than two groups) categorical predictor? \pause
+
+\vspace{0.3cm}
+
+If the predictor is binary (e.g. has a genetic variant vs. does not):
+\begin{itemize}
+	\item Simple linear regression or t-test comparing difference in means between two groups
+\end{itemize} \pause
+
+\vspace{0.3cm}
+
+If the predictor is ordinal (e.g. education level: high school, college, masters, etc.):
+\begin{itemize}
+	\item You \textit{may} be able to find a meaningful way to represent categories numerically (i.e. assign numbers 1 through $k$ to each of $k$ groups)
+\end{itemize} \pause
+
+\vspace{0.3cm}
+
+If the predictor is nominal (e.g., country)
+\begin{itemize}
+	\item No meaningul numeric representation
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Linear regression with a categorical predictor}
+What can we do? \pause We can use \textcolor{blue}{dummy variables}\dots
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Dummy variables}: The set of \textit{binary} variables created by re-writing (or re-coding) a multilevel categorical variable  \pause
+
+\vspace{0.3cm}
+
+Example: Suppose we have a multilevel categorical variable for US region, with values West, Midwest, South, and Northeast
+
+\vspace{0.1cm}
+
+\centering
+
+\includegraphics[scale=0.06]{us_regions.png}
+
+\end{frame}
+
+\begin{frame}{Linear regression with a categorical predictor}
+What can we do? We can use \textcolor{blue}{dummy variables}\dots
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Dummy variables}: The set of \textit{binary} variables created by re-writing (or re-coding) a multilevel categorical variable  
+
+\vspace{0.3cm}
+
+Example: Suppose we have a multilevel categorical variable for US region, with values West, Midwest, South, and Northeast
+
+\vspace{0.3cm}
+
+We create the new variables:
+\begin{itemize}
+	\item Midwest: \textit{Midwest} = 1 if \textit{region} = \textit{Midwest}, and 0 otherwise
+	\item South: \textit{South} = 1 if \textit{region} = \textit{South}, and 0 otherwise
+	\item Northeast: \textit{Northeast} = 1 if \textit{region} = \textit{Northeast}, and 0 otherwise
+\end{itemize} \pause
+
+\vspace{0.1cm}
+
+\textcolor{blue}{Question:} We didn't make a dummy variable for West. Why not? \pause
+
+\textcolor{blue}{Answer:} If all other dummy variables (Midwest, South, and Northeast) are 0, then the region must be West! In this case, West is referred to as a \textcolor{blue}{reference group}.
+\end{frame} 
+
+\begin{frame}{Linear regression with a categorical predictor}
+Writing out our regression model for this example, we have
+$$
+E[\text{Outcome} \mid \text{Region}] = \beta_0 + \beta_1 \times \text{Midwest} + \beta_2 \times \text{South} + \beta_3 \times \text{Northeast}
+$$
+
+Note that we have more than just an intercept and slope coefficient here (making our way towards multiple linear regression!)
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Question}: How do we interpret the coefficients $\beta_0$, $\beta_1$, $\beta_2$, $\beta_3$? \pause
+
+\vspace{0.3cm}
+
+$\beta_0$: average outcome among those in the Western region
+
+$$
+E[\text{Outcome} \mid \text{Region = West}] = \beta_0 + \beta_1 \times 0 + \beta_2 \times 0 + \beta_3 \times 0
+$$
+
+
+\end{frame}
+
+\begin{frame}{Linear regression with a categorical predictor}
+Writing out our regression model for this example, we have
+$$
+E[\text{Outcome} \mid \text{Region}] = \beta_0 + \beta_1 \times \text{Midwest} + \beta_2 \times \text{South} + \beta_3 \times \text{Northeast}
+$$
+
+Note that we have more than just an intercept and slope coefficient here (making our way towards multiple linear regression!)
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Question}: How do we interpret the coefficients $\beta_0$, $\beta_1$, $\beta_2$, $\beta_3$?
+
+\vspace{0.3cm}
+
+$\beta_1$: difference in average outcome between groups in the Western region and Midwest region
+
+\begin{align*}
+E[&\text{Outcome} \mid  \text{Region = Midwest}] - E[\text{Outcome} \mid \text{Region = West}] \\
+& = [\beta_0 + \beta_1 \times 1 + \beta_2 \times 0 + \beta_3 \times 0] - [\beta_0 + \beta_1 \times 0 + \beta_2 \times 0 + \beta_3 \times 0] \\
+& = \beta_0 + \beta_1 - \beta_0 \\
+& = \beta_1
+\end{align*}
+
+
+\end{frame}
+
+\begin{frame}{Linear regression with a categorical predictor}
+Writing out our regression model for this example, we have
+$$
+E[\text{Outcome} \mid \text{Region}] = \beta_0 + \beta_1 \times \text{Midwest} + \beta_2 \times \text{South} + \beta_3 \times \text{Northeast}
+$$
+
+Note that we have more than just an intercept and slope coefficient here (making our way towards multiple linear regression!)
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Question}: How do we interpret the coefficients $\beta_0$, $\beta_1$, $\beta_2$, $\beta_3$?
+
+\vspace{0.3cm}
+
+$\beta_2$: difference in average outcome between groups in the Western region and Southern region
+
+\begin{align*}
+E[&\text{Outcome} \mid  \text{Region = South}] - E[\text{Outcome} \mid \text{Region = West}] \\
+& = [\beta_0 + \beta_1 \times 0 + \beta_2 \times 1 + \beta_3 \times 0] - [\beta_0 + \beta_1 \times 0 + \beta_2 \times 0 + \beta_3 \times 0] \\
+& = \beta_0 + \beta_2 - \beta_0 \\
+& = \beta_2
+\end{align*}
+
+
+\end{frame}
+
+\begin{frame}{Linear regression with a categorical predictor}
+Writing out our regression model for this example, we have
+$$
+E[\text{Outcome} \mid \text{Region}] = \beta_0 + \beta_1 \times \text{Midwest} + \beta_2 \times \text{South} + \beta_3 \times \text{Northeast}
+$$
+
+Note that we have more than just an intercept and slope coefficient here (making our way towards multiple linear regression!)
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Question}: How do we interpret the coefficients $\beta_0$, $\beta_1$, $\beta_2$, $\beta_3$?
+
+\vspace{0.3cm}
+
+$\beta_3$: difference in average outcome between groups in the Western region and Northeastern region
+
+\begin{align*}
+E[&\text{Outcome} \mid  \text{Region = Northeast}] - E[\text{Outcome} \mid \text{Region = West}] \\
+& = [\beta_0 + \beta_1 \times 0 + \beta_2 \times 0 + \beta_3 \times 1] - [\beta_0 + \beta_1 \times 0 + \beta_2 \times 0 + \beta_3 \times 0] \\
+& = \beta_0 + \beta_3 - \beta_0 \\
+& = \beta_3
+\end{align*}
+
+\end{frame}
+
+\begin{frame}{Linear regression with a categorical predictor: summary}
+Our example:
+$$
+E[\text{Outcome} \mid  \text{Region = Northeast}] - E[\text{Outcome} \mid \text{Region = West}] 
+$$
+
+\begin{itemize}
+	\item If we have $k$ categories, we create $k - 1$ \textcolor{blue}{dummy variables}, with the $k$th category being the \textcolor{blue}{reference group} captured in the intercept
+	\item \texttt{R} automatically creates these dummy variables for you for multilevel categorical variables, as you'll see on your homework
+\end{itemize}
+
+\vspace{0.3cm}
+
+Hypothesis testing: If we want to test whether our outcome is associated with a multilevel categorical variable, we need to test if \textit{all} coefficients for the dummy variables (in this example, $\beta_1, \beta_2, \beta_3$) are equal to zero.
+
+\end{frame}
+
+\begin{frame}{Linear regression with a categorical predictor: Example in \texttt{R}}
+Suppose we're interested in whether birthweight is associated with race, in our births dataset. We can fit a linear regression model as before with simple linear regression, and look at the output\dots
+
+\vspace{0.3cm}
+
+\centering
+
+\includegraphics[scale=0.4]{multilevel_cat_lm.png}
+
+\end{frame}
+
+\begin{frame}{Linear regression with a categorical predictor: Example in \texttt{R}}
+
+\begin{figure}
+	\centering \includegraphics[scale=0.3]{multilevel_cat_lm.png}
+\end{figure}
+
+\vspace{0.1cm}
+
+A couple things to notice:
+
+
+\end{frame}
+
+\begin{frame}{Linear regression with a categorical predictor: Example in \texttt{R}}
+
+\begin{figure}
+	\centering \includegraphics[scale=0.3]{multilevel_cat_lm2.png}
+\end{figure}
+
+\vspace{0.1cm}
+
+A couple things to notice:
+\begin{itemize}
+	\item \texttt{R} has created dummy variables for us! The reference group by default will be the first category alphabetically (in this case, ``asian").
+\end{itemize}
+
+\end{frame}
+
+% motivator for multiple linear regression
+% note that also had multiple coefficients with the polynomial transformation
+
+
+\begin{frame}[c]
+\centering \huge Any Questions?
+\end{frame}
+
+\end{document}
