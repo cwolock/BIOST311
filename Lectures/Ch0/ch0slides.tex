@@ -1173,13 +1173,15 @@ Once we know the sampling distribution of our estimate, it's fairly straightforw
 
 \vspace{0.3cm}
 
-\textcolor{blue}{Example:} Suppose we have two estimates. The first has sampling distribution $N(2, 5)$ and the second has sampling distribution $N(2, 1)$. \textit{Which of these estimates is more precise?}
+\textcolor{blue}{Example:} Suppose we have to estimates. The first has sampling distribution $N(2, 5)$ and the second has sampling distribution $N(2, 1)$. \textit{Which of these estimates is more precise?}
 
 \vspace{0.3cm}
 
-\small (Hint: precision and variance are inversely related)
+\small (Hint: precision and variance are inversely related) \pause
 
+\vspace{0.3cm}
 
+\normalsize \textcolor{blue}{Answer:} We typically describe the precision of an estimate via its standard error. Estimates with \textit{smaller} standard error are \textit{more} precise. Therefore, the estimate with sampling distribution $N(2, 1)$ is more precise.
 \end{frame}
 
 \begin{frame}{Standard error}
@@ -1188,19 +1190,32 @@ Once we know the sampling distribution of our estimate, it's fairly straightforw
 
 \vspace{0.3cm} 
 
-Once we know the sampling distribution of our estimate, it's fairly straightforward to figure out how \textit{precise} it is. 
+The sampling distribution of the sample mean $\bar{X}$ is approximately normal: $\bar{X} \sim N(\mu, \sigma^2/n)$
 
 \vspace{0.3cm}
 
-\textcolor{blue}{Example:} Suppose we have to estimates. The first has sampling distribution $N(2, 5)$ and the second has sampling distribution $N(2, 1)$. \textit{Which of these estimates is more precise?}
+\textcolor{blue}{Question}: What is the standard error? \pause
 
 \vspace{0.3cm}
 
-\small (Hint: precision and variance are inversely related)
+\textcolor{blue}{Answer}: The standard deviation of the sample mean, which is $\sqrt{\sigma^2/n}$.
+\end{frame}
+
+\begin{frame}{Standard error}
+\textbf{Sampling distribution}: the distribution of an estimate/statistic
+\textbf{Standard error}: the standard deviation of an estimate/statistic
+
+\vspace{0.3cm} 
+
+The sampling distribution of the sample proportion $\hat{p}$ is approximately normal: $\hat{p} \sim N(p, p(1-p)/n)$
 
 \vspace{0.3cm}
 
-\normalsize \textcolor{blue}{Answer:} We typically describe the precision of an estimate via its standard error. Estimates with \textit{smaller} standard error are \textit{more} precise. Therefore, the estimate with sampling distribution $N(2, 1)$ is more precise.
+\textcolor{blue}{Question}: What is the standard error? \pause
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Answer}: The standard deviation of the sample proportion, which is $\sqrt{p(1-p)/n}$.
 \end{frame}
 
 \begin{frame}{Reporting uncertainty: Motivating example}
