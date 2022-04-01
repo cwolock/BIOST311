@@ -1,0 +1,128 @@
+---
+title: "Homework 1: R cheat sheet"
+subtitle: "BIOST 311"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(formatR)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This cheat sheet will walk you through some `R` commands that will be useful as you complete Homework 1. 
+
+We will rely heavily on the `tidyverse` package, so let's start by loading it.
+
+```{r load_tidy}
+library(tidyverse)
+```
+
+We'll also load the `births` dataset to use as an example. (Note that the function we use here reads the data directly from the course GitHub page; you can also load it from your computer like we did in Week 1 Discussion Section. If you want to do that, change this line of code!)
+
+```{r load_data, results = "hide", message = FALSE, error = FALSE, warning = FALSE}
+births <- readr::read_csv(url("https://raw.githubusercontent.com/cwolock/BIOST311/main/Datasets/births.csv")) # change this if you want to load from your computer
+```
+
+## Subsetting
+
+There are two basic functions for subsetting data: `filter` and `select`. The former picks out \textcolor{blue}{rows} of the data frame, while the latter picks out \textcolor{blue}{columns}. 
+
+Usually, we use `filter` by giving it a logical expression, in order to pick out rows meeting some criteria. For example, to get all observations from the dataset where the birth parent smoked cigarettes, we can run
+
+```{r filter_smoke}
+births_smoke <- births %>% filter(smoke == 1) # recall what the pipe operator (%>%) does!
+```
+
+The basic logical operators are
+
+* `==` equal to 
+* `!=` not equal to
+* `>` greater than
+* `<` less than
+* `>=` greater than or equal to
+* `<=` less than or equal to
+
+Note that we only have only 175 individuals in this dataset now, after filtering out all those who did not smoke. (We can count rows of the dataset using `nrow`.)
+
+```{r nrow}
+nrow(births_smoke)
+```
+
+We can filter according to multiple criteria using the `&` ("and") and `|` ("or") symbols. 
+
+```{r and_or}
+births_and <- births %>% filter(smoke == 1 & drink == 1) # those who smoked and drank
+births_or <- births %>% filter(smoke == 1 | drink == 1) # those who smoked or drank
+```
+
+We will often want to pull out particular columns of a data frame, usually to pass on to other functions. We can pick one or multiple columns using `select`.
+
+```{r select_1}
+births %>% select(race) %>% head() # look at first six rows
+```
+
+```{r select_2}
+births %>% select(race, gestation) %>% head() # look at first six rows
+```
+
+## New variables
+
+We may want to create new variables from the existing variables in our dataset. We use the `mutate` function for this. If you give the new variable the same name as an existing variable in your dataset, it will overwrite the existing variable. Be careful with this!
+
+We can create a new variable that's the logarithm of `bwt`. Note that we use the `<-` symbol to assign the output of our function to an object. If we don't do that, the output will just appear in our console without being stored anywhere.
+
+```{r mutate}
+births %>% mutate(l_bwt = log(bwt)) # not very useful
+births <- births %>% mutate(l_bwt = log(bwt)) # now our new variable is stored in our data frame
+```
+
+A common operation used in creating a new variable is `ifelse`. This functions takes three arguments: (1) a logical expression; (2) a value to assign if that logical expression is `TRUE`; (3) a value to assign if that logical expression is `FALSE`. For example, say we want to create a new binary variable indicator whether an individual had more than 12 years of education. We can use `ifelse` to do this quite simply: 
+
+```{r ifelse}
+births <- births %>% mutate(edu12 = ifelse(education > 12, 1, 0))
+```
+
+If you want to convince yourself that this worked, you can manually look at a few observations to see if individuals with `education > 12` got assigned a value of 1, as we expect. 
+
+```{r confirm}
+births %>% select(education, edu12) %>% head()
+```
+
+## Descriptive statistics
+
+We will spend a lot of time in BIOST 311 looking at descriptive statistics -- it's the first step in any data analysis. `R` has a decent built-in function for basic summary statistics, aptly named `summary`. Let's look at `age`, `race`, and `parity`.
+
+```{r summary_function}
+births %>% select(age, race, parity) %>% summary()
+```
+
+Since `race` is a string (i.e., composed of alphanumeric characters), `summary` doesn't tell us much. We can learn a lot more by creating a `factor` version of `race`. A `factor` is an `R` data type that represents a categorical variable (either ordinal or nominal). Let's create a `factor` version of `race` and try `summary` again. 
+
+```{r summary_factor}
+births %>% mutate(race_f = factor(race)) %>% select(race_f) %>% summary()
+```
+
+Now that we have a factor, `summary` actually tells us something useful: how many individuals fall into each category. 
+
+We can also perform custom descriptive statistics using the `tidyverse` function `summarize`. Let's say we want the standard deviation of `bwt`, which isn't given to us by `summary`. We can use the `sd` (standard deviation) function inside of `summarize`:
+
+```{r summarize}
+births %>% summarize(bwt_sd = sd(bwt))
+```
+
+We can also get multiple summary statistics at the same time. Let's look at the interquartile range (IQR) along with the standard deviation. 
+
+```{r summarize_multiple}
+births %>% summarize(bwt_sd = sd(bwt), bwt_iqr = IQR(bwt))
+```
