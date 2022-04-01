@@ -419,12 +419,203 @@ In everything we've done so far $X$ has been our predictor of interest, but it a
 	\item Providing information that \textcolor{blue}{reduces the variability} of our estimates
 \end{itemize}
 
+\end{frame}
 
+\begin{frame}{Multiple linear regression: Motivation}
+(1) Suppose we collect information on the variables $X_1$ and $Y$ for 50 individuals (plotted below). What is your best guess at the linear relationship between $X_1$ and $Y$ (i.e. how would you draw the simple linear regression line on this graph)?
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.3]{multreg1.png}
+\end{frame}
+
+\begin{frame}{Multiple linear regression: Motivation}
+(1) Suppose we collect information on the variables $X_1$ and $Y$ for 50 individuals (plotted below). What is your best guess at the linear relationship between $X_1$ and $Y$ (i.e. how would you draw the simple linear regression line on this graph)?
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.3]{multreg2.png}
+\end{frame}
+
+\begin{frame}{Multiple linear regression: Motivation}
+(2) Suppose we also collected information on the binary variable $X_2$ for each individual. What is your best guess at the linear relationship between $X_1$ and $Y$, \textit{for each group} defined by the variable $X_2$? 
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.3]{multreg3.png}
+
+\end{frame}
+
+\begin{frame}{Multiple linear regression: Motivation}
+(2) Suppose we also collected information on the binary variable $X_2$ for each individual. What is your best guess at the linear relationship between $X_1$ and $Y$, \textit{for each group} defined by the variable $X_2$? 
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.3]{multreg4.png}
+
+\end{frame}
+
+\begin{frame}{Multiple linear regression: Motivation}
+\begin{figure}
+	\centering \includegraphics[scale=0.2]{multreg4.png}
+\end{figure}
+
+\vspace{0.1cm}
+
+A couple things to note:
+
+\begin{itemize}
+	\item The best fitting line for the relationship between $X_1$ and $Y$ is different when we ignore $X_2$ vs. the best fitting lines for the relationship between $X_1$ and $Y$ for each group defined by $X_2$
+	\item The lines we drew were in response to \textit{different} questions:
+	\begin{enumerate}
+		\item What is your best guess at the linear relationship between $X_1$ and $Y$?
+		\item What is your best guess at the linear relationship between $X_1$ and $Y$, \textit{for each group} defined by the variable $X_2$? 
+	\end{enumerate}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Multiple linear regression: Motivation}
+\begin{itemize}
+	\item The best fitting line for the relationship between $X_1$ and $Y$ is different when we ignore $X_2$ vs. the best fitting lines for the relationship between $X_1$ and $Y$ for each group defined by $X_2$
+	\item The lines we drew were in response to \textit{different} questions:
+	\begin{enumerate}
+		\item What is your best guess at the linear relationship between $X_1$ and $Y$?
+		\item What is your best guess at the linear relationship between $X_1$ and $Y$, \textit{for each group} defined by the variable $X_2$? 
+	\end{enumerate}
+\end{itemize}
+
+\vspace{0.3cm}
+
+Multiple linear regression addresses questions like the latter, where we are interested in the relationship between an outcome and a \textcolor{blue}{predictor of interest}, while other variables may \textit{influence} the association between the predictor of interest and the outcome. \pause
+
+\vspace{0.3cm}
+
+\small *The graphical example on the previous slides is just one example of how the relationship between the outcome and predictor of interest may vary based on another variable! You may see more or less extreme differences in practice, and we'll show graphical examples for each of confounders, precision variables, and effect modifiers in the following section.
 \end{frame}
 
 \section{Adjusting for covariates}
 
+\begin{frame}{Adjusting for covariates}
+In simple linear regression, we modeled the expected value of $Y$ given a single predictor of interest $X_1$ as a linear function of the intercept and slope:
+
+$$
+E[Y \mid X_1] = \beta_0 + \beta_1 X_1
+$$
+\pause
+In multiple linear regression, we'll start to add additional variables into our model. We will often call these additional variables \textcolor{blue}{covariates}. If we have a covariate $X_2$ that we want to include in our model, our regression form becomes
+
+$$
+E[Y \mid X_1, X_2] = \beta_0 + \beta_1 X_1 + \beta_2 X_2
+$$
+
+\end{frame}
+
+\begin{frame}{Adjusting for covariates}
+In simple linear regression, we modeled the expected value of $Y$ given a single predictor of interest $X_1$ as a linear function of the intercept and slope:
+
+$$
+E[Y \mid X_1] = \beta_0 + \beta_1 X_1
+$$
+In multiple linear regression, we'll start to add additional variables into our model. We will often call these additional variables \textcolor{blue}{covariates}. If we have a covariate $X_2$ that we want to include in our model, our regression form becomes
+
+$$
+E[Y \mid X_1, \textcolor{red}{X_2}] = \beta_0 + \beta_1 X_1 + \beta_2 X_2
+$$
+
+We've included \textcolor{red}{$X_2$} on the left-hand side of our equation, because our expected outcome now depends on both $X_1$ \textit{and} $X_2$.
+
+\end{frame}
+
+\begin{frame}{Adjusting for covariates}
+In simple linear regression, we modeled the expected value of $Y$ given a single predictor of interest $X_1$ as a linear function of the intercept and slope:
+
+$$
+E[Y \mid X_1] = \beta_0 + \beta_1 X_1
+$$
+In multiple linear regression, we'll start to add additional variables into our model. We will often call these additional variables \textcolor{blue}{covariates}. If we have a covariate $X_2$ that we want to include in our model, our regression form becomes
+
+$$
+E[Y \mid X_1, X_2] = \beta_0 + \beta_1 X_1 + \color{red}{\beta_2 X_2}
+$$
+
+We've \textit{added} \textcolor{red}{$X_2$} to the right-hand side of our equation because with linear regression, our expected outcome is a \textit{linear combination} of predictors (this means we always add!). Note that $X_2$ also gets its own coefficient, $\beta_2$.
+
+\end{frame}
+
+\begin{frame}{Adjusting for covariates}
+In simple linear regression, we modeled the expected value of $Y$ given a single predictor of interest $X_1$ as a linear function of the intercept and slope:
+
+$$
+E[Y \mid X_1] = \beta_0 + \beta_1 X_1
+$$
+In multiple linear regression, we'll start to add additional variables into our model. We will often call these additional variables \textcolor{blue}{covariates}. If we have a covariate $X_2$ that we want to include in our model, our regression form becomes
+
+$$
+E[Y \mid X_1, X_2] = \beta_0 + \beta_1 X_1 + \beta_2 X_2
+$$
+
+\textcolor{blue}{Question}: What if we want to include covariates $X_3, X_4, \dots, X_{100}$ in our model as well? What would the regression equation look like?
+\end{frame}
+
+\begin{frame}{Adjusting for covariates}
+\textcolor{blue}{Question}: What if we want to additionally include covariates $X_3, X_4, \dots, X_{100}$ in our model as well? What would the regression equation look like?
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Answer:} 
+
+$$
+E[Y \mid X_1, \dots, X_{100}] = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_{100} X_{100}
+$$
+
+We include all of the covariates in our model on the left-hand side of the equation (after the conditional symbol, ``$|$"), and add all of the covariates to the right-hand side of the equation, each with their own coefficient.
+
+\end{frame}
+
+\begin{frame}{Adjusting for covariates}
+In what situations would we want / need to include additional covariates in our regression model?
+
+\vspace{0.3cm}
+
+Scientific questions typically address one of three questions about the relationship between the predictor of interest and the outcome:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item does the predictor of interest \textit{causally} effect the outcome?
+	\item is there an association between the predictor of interest and the outcome?
+	\item does the association (if it exists) differ in groups defined by an additional covariate?
+\end{itemize} \pause
+
+\vspace{0.3cm}
+
+Depending on the \textcolor{blue}{study design} and \textcolor{blue}{scientific question}, we may need to include additional covariates in our model to answer these questions!
+
+\end{frame}
+
+\begin{frame}{Adjusting for covariates}
+Throughout this section, we will consider three types of covariates that we may include in our multiple regression models:
+
+\vspace{0.3cm}
+
+\begin{enumerate}
+	\item Confounders
+	\item Precision variables
+	\item Effect modifiers
+\end{enumerate}
+
+\vspace{0.3cm}
+
+For each, we'll discuss their need for inclusion in a statistical model based on study design and scientific question. But first, we'll talk about \textcolor{blue}{causal diagrams}, which are a useful tool to help us visualize the potential relationships between variables.
+
+\end{frame}
+
 \subsection{Causal diagrams}
+
+\begin{frame}{Causal diagrams}
+\small \textcolor{blue}{This slide intentionally left blank for causal diagrams activity.}
+\end{frame}
 
 \subsection{Stratification}
 
