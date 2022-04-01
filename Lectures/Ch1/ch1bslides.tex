@@ -601,8 +601,8 @@ Throughout this section, we will consider three types of covariates that we may 
 
 \begin{enumerate}
 	\item Confounders
-	\item Precision variables
 	\item Effect modifiers
+	\item Precision variables
 \end{enumerate}
 
 \vspace{0.3cm}
@@ -617,13 +617,163 @@ For each, we'll discuss their need for inclusion in a statistical model based on
 \small \textcolor{blue}{This slide intentionally left blank for causal diagrams activity.}
 \end{frame}
 
-\subsection{Stratification}
+\begin{frame}{Causal diagrams: Terminology}
+Often, when thinking about the need to adjust for additional covariates in a model, it is helpful to draw a \textcolor{blue}{causal diagram} relating the predictor of interest, outcome, and additional covariates. Causal diagrams consist of\dots
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textcolor{blue}{Nodes}: variables (including the predictor of interest, outcome, and additional covariates) \pause
+	\item \textcolor{blue}{Edges}: connections between nodes, to denote causal relationships or associations \pause
+	\begin{itemize}
+		\item Line: denotes that two variables are associated with one another
+		\item Arrow: denotes that one variable is \textit{causally related to} another
+	\end{itemize} \pause
+\item \textcolor{blue}{Causal pathway}: a path between nodes in a causal diagram, directed using arrows
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Causal diagram: Example}
+Below is an example of a causal diagram, with nodes A through H:
+
+\vspace{0.1cm}
+\begin{figure}
+	\centering \includegraphics[scale=0.4]{dag1.png}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Causal diagram: Example}
+
+\begin{figure}
+	\centering \includegraphics[scale=0.4]{dag1.png}
+\end{figure}
+
+\vspace{0.1cm} 
+
+\textcolor{blue}{Question}: Which nodes (if any) are on a causal pathway from B to G? It may be useful to list the causal pathways first. \pause
+
+\vspace{0.1cm}
+
+\textcolor{blue}{Answer}: The causal pathways from B to G are: (B $\to$ D $\to$ G) (B $\to$ E $\to$ G) (B $\to$ E $\to$ F $\to$ G). Therefore, D, E, and F are on causal pathways from B to G.
+
+\end{frame}
 
 \subsection{Confounders}
 
-\subsection{Precision variables}
+% definition slide and example of diagram
+\begin{frame}{Confounders}
+Causal diagrams are useful tools we can use to determine whether or not variables are confounders.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Confounder} (or ``confounding variable"): a variable that is \textit{causally related to} our outcome, and also \textit{associated with} the exposure in our sample
+
+\vspace{0.3cm} \pause
+
+In a causal diagram, confounders look like \dots
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.4]{confounder1.png}
+
+\end{frame}
+
+% second diagram example
+\begin{frame}{Confounders}
+Causal diagrams are useful tools we can use to determine whether or not variables are confounders.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Confounder} (or ``confounding variable"): a variable that is \textit{causally related to} our outcome, and also \textit{associated with} the exposure in our sample
+
+\vspace{0.3cm} 
+
+\dots confounders can also look like this\dots
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.4]{confounder2.png}
+\end{frame}
+
+\begin{frame}{Confounders}
+Causal diagrams are useful tools we can use to determine whether or not variables are confounders.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Confounder} (or ``confounding variable"): a variable that is \textit{causally related to} our outcome, and also \textit{associated with} the exposure in our sample
+
+\vspace{0.3cm} 
+
+\dots but confounders \textcolor{red}{cannot} look like this:
+
+\vspace{0.3cm}
+
+\begin{figure}
+	\centering \includegraphics[scale=0.4]{confounder3.png}
+\end{figure}
+
+
+\small Confounder cannot be on the causal pathway from the predictor of interest to the outcome!
+
+\end{frame}
+
+% Example of what to look for graphically
+\begin{frame}{Confounders: what to look for in a graph}
+If your predictor of interest and outcome are both quantitative, and your potential confounder is \textit{binary}, there are some things you can look for in a graph that may indicate whether or not the potential confounder is in fact a confounding variable. \pause
+
+\vspace{0.3cm}
+
+Below we plot an exposure vs. an outcome:
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.4]{p0.png}
+\end{frame}
+
+\begin{frame}{Confounders: what to look for in a graph}
+We now color the points by our potential confounding variable.
+\vspace{0.3cm}
+
+\begin{figure}
+	\centering \includegraphics[scale=0.4]{p1.png}
+\end{figure}
+
+\vspace{0.3cm} \pause
+\small We can see from the plot that the sets of points for each group identified by the potential confounder appear to be associated with the exposure (predictor of interest). This indicates that the potential confounder is associated with the predicted of interest \textit{in the sample} (one of the requirements for a confounding variable!).
+
+\end{frame}
+
+\begin{frame}{Confounders: what to look for in a graph}
+
+\textcolor{red}{Important note}: A graph alone is not enough to determine if a variable is a confounder! You still need to think about whether that variable causes the outcome in the population, which cannot be determined graphically but must be thought about \textit{scientifically}.
+
+\end{frame}
+
+% Example with a question and answer - could be from the worksheet
+\begin{frame}{Confounders: Example}
+
+\end{frame}
 
 \subsection{Effect modifiers}
+
+% definition slide and example of diagram
+
+% Example with a question and answer - could be from the worksheet
+
+% Example of what to look for graphically in R
+
+\subsection{Precision variables}
+
+% definition slide and example of diagram
+
+% Example with a question and answer - could be from the worksheet
+
+% Example of what to look for graphically in R
+
+\subsection{Stratification}
+
+% maybe move this entire subsection up to the beginning of Adjusting for covariates? or make it it's own section beforehand?
 
 
 
