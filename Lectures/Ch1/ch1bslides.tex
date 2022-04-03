@@ -595,6 +595,26 @@ Depending on the \textcolor{blue}{study design} and \textcolor{blue}{scientific 
 \end{frame}
 
 \begin{frame}{Adjusting for covariates}
+Note that the inclusion of additional covariates in your model changes the scientific question that your model is answering.
+
+\vspace{0.3cm}
+
+With simple linear regression, the model $E[Y \mid X_1] = \beta_0 + \beta_1 X_1$ was used to address the question, ``Is $X_1$ associated with $Y$"?  \pause
+
+\vspace{0.3cm}
+
+With multiple linear regression, the model $E[Y \mid X_1] = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p$ (for $p$ total covariates), we address the question, ``Is $X_1$ associated with $Y$, \textit{adjusting for covariates} $X_2$ through $X_p$?" \pause
+
+\vspace{0.3cm}
+
+When we estimate the association between the predictor of interest and the outcome, we want to do so at \textcolor{orange}{fixed values} of the additional covariates in the model. \pause
+
+\vspace{0.3cm}
+
+Of course, all scientific questions and interpretations should be made \textit{in the context of the problem}. We'll give examples of this in a bit.
+\end{frame}
+
+\begin{frame}{Adjusting for covariates}
 Throughout this section, we will consider three types of covariates that we may include in our multiple regression models:
 
 \vspace{0.3cm}
@@ -753,23 +773,310 @@ We now color the points by our potential confounding variable.
 % Example with a question and answer - could be from the worksheet
 \begin{frame}{Confounders: Example}
 
+\textcolor{blue}{Question}: Your friend shows you the following graph\dots
+
+\vspace{0.1cm}
+
+\begin{figure}
+	\centering \includegraphics[scale=0.4]{lemons.png}
+\end{figure}
+
+\vspace{0.1cm} 
+
+\dots and says ``More lemons imported from Mexico lead to lower highway fatality rates! We should import more lemons to lower the higher fatality rate!"
+
+
+
+\end{frame}
+
+\begin{frame}{Confounders: Example}
+\begin{figure}
+	\centering \includegraphics[scale=0.3]{lemons.png}
+\end{figure}
+
+\vspace{0.1cm} 
+
+\dots and says ``More lemons imported from Mexico lead to lower highway fatality rates! We should import more lemons to lower the higher fatality rate!"
+
+\vspace{0.3cm}
+
+You think your friend is being mislead. What confounding variable is at play here, and what other possibly explanation could there be for this observed relationship?
+\end{frame}
+
+\begin{frame}{Confounders: Example}
+\textcolor{blue}{Question}: You think your friend is being mislead. What confounding variable is at play here, and what other possibly explanation could there be for this observed relationship?
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Answer}: From the graph, we can see that highway fatality rates have decreased over time, and number of lemons imported has increased \textit{over time}. Time is a confounding variable in this case. Highway fatality rates have likely decreased over time because cars have gotten much safer with improved airbag quality and other innovations. Number of fresh lemon imported has increased over time, potentially because the US population has increased (and therefore demands more lemons).
+\end{frame}
+
+
+\begin{frame}{Confounders and study design}
+When our scientific question involves a causal relationship, whether or not we \textit{need} to adjust for covariates depends on the study design.
+
+\vspace{0.3cm}
+
+When reviewing study design, we said that a randomized controlled trial is the only study design in which we can confidently make causal claims about relationships between variables. \textit{However}, if we are able to adjust for \textit{all possible confounders} in an observational study, we could also make causal statements for these study designs. In practice, situations where we can confidently say we've adjusted for all possible confounders are extremely rare. Nevertheless, it is good to adjust for any possible confounders we have regardless, so long as we are still answering a scientific question of interest. \pause
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textcolor{blue}{Randomized controlled trial:} no need to adjust because there are no possible confounders (unless randomization has failed)
+	\item \textcolor{blue}{Observational study:} must adjust for all possible confounders in order to make causal claims, should adjust for all potential confounders regardless
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Confounders: regression equation}
+Writing regression equations including confounding variables is as simple as adding in an additional covariate. Suppose
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item $Y$ = outcome
+	\item $X$ = predictor of interest
+	\item $Z$ = confounder
+\end{itemize}
+
+\vspace{0.3cm}
+
+Then to include the confounding variable $Z$ into our model, we would write
+$$
+E[Y \mid X, Z] = \beta_0 + \beta_1 X + \beta_2 Z
+$$
+
+If we instead had \textit{two} confounding variables $Z$ and $W$, we would write
+$$
+E[Y \mid X, Z, W] = \beta_0 + \beta_1 X + \beta_2 Z + \beta_3 W
+$$
+\dots and so forth with additional confounding variables!
+
 \end{frame}
 
 \subsection{Effect modifiers}
 
 % definition slide and example of diagram
+\begin{frame}{Effect modifiers}
+Causal diagrams are \textit{also} useful tools we can use to determine whether or not variables are effect modifiers.
 
-% Example with a question and answer - could be from the worksheet
+\vspace{0.3cm}
 
-% Example of what to look for graphically in R
+\textcolor{blue}{Effect modifiers}: a variable that modifies the association between the predictor of interest and the outcome. In other words, the association between the predictor of interest and the outcome \textit{depends on} the effect modifier \pause
+
+\vspace{0.3cm}
+
+In a causal diagram, we denote effect modifiers like this:
+
+\vspace{0.1cm}
+
+\begin{figure}
+	\centering \includegraphics[scale=0.4]{effectmod1.png}
+\end{figure}
+\end{frame}
+
+
+% Example of what to look for graphically
+\begin{frame}{Effect modifiers: what to look for in a graph}
+If your predictor of interest and outcome are both quantitative, and your potential effect modifier is \textit{binary}, there are some things you can look for in a graph that may indicate whether or not the potential effect modifier is in fact an effect modifier. \pause
+
+\vspace{0.3cm}
+
+Below we plot an exposure vs. an outcome:
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.4]{p2.png}
+\end{frame}
+
+\begin{frame}{Effect modifiers: what to look for in a graph}
+We now color the points by our potential effect modifier\dots
+\vspace{0.3cm}
+
+\begin{figure}
+	\centering \includegraphics[scale=0.4]{p3.png}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Effect modifiers: what to look for in a graph}
+\dots and if we were to fit simple linear regressions for each group defined by our potential effect modifier (a stratified analysis), we could add those regression lines to the plot as well:
+
+\vspace{0.3cm}
+
+\begin{figure}
+	\centering \includegraphics[scale=0.4]{p4.png}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Effect modifiers: what to look for in a graph}
+
+\begin{figure}
+	\centering \includegraphics[scale=0.4]{p4.png}
+\end{figure}
+
+\vspace{0.3cm}
+
+The key thing to note here is that groups defined by a binary effect modifier will have linear regression lines with different \textcolor{blue}{slopes} \textit{and} different \textcolor{blue}{intercepts}. This indicates that the association between the exposure and the outcome has been \textit{modified} by the additional variable, and thus the additional variable is an effect modifier.
+
+\end{frame}
+
+\begin{frame}{Effect modifiers: always adjust}
+When our scientific question addresses whether or not the assication between a predictor of interest and the outcome differs by an additional covariate (effect modifier), you \textit{must} adjust for the covariate in your model. Otherwise, your model would not adequately answer the scientific question.
+
+\vspace{0.3cm}
+
+(Note that this is different from a confounder, where we do not need to adjust for confounding variables in a randomized controlled trial, so long as randomization was successful.)
+
+
+\end{frame}
+
+\begin{frame}{Effect modifiers: regression equation}
+The presence of an effect modifier is called an \textcolor{blue}{interaction}, and means we will need to include an interaction \textit{term} in our statistical model. In regression equations, interaction terms are modeled as the \textit{multplication} of the potential effect modifier and the predictor of interest. Suppose
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item $Y$ = outcome
+	\item $X$ = predictor of interest
+	\item $Z$ = potential effect modifier
+\end{itemize}
+
+\vspace{0.3cm}
+
+Then to include the potential effect modifier into our model, we would write,
+$$
+E[Y \mid X, Z] = \beta_0 + \beta_1 X + \beta_2 Z + \beta_3 (X \times Z)
+$$
+\end{frame}
+
+\begin{frame}{Effect modifiers: regression equation}
+$$
+E[Y \mid X, Z] = \beta_0 + \beta_1 X + \beta_2 Z + \beta_3 (X \times Z)
+$$
+New terminology:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item The terms $X$ and $Y$ are called \textcolor{blue}{main effects}
+	\item The multiplicative term $(X \times Z)$ is called the \textcolor{blue}{interaction term}
+\end{itemize}
+
+\vspace{0.3cm}
+
+You must \textcolor{red}{always} include the main effects in your model if you include an interaction term. Not including the main effects changes the interpretation of the interaction term. We'll give examples of interpretation in a bit.
+
+\end{frame}
 
 \subsection{Precision variables}
 
 % definition slide and example of diagram
+\begin{frame}{Precision variables}
+Causal diagrams can also help us determine whether or not variables are precision variables.
 
-% Example with a question and answer - could be from the worksheet
+\vspace{0.3cm}
+
+\textcolor{blue}{Precision variable}: a variable that is associated with (or causes) the outcome \textit{in the population}, but is not associated with the predictor of interest \textit{in the sample} \pause
+
+\vspace{0.3cm}
+
+In a causal diagram, we denote precision variables as\dots
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.4]{precvar1.png}
+
+\end{frame}
+
+\begin{frame}{Precision variables}
+Causal diagrams can also help us determine whether or not variables are precision variables.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Precision variable}: a variable that is associated with (or causes) the outcome \textit{in the population}, but is not associated with the predictor of interest \textit{in the sample} 
+
+\vspace{0.3cm}
+
+\dots or we denote precision variables as:
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.4]{precvar2.png}
+\end{frame}
 
 % Example of what to look for graphically in R
+\begin{frame}{Precision variable: what to look for in a graph}
+If your predictor of interest and outcome are both quantitative, and your potential precision variable is \textit{binary}, there are some things you can look for in a graph that may indicate whether or not the potential precision variable is in fact a precision variable. \pause
+
+\vspace{0.3cm}
+
+Below we plot an exposure vs. an outcome:
+
+\vspace{0.1cm}
+
+\centering \includegraphics[scale=0.4]{p5.png}
+\end{frame}
+
+\begin{frame}{Precision variables: what to look for in a graph}
+We now color the points by our potential precision variable\dots
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.4]{p6.png}
+
+\end{frame}
+
+\begin{frame}{Precision variables: what to look for in a graph}
+\dots and if we were to fit simple linear regressions for each group defined by our potential precision variable (a stratified analysis), we could add those regression lines to the plot as well:
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.4]{p7.png}
+
+\end{frame}
+
+\begin{frame}{Precision variables: what to look for in a graph}
+\begin{figure}
+	\centering \includegraphics[scale=0.4]{p7.png}
+\end{figure}
+
+\vspace{0.3cm}
+
+The key thing to note here is that the groups defined by a binary precision variable will have linear regression lines with different \textcolor{blue}{intercepts}, but the \textit{same} \textcolor{blue}{slope}. This indicates that there is no association between the exposure and additional variable, and hints that there may be a relationship between the additional variable and the outcome in the population. 
+\end{frame}
+
+\begin{frame}{Precision variables: what to look for in a graph}
+\textcolor{red}{Important note}: A graph alone is not enough to determine if a variable is a precision variable! You still need to think about whether that variable is associated with the outcome \textit{in the population}. This should generally be true if your data is representative of your population.
+\end{frame}
+
+\begin{frame}{Precision variables: regression equation}
+Writing regression equations including precision variables is as simple as adding in an additional covariate (just like with confounders). Suppose
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item $Y$ = outcome
+	\item $X$ = predictor of interest
+	\item $Z$ = precision variable
+\end{itemize}
+
+\vspace{0.3cm}
+
+Then to include the precision variable $Z$ into our model, we would write
+$$
+E[Y \mid X, Z] = \beta_0 + \beta_1 X + \beta_2 Z
+$$
+
+If we instead had \textit{two} precision variables $Z$ and $W$, we would write
+$$
+E[Y \mid X, Z, W] = \beta_0 + \beta_1 X + \beta_2 Z + \beta_3 W
+$$
+\dots and so forth with additional precision variables!
+
+\end{frame}
+
+
+% Example with a question and answer - could be from the worksheet
 
 \subsection{Stratification}
 
