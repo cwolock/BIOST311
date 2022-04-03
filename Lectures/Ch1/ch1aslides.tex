@@ -131,6 +131,41 @@ Lines take the form \textcolor{red}{$y = a + bx$}. When writing regression model
 \end{itemize}
 \end{frame}
 
+\begin{frame}{Correlation}
+When describing the linear relationship between two variables, we often talk about \textcolor{blue}{correlation}. 
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Correlation}: The degree to which two variables are \textit{linearly} related to each other. Correlation coefficients, which we'll denote by $r$, can take values between -1 and 1:
+
+\vspace{0.3cm} \pause
+\begin{itemize}
+	\item $r = -1$: perfect \textit{negative} correlation
+	\item $r = 0$: no correlation
+	\item $r = 1$: perfect \textit{positive} correlation
+\end{itemize}
+
+\vspace{0.3cm} \dots and any other values of $r$ in between -1 and 1 correspond to either weak or strong, negative or positive correlation.
+
+
+\end{frame}
+
+\begin{frame}{Correlation}
+Testing the null hypothesis $H_0: r = 0$ is equivalent to testing if $\beta_1$ (the slope of the simple linear regression line) is equal to zero. 
+
+\vspace{0.3cm}
+
+For this course, we'll focus on using correlation coefficients only as a means to describe the relationship between two variables, rather than use them to conduct hypothesis tests.
+
+\vspace{0.3cm}
+
+\includegraphics[scale=0.01]{chilipepper.png} When we talk about correlation coefficients in this class, we are talking specifically about \textit{Pearson's} correlation coefficient. Other types of correlation coefficients exist, but Pearson's is most commonly used.
+\end{frame}
+
+\begin{frame}{Correlation: Example}
+\centering \includegraphics[scale=0.5]{correlation.png}
+\end{frame}
+
 \begin{frame}{Simple linear regression: types of predictors}
 Our example with heights and widths of leaves had a quantitative outcome \textit{and} a quantitative predictor. 
 
