@@ -1,0 +1,385 @@
+---
+title: "Graphics in R"
+subtitle: "BIOST 311, Discussion Section Week 2"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+Adapted from \href{https://github.com/fmcquarrie3/ggplot_wkshop}{Francie McQuarrie}.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Preliminaries
+
+Let's load a couple of datasets to use as examples. 
+
+```{r preliminaries, message = FALSE, results = "hide"}
+library(readr)
+actors <- read_csv(url("https://raw.githubusercontent.com/fmcquarrie3/ggplot_wkshop/main/actors.csv"))
+colnames(actors) <- c('Actor', 'Total_Gross', 'Number_of_Movies', 'Average_per_Movie', 'Top_Movie', 'Gross')
+fev <- read_csv(url("https://raw.githubusercontent.com/cwolock/BIOST311/main/Datasets/fev.csv"))
+```
+
+# Introduction
+
+Today's discussion section activity will explore `ggplot2`, a plotting system in `R`. 
+
+`R` has some built-in plotting functions, but they are pretty limited. The `ggplot2` package makes plots that are generally more attractive and more professional. And as you start doing more complicated analyses in `R`, `ggplot2` will allow your plots to be customizable and versatile based on your data.  
+
+`ggplot2` has a grammatical structure, just like any language [Ram]. Specifically, it implements the **grammar of graphics**, a "coherent system for describing and building graphs" [R for Data Science]. The grammar of `ggplot2` defines the components that makes up a plot.
+
+## Basic Structure
+
+`ggplot2` is part of the `tidyverse` package, so we'll need to load that. 
+
+```{r, warning = FALSE, message = FALSE}
+library(tidyverse)
+```
+
+All plots in `ggplot2` begin with the function `ggplot()`. This creates the base empty graph tied to your dataset. Then, add one or more "layers" to the plot depending on your desired output. 
+
+We'll practice on an example dataset. The `actors` dataset contains information about the top 50 grossing actors. 
+
+Let's investigate the relationship between the number of movies these actors have starred in versus the average gross domestic box office receipt (in millions of dollars) for all of the actor's movies. 
+
+What happens if we just call the `ggplot` function?
+
+```{r}
+actors %>% ggplot()
+```
+
+Not very interesting. We have to add graphical layers to this base graph:
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+actors %>% ggplot() + 
+  geom_point(aes(x = Number_of_Movies, y = Average_per_Movie))
+```
+
+The above call added a layer of points to the base graph to create a scatterplot. The `aes` function within the `geom_point` graphical layer  specifies how variables in your dataset are mapped to visual properties in the graph. In this case, the `Number_of_Movies` variable is mapped to the x-axis and the `Average_per_Movie` is mapped to the y-axis. We'll explore other things that can be mapped besides the axes later. 
+
+Our plots almost always follow this template:
+
+```
+<DATA> %>% ggplot() + 
+  <GEOM_FUNCTION>(aes(<MAPPINGS>))
+```
+
+To implement this template in your own code, replace the bracket sections with the correct input (dataset, `geom` function, or collection of mappings). **Important**: The `+` must always come at the end of the line, not the start. 
+
+**Exercise**: The plot above has two extreme outliers. In the code chunk below, display a two-row table whose rows correspond to the two actors with highest and lowest number of movies, respectively. Consider using the `filter` function!
+
+```{r}
+# insert code here
+```
+
+### Aesthetics
+
+There are many ways to customize the appearance of plots by tweaking small bits of the call above. Specifically, we want to explore changing the **aesthetics** of the graph, which are visual properties of the objects in the plot. The following examples will be demonstrated on a scatterplot, but they can be specified for any type of plot. 
+
+There are a couple pieces missing from our plot above. Always give your plots informative labels! Correct that using the `labs` function:
+
+```{r, fig.width = 4, fig.height = 3, fig.align='center'}
+actors %>% ggplot() + 
+  geom_point(aes(x = Number_of_Movies, y = Average_per_Movie)) + 
+  labs(x = 'Number of Movies', y = 'Average Gross Per Movie (Millions)', 
+       title = 'Box Office Gross Receipts Per Actor', 
+       subtitle = 'For the top 50 grossing actors', 
+       caption = 'from inferentialthinking.com')
+```
+
+What if we want to change the size of the points? We can do so with `size`. Note that this is an argument of `geom_point` -- the size of the points is a property of that particular layer, not the plots as a whole. Note also that it's a visual element separate from the data mapping, so it goes outside of `aes()`. 
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+# Size is specified in mm
+actors %>% ggplot() + 
+  geom_point(aes(x = Number_of_Movies, y = Average_per_Movie), 
+             size = 0.8) + 
+  labs(x = 'Number of Movies', y = 'Average Gross Per Movie (Millions)', 
+       title = 'Box Office Gross Receipts Per Actor')
+```
+
+We can also change colors and shape. 
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+actors %>% ggplot() + 
+  geom_point(aes(x = Number_of_Movies, y = Average_per_Movie), 
+             size = 1, color = 'purple') + 
+  labs(x = 'Number of Movies', y = 'Average Gross Per Movie (Millions)', 
+       title = 'Box Office Gross Receipts Per Actor')
+```
+
+The possible shapes of points are specified by numbers. See \href{https://r4ds.had.co.nz/data-visualisation.html#aesthetic-mappings}{here} for a complete chart of numbers and shapes. 
+
+**Exercise**: Replicate the above graph such that the markers are size 1.3mm, red, and square shaped. 
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+# insert code here
+```
+
+What if you wanted to change the aesthetics of the points based on another *variable* in your dataset? That's where the power of `ggplot2` comes into play. 
+
+Let's explore this ability with the `fev` dataset. We are interested in the relationship between height and FEV. 
+
+**Exercise**: Make a scatterplot with height on the x-axis and FEV on the y-axis. Specify the points to be 1mm circles and label the x and y axes. 
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+# insert code here
+```
+
+We hypothesize that the relationship between height and FEV might be affected by smoking status. How can we incorporate that information into the above plot? 
+
+*Color* the points *by* the `smoke` variable in the table.
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+fev %>% ggplot() + 
+  geom_point(aes(x = height, y = fev, color = smoke), size = 1) + 
+  labs(x = 'Height (inches)', y = 'FEV (l/sec)', color = "Smoking status")
+```
+
+What happened in the call above? We mapped the aesthetic `color` to the `smoke` *variable* in our dataset. Since we're connecting the color aesthetic to our data (rather than setting it manually), we specify this *inside* the `aes` function. `ggplot2` will automatically assign a unique level of the aesthetic (here a unique color) to each unique value of the variable. 
+
+**Exercise**: Replicate the plot above but use the *shape* of a point to denote smoking status. What's wrong with this graph? 
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+# Insert code here
+```
+
+When the points are black and clustered together, it's difficult to see which are circles and which are triangles. That doesn't help us see the differences between groups.
+
+### Facets
+
+If we want to look at subgroups, sometimes a single figure can get too crowded (as we just saw). We could instead make two subplots that display the same information but subdivided by `smoke`. This is accomplished using facets. If we want to facet our plot with a single variable, we use `facet_wrap`. The first argument must be a formula: `~` followed by a variable name. (We will see a lot more of the formula syntax later in the course.) Importantly, the variable you want to facet on must be *discrete*.
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+fev %>% ggplot() + 
+  geom_point(aes(x = height, y = fev), size = 1) + 
+  labs(x = 'Height (inches)', y = 'FEV (l/sec)') + 
+  facet_wrap(~smoke) 
+```
+
+If you want to subdivide by two variables, use `facet_grid()`, and your formula argument should contain two variables - `a ~ b` - to denote the columns and rows of the subplots. 
+
+### Multiple layers
+
+There are different visual objects we can use to represent data. For example, look at the following two representations of the relationship between height and FEV.
+
+```{r message = FALSE, warnings = FALSE, fig.width = 4, fig.height = 3, fig.align='center'}
+fev %>% ggplot() + 
+  geom_point(aes(x = height, y = fev))
+fev %>% ggplot() + 
+  geom_smooth(aes(x = height, y = fev))
+```
+
+What's the difference between the two plots above? They have the same x variable, y variable, and they describe the same data. But each uses a different visual object to represent the data. In `ggplot2` syntax, we say they use different `geom`s. A geom is the geometrical object that a plot uses to represent the data. We describe plots by the type of `geom` they use and specify with `geom_<>()` (where the brackets are replaced by the object you want). Not every aesthetic works with every `geom`. For example, a line has a `color`, but does not have a `shape` or a `fill`.  
+
+You can include two `geom` objects in the same graph:
+
+```{r message = FALSE, fig.width = 4, fig.height = 3, fig.align='center'}
+fev %>% ggplot() + 
+  geom_point(aes(x = height, y = fev)) + 
+  geom_smooth(aes(x = height, y = fev))
+```
+
+Notice we have redundancy in the code above - we specify the same mapping twice. Redundancy in our code is usually bad. We can avoid this repetition by passing the mappings to the outer `ggplot()` function. This will treat the mappings as a "global" setting that is applied to every succeeding `geom` object in the graph. This code is more succinct:
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+fev %>% ggplot(aes(x = height, y = fev)) + 
+  geom_point() + 
+  geom_smooth()
+```
+
+Any mapping within a `geom` object is a *local* mapping that will override the global mapping for that layer. This allows you to display different aesthetics for different layers. Let's color the points by smoking status, but not do anything to the smoother. 
+
+```{r message = FALSE, fig.width = 4, fig.height = 3, fig.align='center'}
+fev %>% ggplot(aes(x = height, y = fev)) + 
+  geom_point(aes(color = smoke)) + 
+  geom_smooth()
+```
+
+Notice how the color only appears on the points, not on the smoother.
+
+\newpage
+
+# Histograms
+
+So far we've looked at graphics for two or more variables -- graphing the distribution of a single numerical variable is similar. We can use `geom_histogram` for a histogram: 
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+actors %>% ggplot(aes(x = Total_Gross)) + 
+  geom_histogram() + 
+  labs(x = 'Total Gross (millions)', y = 'Count')
+```
+
+By default, `ggplot2` uses 30 bins. This value may not be suitable, so you can set the value yourself. Further, the default for histograms is to make the y-axis the count. But you may prefer density to raw counts. You can make a histogram on the density scale by specifying density in `aes`: 
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+actors %>% ggplot(aes(x = Total_Gross, y = ..density..)) + 
+  geom_histogram() + 
+  labs(x = 'Total Gross (millions)', y = 'Density')
+```
+
+**Exercise**: Play around with different numbers of bins using the `bins` argument within `geom_histogram`. What happens when the number of bins is very small? Very large? 
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+# insert code here
+```
+
+Again, often we want to display information about two groups in the same plot. We want to investigate how the distribution of `fev` changes for children who smoke versus those who do not. 
+
+**Exercise**: To show two distributions, would it be better to `facet_wrap` on `smoke` or specify `smoke` as an `aes`? If the latter, which `aes`? 
+
+For overlaid histograms, we may worry that the color of one distribution blocks some aspect of the other. We can control the opacity of the distributions with the **alpha** parameter:
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+fev %>% ggplot() + 
+  geom_histogram(aes(x = fev, y = ..density..,  fill = smoke), alpha = 0.5) + 
+  labs(x = 'FEV', y = 'Density', fill = 'Smoking status')
+```
+
+\newpage
+
+# Boxplots
+
+The `geom_boxplot` function produces (surprise) a boxplot: 
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+fev %>% ggplot() + 
+  geom_boxplot(aes(x = fev)) 
+```
+
+(You may want to get rid of the y-axis labels here. Try Googling it!)
+
+\newpage
+
+# Bar Charts
+
+Using the `fev` dataset, let's investigate the distribution of children who smoke. Since `smoke` is a categorical (specifically, binary) variable, we want to use a bar chart/bar plot:
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+fev %>% ggplot() + 
+  geom_bar(aes(x = smoke))
+```
+
+Notice the y-axis displays the count of the two groups, but `count` wasn't an original variable in our dataset! Some functions in `ggplot2` will compute values for you to create the graphs - barcharts and histograms bin the data, smoothers fit a model and compute predictions, and boxplots summarize the distribution. The objects do this with an algorithm called a **stat**, or statistical transformation. Many of the `geom`s mentioned above have their own built in `stat` functions (that can be found in documentation). 
+
+Similar to what we saw with histograms, we can plot a proportion rather than a count: 
+
+```{r, fig.width = 4, fig.height = 3, fig.align='center'}
+fev %>% ggplot() + 
+  geom_bar(aes(x = smoke, y = ..prop.., group = 1))
+```
+
+(Why `group = 1`? See \href{https://stackoverflow.com/questions/39878813/ggplot-geom-bar-meaning-of-aesgroup-1}{here}). 
+
+What if we wanted to brighten up the plot above? You can color it!
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+fev %>% ggplot() + 
+  geom_bar(aes(x = smoke, fill = smoke))
+```
+
+This can help visually distinguish the two bars. But currently, this displays the same variable twice (on x-axis and in legend), which feels redundant. What if we wanted to color by *another variable*?
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+# Create another categorical variable for this example
+fev <- fev %>% mutate(over_10 = ifelse(age > 10, "yes", "no"))
+fev %>% ggplot() + 
+  geom_bar(aes(x = smoke, fill = over_10))
+```
+
+Now we can see each category of `smoke` subdivided by *another categorical* variable. When doing this, `ggplot2` automatically stacks the bars with every combination of the two variables. If you want something different, you can place the bars next to each other: 
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+fev %>% ggplot() + 
+  geom_bar(aes(x = smoke, fill = over_10), position = 'dodge')
+```
+
+Position can also be specified to make the stacked bars the same height (for proportion comparison), or on top of each other but not stacked (not so great for bar charts but better for points). The `position` argument can also be used to **jitter** overlapped points in a scatterplot. 
+
+Finally, you can swap the orientation of your bar charts (which can make long labels on the x-axis easier to read) using `coord_flip`:
+
+```{r fig.width = 4, fig.height = 3, fig.align='center'}
+fev %>% ggplot() + 
+  geom_bar(aes(x = smoke, fill = smoke)) + 
+  coord_flip()
+```
+
+\newpage
+
+# Template for Layered Plots
+We've covered a lot of options above. Let's summarize the options by adding to our template ggplot call:
+```
+<DATA> %>% ggplot() + 
+  <GEOM_FUNCTION>(
+     aes(<MAPPINGS>),
+     stat = <STAT>, 
+     position = <POSITION>
+  ) +
+  <COORDINATE_FUNCTION> +
+  <FACET_FUNCTION>
+```
+Replace the brackets <> with your specifics. You don't always have to specify everything (e.g. `stat`) because of defaults within `ggplot2`. You'll get a better feel for this with more practice. 
+
+# Saving Plots
+
+Once you've created a plot, you'll want to save it as an image to use elsewhere. You can either save through RStudio, or use `ggsave`. 
+
+By default, `ggsave` will save the last plot that you displayed. If you want to save the figure to your *current working directory*, use the command:
+```
+# Saves to current working directory
+# Saves most recent plot run
+ggsave(filename = "filename.png")
+```
+If you want to specify a file path where the figure should be saved (perhaps an `images` folder within your working directory), use the command:
+```
+# Saves most recent plot run
+ggsave(filename = 'filename.png', path = "/path/to/figure/")
+```
+
+If you want to save a different plot, one that has been saved to a variable, do so with the command:
+```
+# Somewhere earlier there should be code 
+# myplot = ggplot(data = dat) + ....
+ggsave(plot = myplot, filename = 'filename.png', path = "/path/to/figure/")
+```
+
+If you want to specify a size of the plot, to fit within your paper or homework assignment, you can do so with:
+```
+# default units are of current graphics device
+ggsave(filename = 'filename.png', width = 4, height = 4)
+# But can specify units as well!
+ggsave(filename = 'filename.png', width = 20, height = 20, units = 'cm')
+```
+
+# Advanced Topics + Next Steps
+
+There are more advanced topics not covered here that allow for further customization of figures, such as:
+
+* Adding custom themes (something other than grey background with white gridlines)
+* Create functions to automate plotting (if you use the same format for many figures)
+* Adjusting axis scales
+
+For references for the above topics see [Ram] below.
+
+In general, becoming familiar with these functions requires lots of practice and reading of documentation. Another tutorial (*with practice problems*) can be found \href{https://r4ds.had.co.nz/explore-intro.html}{here}, a complete reference of functions can be found \href{https://ggplot2.tidyverse.org/reference/}{here}, and a cheat sheet of syntax can be found \href{https://www.rstudio.com/wp-content/uploads/2016/11/ggplot2-cheatsheet-2.1.pdf}{here}. Just like with learning a new programming language, becoming well-versed in Googling "r ggplot how to (task)" will serve you well in finding the syntax for a desired task. 
+
+\newpage
+
+# References
+The following references were used to create this tutorial. 
+
+* Adhikari, Ani, DeNero John. "Chapter 7: Visualization". Computational and Inferential Thinking: The Foundations of Data Science. https://inferentialthinking.com/chapters/07/Visualization.html
+* "Chapter 3: Data Visualization". R for Data Science. https://r4ds.had.co.nz/data-visualisation.html
+* Freeman, Michael, Ross, Joel. "Chapter 13: The `ggplot2` Library". Technical Foundations of Informatics. https://info201.github.io/ggplot2.html
+* Ram, Karthik. "Data Visualization with R & ggplot2". UC Berkeley STAT133 Lecture, September 2, 2013. https://github.com/ucb-stat133/stat133-slides/blob/master/ggplot-karthik.pdf
