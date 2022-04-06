@@ -494,6 +494,123 @@ Multiple linear regression addresses questions like the latter, where we are int
 \small *The graphical example on the previous slides is just one example of how the relationship between the outcome and predictor of interest may vary based on another variable! You may see more or less extreme differences in practice, and we'll show graphical examples for each of confounders, precision variables, and effect modifiers in the following section.
 \end{frame}
 
+\section{Stratified Analyses}
+
+\begin{frame}{Stratified Analyses}
+Suppose we are interested in estimating the association between an outcome $Y$ and a predictor of interest $X$; however, knowledge of the scientific problem tells us that third variable $Z$ may be related to $Y$ and/or $X$.
+
+\vspace{0.3cm}
+
+If $Z$ is \textit{binary}, how might we account for it? \pause One way to account for a second predictor variable is to \textcolor{blue}{stratify} our analysis:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item Fit a simple linear regression model with $Y$ as the outcome and $X$ as the predictor for those with $Z = 0$
+	\item Fit a simple linear regression model with $Y$ as the outcome and $X$ as the predictor for those with $Z = 1$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Stratified analyses: interpretation}
+This implies the following two regression models:
+
+\begin{align*}
+E[Y \mid X, Z = 0] & = \beta_0 + \beta_1 X, \text{ and } \\
+E[Y \mid X, Z = 1] & = \gamma_0 + \gamma_1 X,
+\end{align*} \pause
+
+\textcolor{blue}{Question}: What is the interpretation of $\beta_0$? $\gamma_0$? \pause
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item $\beta_0$: The mean value of $Y$ for groups with $X  = 0$ and $Z = 0$ \pause
+	\item $\gamma_0$: The mean value of $Y$ for groups with $X = 0$ and $Z = 1$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Stratified analyses: interpretation}
+This implies the following two regression models:
+
+\begin{align*}
+E[Y \mid X, Z = 0] & = \beta_0 + \beta_1 X, \text{ and } \\
+E[Y \mid X, Z = 1] & = \gamma_0 + \gamma_1 X,
+\end{align*} 
+
+\textcolor{blue}{Question}: What is the interpretation of $\beta_1$? $\gamma_1$? \pause
+
+\begin{itemize}
+	\item $\beta_1$: The average difference in $Y$ comparing two groups differing by one unit in $X$, when $Z = 0$ \pause
+	\item $\gamma_1$: The average difference in $Y$ comparing two groups differing by one unit in $X$, when $Z = 1$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Stratified analyses: Example}
+Suppose we are interested in knowing whether the association between birthweight and age of birth parent is different for birth parents who smoked during pregnancy vs. those who did not.
+
+\vspace{0.3cm}
+
+We can write the two regression models implied by this stratified analysis as:
+
+\begin{align*}
+E[\text{bwt} \mid \text{age}, \text{smoke} = 0] & = \beta_0 + \beta_1 \times \text{age} \\
+E[\text{bwt} \mid \text{age}, \text{smoke} = 1] & = \gamma_0 + \gamma_1 \times \text{age}
+\end{align*}
+
+Each of these regression models is a simple linear regression model, which we know how to handle! The difference is that we are \textit{conditioning} on a specific value of a stratification variable (smoking yes/no).
+
+
+\end{frame}
+
+\begin{frame}{Stratified analysis: Example in \texttt{R}}
+In \texttt{R}, this means we need to create two separate dataframes containing (1) only individuals who smoked during pregnancy, and (2) only individuals who did not smoke during pregnancy:
+
+\vspace{0.3cm}
+
+\texttt{births\_nosmoke <- births \%>\% filter(smoke == 0)} \\
+\texttt{births\_smoke <- births \%>\% filter(smoke == 1)} \\
+\texttt{mod1 <- lm(data = births\_nosmoke, bwt} $\sim$ \texttt{age)} \\
+\texttt{mod2 <- lm(data = births\_smoke, bwt} $\sim$ \texttt{age)}
+
+\vspace{0.3cm}
+
+(and remember we can look at the output from models using the \texttt{summary} function)
+
+\end{frame}
+
+\begin{frame}{Stratified analysis: Example}
+
+The results of our regression analyses (including fitting simple linear regression model to everyone in the dataset) are found below:
+
+\vspace{0.3cm}
+
+\begin{table}
+	\centering
+	\begin{tabular}{lll}
+		& \multicolumn{2}{l}{Estimated coefficient (95\% CI)} \\
+		\multicolumn{1}{l|}{Analysis}             & \multicolumn{1}{l|}{Intercept}        & Age         \\ \hline
+		\multicolumn{1}{l|}{Unstratified}           & \multicolumn{1}{l|}{3161.750}         & 8.609       \\ \hline
+		\multicolumn{1}{l|}{Stratified: Smoke}    & \multicolumn{1}{l|}{3136.125}         & 1.897       \\ \hline
+		\multicolumn{1}{l|}{Stratified: No Smoke} & \multicolumn{1}{l|}{3204.643}         & 7.669      
+	\end{tabular}
+\end{table}
+
+\vspace{0.3cm}
+
+We can see that the coefficient for age is different for those who smoked vs. those who did not smoke. This suggests that the association between age and birthweight may be different for birth parents who smoked vs. those who did not. 
+
+\end{frame}
+
+
+\begin{frame}{Stratified analysis: summary}
+Stratified analyses are a perfectly valid way to analyze your data, and allow you to answer a variety of interesting scientific/statistical questions!
+
+\vspace{0.3cm}
+
+\textit{However}, it is less straightforward to do a stratified analysis if your stratification variable is continuous, and we typically prefer \textcolor{blue}{adjusting for covariates} in a \textcolor{blue}{multiple linear regression} framework, as it is more flexible in terms of modeling choices.
+\end{frame}
+
+
 \section{Adjusting for covariates}
 
 \begin{frame}{Adjusting for covariates}
@@ -603,7 +720,7 @@ With simple linear regression, the model $E[Y \mid X_1] = \beta_0 + \beta_1 X_1$
 
 \vspace{0.3cm}
 
-With multiple linear regression, the model $E[Y \mid X_1] = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p$ (for $p$ total covariates), we address the question, ``Is $X_1$ associated with $Y$, \textit{adjusting for covariates} $X_2$ through $X_p$?" \pause
+With multiple linear regression, the model $E[Y \mid X_1, \dots, X_p] = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p$ (for $p$ total covariates), we address the question, ``Is $X_1$ associated with $Y$, \textit{adjusting for covariates} $X_2$ through $X_p$?" \pause
 
 \vspace{0.3cm}
 
@@ -613,6 +730,128 @@ When we estimate the association between the predictor of interest and the outco
 
 Of course, all scientific questions and interpretations should be made \textit{in the context of the problem}. We'll give examples of this in a bit.
 \end{frame}
+
+% HERE
+
+\subsection{Interpretation}
+
+\begin{frame}{Adjusting for covariates: interpretation}
+Suppose we have just a single additional variable $Z$ in our model, along with a predictor of interest $X$ and an outcome $Y$:
+$$
+E[Y \mid X, Z] = \beta_0 + \beta_1 X + \beta_2 Z
+$$\pause
+How do we interpret\dots
+\vspace{0.3cm}
+\begin{enumerate}
+	\item[] $\beta_0$
+	\item[] $\beta_1$
+	\item[] $\beta_2$
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Adjusting for covariates: interpretation}
+$$
+E[Y \mid X, Z] = \beta_0 + \beta_1 X + \beta_2 Z
+$$
+
+\vspace{0.3cm}
+
+$\beta_0$: The mean value of $Y$ when both $X$ and $Z$ are 0.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Why?} \pause $E[Y \mid X = 0, Z = 0] = \beta_0 + \beta_1 \times 0 + \beta_2 \times 0 = \beta_0$
+\end{frame}
+
+\begin{frame}{Adjusting for covariates: interpretation}
+$$
+E[Y \mid X, Z] = \beta_0 + \beta_1 X + \beta_2 Z
+$$
+
+\vspace{0.3cm}
+
+$\beta_1$: The average difference in $Y$ comparing two groups that differ in one unit of $X$, and have \textit{the same} value $Z$.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Why?} \pause 
+
+\begin{align*}
+E[Y & \mid X = x + 1, Z = z] - E[Y \mid X = x, Z = z] \\
+& = [\beta_0 + \beta_1(x + 1) + \beta_2 z] - [\beta_0 + \beta_1x + \beta_2 z] \\
+& = [\beta_1 x + \beta_1 + \beta_2 z] - [\beta_1 x + \beta_2 z] \\
+& = \beta_1
+\end{align*}
+
+\end{frame}
+
+\begin{frame}{Adjusting for covariates: interpretation}
+$$
+E[Y \mid X, Z] = \beta_0 + \beta_1 X + \beta_2 Z
+$$
+
+\vspace{0.3cm}
+
+$\beta_2$: The average difference in $Y$ comparing two groups that differ in one unit of $Z$, and have \textit{the same} value $X$.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Why?} \pause 
+
+\begin{align*}
+E[Y & \mid X = x, Z = z + 1] - E[Y \mid X = x, Z = z] \\
+& = [\beta_0 + \beta_1 x + \beta_2 (z + 1)] - [\beta_0 + \beta_1x + \beta_2 z] \\
+& = [\beta_1 x + \beta_2 z + \beta_2] - [\beta_1 x + \beta_2 z] \\
+& = \beta_2
+\end{align*}
+
+\end{frame}
+
+\begin{frame}{Adjusting for covariates: interpretation}
+Now suppose we have a model with $p$ total covariates,
+$$
+E[Y \mid X_1, \dots, X_p] = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p
+$$
+
+\textcolor{blue}{Question:} How do you interpret $\beta_0$? \pause
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Answer:} The mean value of $Y$ when all covariates $X_1$ through $X_p$ are $0$.
+\end{frame}
+
+\begin{frame}{Adjusting for covariates: interpretation}
+Now suppose we have a model with $p$ total covariates,
+$$
+E[Y \mid X_1, \dots, X_p] = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p
+$$
+
+\textcolor{blue}{Question:} How do you interpret $\beta_1$? \pause
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Answer:} The average difference in $Y$ comparing two groups that differ in one unit of $X_1$, and have the same value for covariates $X_2$ through $X_p$.
+\end{frame}
+
+\begin{frame}{Adjusting for covariates: interpretation}
+Now suppose we have a model with $p$ total covariates,
+$$
+E[Y \mid X_1, \dots, X_p] = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p
+$$
+
+\textcolor{blue}{Question:} How do you interpret $\beta_j$ for some general $j = 2, \dots, p$? \pause
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Answer:} The average difference in $Y$ comparing two groups that differ in one unit of $X_j$, and have the same value for all other covariates in the model. \pause
+
+\vspace{0.3cm}
+
+*Of course, we always need to interpret coefficients in scientific context! These interpretations should serve as guidelines, that you then need to fill in with units and context for any models you fit.
+\end{frame}
+
+
+\subsection{Causal diagrams}
 
 \begin{frame}{Adjusting for covariates}
 Throughout this section, we will consider three types of covariates that we may include in our multiple regression models:
@@ -630,8 +869,6 @@ Throughout this section, we will consider three types of covariates that we may 
 For each, we'll discuss their need for inclusion in a statistical model based on study design and scientific question. But first, we'll talk about \textcolor{blue}{causal diagrams}, which are a useful tool to help us visualize the potential relationships between variables.
 
 \end{frame}
-
-\subsection{Causal diagrams}
 
 \begin{frame}{Causal diagrams}
 \small \textcolor{blue}{This slide intentionally left blank for causal diagrams activity.}
@@ -853,6 +1090,78 @@ $$
 
 \end{frame}
 
+\begin{frame}{Confounders: Example in \texttt{R}}
+Thinking back to our births dataset, we are interested in the association between First Steps participation and birthweight. Since this is an observational study, confounding is a potential concern. In particular, we think that age may be a confounding variable, since 
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item Age is associated with First Steps participation in the sample
+	\item Giving birth at a young age may cause more birth complications leading to low birthweights than giving birth at older ages (a causal relationship)
+\end{itemize} \pause
+
+\vspace{0.3cm}
+
+We can write our regression model as
+$$
+E[\text{bwt} \mid \text{FS}, \text{age}] = \beta_0 + \beta_1 \times \text{FS} + \beta_2 \times \text{age}
+$$
+\end{frame}
+
+\begin{frame}{Confounders: Example in \texttt{R}}
+Fitting this model in \texttt{R} is similar to simple linear regression models, we just need to add our additional variable to the formula argument as follows:
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.4]{confound_code.png}
+\end{frame}
+
+\begin{frame}{Confounders: Example in \texttt{R}}
+Fitting this model in \texttt{R} is similar to simple linear regression models, we just need to add our additional variable to the formula argument as follows:
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.4]{confound_code2.png}
+\end{frame}
+
+\begin{frame}{Confounders: Example in \texttt{R}}
+From our multiple regression output, we have coefficient estimates and standard errors for each variable in our model:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item $\beta_0$: 3180.862 (SE = 59.5)
+	\item $\beta_1$ (Coefficient for FS): -28.323 (SE = 31.62)
+	\item $\beta_2$ (Coefficient for age): 8.112 (SE = 1.94)
+\end{itemize}
+
+\vspace{0.3cm}
+	
+(remember that if we want confidence intervals for our estimates we can either use the \texttt{confint} function on our model, or we can compute them by hand using the standard errors above)
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Question}: How do we interpret the results of our regression model, in the context of our scientific question?
+
+	
+\end{frame}
+
+\begin{frame}{Confounders: Example in \texttt{R}}
+\textcolor{blue}{Question}: How do we interpret the results of our regression model, in the context of our scientific question?
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Answer}: The association we are interested in is between First Steps participation and birthweight, with age as a confounding variable. The coefficient that corresponds to the association between FS and birthweight is $\beta_1$.
+
+\vspace{0.3cm}
+
+\textcolor{cyan}{We estimate that average birthweight is 28.3 grams higher for birth parents who did not paritcipate in FS compared to those who did, for birth parents of the same age. This observed difference would not be surprising if the true difference in average birthweight were between -90.3 grams and  33.7 grams.} \pause
+
+\vspace{0.3cm}
+
+*we could of course interpret $\beta_0$ and $\beta_2$ in this model as well, but $\beta_1$ is the coefficient that corresponds to our scientific question!
+\end{frame}
+
 \subsection{Effect modifiers}
 
 % definition slide and example of diagram
@@ -964,7 +1273,290 @@ New terminology:
 
 \vspace{0.3cm}
 
-You must \textcolor{red}{always} include the main effects in your model if you include an interaction term. Not including the main effects changes the interpretation of the interaction term. We'll give examples of interpretation in a bit.
+You must \textcolor{red}{always} include the main effects in your model if you include an interaction term. Not including the main effects changes the interpretation of the interaction term. We'll see an example of interpreting the coefficient for the interaction term in the next few slides\dots
+
+\end{frame}
+
+\begin{frame}{Effect modifiers: Example in \texttt{R}}
+Thinking back to our births dataset, suppose we are interested in whether or not the association between age and birthweight differs for individuals in First Steps vs. those not in First Steps. Since we are interested in how an association between a predictor of interest and outcome varies based on another variable, we are interested in \textcolor{blue}{effect modification}. \pause
+
+\vspace{0.3cm}
+
+We can write our regression model as 
+$$
+E[\text{bwt} \mid FS, age] = \beta_0 + \beta_1 \times \text{FS} + \beta_2 \times \text{age} + \beta_3 \times (\text{FS} \times \text{age})
+$$
+
+\end{frame}
+
+\begin{frame}{Effect modifiers: Example in \texttt{R}}
+Fitting this model in \texttt{R} is similar to multiple linear regression models we've seen, but we now need to include an interaction term in our formula. There are a couple ways to do this:
+
+\vspace{0.3cm}
+
+\begin{enumerate}
+	\item \texttt{lm(dataframe, formula = outcome} $\sim$ \texttt{var1 + var2 + var1:var2)}
+	\item \texttt{lm(dataframe, formula = outcome} $\sim$ \texttt{var1*var2)}
+\end{enumerate}
+
+\vspace{0.3cm}
+
+The first option involves fully writing out the main effects and the interaction term separately, with the interaction term denoted with a ``:" separating the two variables that interact.
+
+\vspace{0.3cm}
+
+The second option involves specifying the interaction term with a ``*" symbol, which tells \texttt{R} to automatically include the main effects for you.
+
+\vspace{0.3cm}
+
+Either option is completely fine to use, and both will give you the same results!
+
+\end{frame}
+
+\begin{frame}{Effect modifiers: Example in \texttt{R}}
+We fit our model for the births dataset in \texttt{R} as follows:
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.4]{interact_mod.png}
+\end{frame}
+
+\begin{frame}{Effect modifiers: Example in \texttt{R}}
+We fit our model for the births dataset in \texttt{R} as follows:
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.4]{interact_mod2.png}
+\end{frame}
+
+\begin{frame}{Effect modifiers: Example in \texttt{R}}
+From our multiple regression output, we have coefficient estimates and (we can obtain) confidence intervals for each variable in our model:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item $\beta_0$: 3197.8 (3069.6, 3325.9)
+	\item $\beta_1$ (Coefficient for FS): -111.8 (-380.2, 156.7)
+	\item $\beta_2$ (Coefficient for age): 7.6 (3.4, 11.7)
+	\item $\beta_3$ (Coefficient for FS * age): 3.2 (-6.8, 13.1)
+\end{itemize}
+
+\vspace{0.3cm}
+
+
+\textcolor{blue}{Question:} How do we interpret the coefficients in our regression model, in the context of our scientific question? 
+\end{frame}
+
+\begin{frame}{Interpreting interaction terms}
+Thinking back to our regression equation for effect modifiers, we had
+
+$$
+E[Y \mid X, Z] = \beta_0 + \beta_1 X + \beta_2 Z + \beta_3 (X \times Z)
+$$
+
+$\beta_0$: The mean value of $Y$ when both $X$ and $Z$ are 0.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Why?} \pause $E[Y, X = 0, Z = 0] = \beta_0 + \beta_1 \times 0 + \beta_2 \times 0 + \beta_3 (0 \times 0) = \beta_0$
+
+\pause \vspace{0.3cm}
+
+Note that this is the same interpretation we have for an intercept in a model that does \textit{not} include an interaction term!
+
+\end{frame}
+
+\begin{frame}{Interpreting interaction terms}
+Thinking back to our regression equation for effect modifiers, we had
+
+$$
+E[Y \mid X, Z] = \beta_0 + \beta_1 X + \beta_2 Z + \beta_3 (X \times Z)
+$$
+
+$\beta_1$: The average difference in $Y$ comparing two groups that differ in one unit of $X$, for groups with $Z = 0$.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Why?} \pause 
+
+\begin{align*}
+E[Y & \mid X = x + 1, Z = 0] - E[Y  \mid X = x, Z = 0] \\
+& = [\beta_0 + \beta_1 (x +1) + \beta_2 (0) + \beta_3 (x + 1)(0)] \\
+& \hspace{0.3cm}- [\beta_0 + \beta_1 x + \beta_2 (0) + \beta_3 (x)(0)] \\
+& = [\beta_0 + \beta_1 x + \beta_1] - [\beta_0 + \beta_1 x] \\
+& = \beta_1
+\end{align*}
+
+\end{frame}
+
+\begin{frame}{Interpreting interaction terms}
+Thinking back to our regression equation for effect modifiers, we had
+
+$$
+E[Y \mid X, Z] = \beta_0 + \beta_1 X + \beta_2 Z + \beta_3 (X \times Z)
+$$
+
+$\beta_2$: The average difference in $Y$ comparing two groups that differ in one unit of $Z$, for groups with $X= 0$.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Why?} \pause 
+
+\begin{align*}
+E[Y & \mid X = 0, Z = z + 1] - E[Y  \mid X = 0, Z = z] \\
+& = [\beta_0 + \beta_1 (0) + \beta_2 (z + 1) + \beta_3 (0)(z + 1)] \\
+& \hspace{0.3cm}- [\beta_0 + \beta_1 (0) + \beta_2 z + \beta_3 (0)(z)] \\
+& = [\beta_0 + \beta_2 z + \beta_2] - [\beta_0 + \beta_2 z] \\
+& = \beta_2
+\end{align*}
+\end{frame}
+
+\begin{frame}{Interpreting interaction terms}
+Thinking back to our regression equation for effect modifiers, we had
+
+$$
+E[Y \mid X, Z] = \beta_0 + \beta_1 X + \beta_2 Z + \beta_3 (X \times Z)
+$$
+
+$\beta_3$: The average difference \textit{in difference} in $Y$ comparing two groups that differ in one unit of $X$, for groups that differ by one unit of $Z$ 
+
+\vspace{0.3cm}
+
+OR: The average difference \textit{in difference} in $Y$ comparing two groups that differ in one unit of $Z$, for groups that differ by one unit of $X$
+
+
+\end{frame}
+
+\begin{frame}{Interpreting interaction terms}
+Thinking back to our regression equation for effect modifiers, we had
+
+$$
+E[Y \mid X, Z] = \beta_0 + \beta_1 X + \beta_2 Z + \beta_3 (X \times Z)
+$$
+
+$\beta_3$: The average difference in [difference in $Y$ comparing two groups that differ in one unit of $X$], for groups that differ by one unit of $Z$ 
+
+\vspace{0.3cm}
+
+OR: The average difference in [difference in $Y$ comparing two groups that differ in one unit of $Z$], for groups that differ by one unit of $X$
+
+\vspace{0.3cm}
+\pause
+The interpretation of the interaction term is a mouthful, but it is correct. \textcolor{blue}{When in doubt, borrow the example interpretation in a few slides and replace with your variables.}
+
+\vspace{0.3cm}
+
+\end{frame}
+
+\begin{frame}{Interaction terms and hypothesis tests}
+When testing whether or not effect modification has occurred, the coefficient corresponding to the interaction term (in the last example, $\beta_3$) is the one we are interested in. 
+
+\vspace{0.3cm}
+
+For the model
+$$
+E[Y \mid X, Z] = \beta_0 + \beta_1 X + \beta_2 Z + \beta_3 (X \times Z)
+$$
+our null and alternative hypotheses for testing for effect modification are:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item $H_0: \beta_3 = 0$
+	\item $H_1: \beta_3 \neq 0$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Effect modifiers: Example in \texttt{R}}
+Back to our example from the births dataset:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item $\beta_0$: 3197.8 (3069.6, 3325.9)
+	\item $\beta_1$ (Coefficient for FS): -111.8 (-380.2, 156.7)
+	\item $\beta_2$ (Coefficient for age): 7.6 (3.4, 11.7)
+	\item $\beta_3$ (Coefficient for FS * age): 3.2 (-6.8, 13.1)
+\end{itemize}
+
+\vspace{0.3cm}
+
+
+\textcolor{blue}{Question:} How do we interpret the coefficients in our regression model, in the context of our scientific question? 
+\end{frame}
+
+\begin{frame}{Effect modifiers: Example in \texttt{R}}
+\textcolor{blue}{Question:} How do we interpret the coefficients in our regression model, in the context of our scientific question? 
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Answer:} Since one of the variables in our interaction term is binary (First Steps participation), the interpretation of the interaction term is more straightforward since groups that differ by one unit in First Steps are just those who participated vs. those who did not.
+
+\vspace{0.3cm}
+
+\textcolor{cyan}{We estimate that the average birthweight is 7.6 grams higher for birth parents differing by 1 year in age who did not participate in FS, with the older group having higher birthweights. We estimate that the average birthweight is 10.8 grams higher for birth parents differing by 1 year in age who participated in FS, with the older group having higher birthweights. This observed difference in association between age and birthweight between those in FS and those not of 3.2 grams would not be surprising if the true difference were between -6.8 and 13.1 grams (p = 0.53).}
+
+\end{frame}
+
+\begin{frame}{Effect modifiers: Example in \texttt{R}}
+\textcolor{cyan}{We estimate that the average birthweight is 7.6 grams higher for birth parents differing by 1 year in age who did not participate in FS, with the older group having higher birthweights. We estimate that the average birthweight is 10.8 grams higher for birth parents differing by 1 year in age who participated in FS, with the older group having higher birthweights. This observed difference in association between age and birthweight between those in FS and those not of 3.2 grams would not be surprising if the true difference were between -6.8 and 13.1 grams (p = 0.53).}
+
+\vspace{0.3cm}
+
+How did we get 7.6 and 10.8?
+\end{frame}
+
+\begin{frame}{Effect modifiers: Example in \texttt{R}}
+How did we get 7.6 and 10.8?
+
+\vspace{0.3cm} If we substitute our estimated coefficients into our regression model statement, we have
+$$
+E[\text{bwt} \mid \text{FS}, \text{age}] = 3197.8 - 111.8 \text{FS} + 7.6 \text{age} + 3.2 (\text{FS} \times \text{age}) 
+$$
+\pause Then when $\text{FS} = 1$, our regression equation becomes
+\begin{align*}
+E[\text{bwt} \mid \text{FS} = 1, \text{age}] & = 3197.8 - 111.8  + 7.6 \text{age} + 3.2 \text{age} \\
+& = 3086 + 10.8 \text{age}
+\end{align*} \pause
+and when $\text{FS} = 0$, we have
+\begin{align*}
+E[\text{bwt} \mid \text{FS} = 0, \text{age}] & = 3197.8  + 7.6 \text{age} 
+\end{align*} \pause
+\small We can see now that the coefficient for age differs depending on the value of FS, and in particular it is different by exactly the value of the coefficient for the interaction term. When one variable in your interaction term is binary, it is often easier to interpret each regression slope (10.8 and 7.6) separately, as in the example interpretation we just gave.
+
+\end{frame}
+
+\begin{frame}{Effect modification: Another example}
+We've now seen an example of how to interpret the coefficient for an interaction term when one of the variables involved in the interaction is binary. Suppose we instead want to test if the association between age and birthweight is modified by birth parent's pre-pregnancy weight. 
+
+\vspace{0.3cm}
+
+We can write our regression model as
+
+$$
+E[\text{bwt} \mid \text{wpre}, \text{age}] = \beta_0 + \beta_1 \times \text{wpre} + \beta_2 \times \text{age} + \beta_3 \times (\text{wpre} \times \text{age})
+$$
+\end{frame}
+
+\begin{frame}{Effect modification: Another example}
+We fit our model for the births dataset in \texttt{R} as follows:
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.37]{effectmod2.png}
+\end{frame}
+
+\begin{frame}{Effect modification: Another example}
+The coefficient for our interaction term is -0.04 with confidence interval given by (-0.14, 0.06)
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Question:} How do we interpret this interaction term coefficient in our regression model, in the context of our scientific question? \pause
+
+\vspace{0.3cm}
+
+\textcolor{cyan}{We estimate that among birth parents who are one additional pound of pre-pregnancy weight heavier, average birthweight is lower by 0.04 grams more per additional year of age than among birth parents with one less pound of pre-pregnancy weight. This observed difference in association would not be surprising if the true difference were between -0.14 and 0.06 grams (p = 0.41).}
 
 \end{frame}
 
@@ -1075,18 +1667,89 @@ $$
 
 \end{frame}
 
+\begin{frame}{Precision variables: In \texttt{R}, and interpretation}
+Note that the regression equation for adding potential confounders into a model is the \textit{same} as the regression equation for adding precision variables, in that you only need to add additional variables to the right-hand side of your regression equation.
 
-% Example with a question and answer - could be from the worksheet
+\vspace{0.3cm}
 
-\subsection{Stratification}
+In \texttt{R}, you do exactly the same things as with confounders, where you simply add another variable to the right-hand side of your formula.
 
-% maybe move this entire subsection up to the beginning of Adjusting for covariates? or make it it's own section beforehand?
+\vspace{0.3cm}
+
+The interpretation of regression coefficients is also the same as for potential confounders, where we interpret each coefficient for a given variable for individuals with \textit{the same} value for all other variables in our model. 
 
 
+\end{frame}
 
-% motivator for multiple linear regression
-% note that also had multiple coefficients with the polynomial transformation
+\section{Reivisiting regression assumptions}
 
+\begin{frame}{Revisiting regression assumptions}
+Recall that in Chapter 1a we listed the \textit{classical} linear regression assumptions under the following model
+$$
+Y_i = \beta_0 + \beta_1 X_i + \epsilon_i \text{ for } i = 1, \dots, n
+$$
+as,
+\vspace{0.3cm}
+\begin{itemize}
+	\item \textcolor{red}{L}inearity: There is a linear relationship between $X_i$ and the true population conditional mean $Y_i \mid X_i$
+	\begin{itemize}
+		\item i.e. $E[Y_i \mid X_i] = \beta_0 + \beta_1 X_i$
+	\end{itemize}
+	\item \textcolor{red}{I}ndependence: The errors $\epsilon_i$ are independent of each other
+	\item \textcolor{red}{N}ormality: $\epsilon_i$ are normally distributed
+	\item \textcolor{red}{E}qual variance: $\epsilon_i$ have the same variance
+	\begin{itemize}
+		\item $\epsilon_i \sim N(0, \sigma^2)$, where $\sigma^2$ does not depend on $i$
+	\end{itemize}
+\end{itemize}
+
+\vspace{0.2cm}
+
+\dots however, we learned that when we have large samples, we do not need the normality assumption, and also that the equal variance assumption can be relaxed with the use of robust standard errors
+
+\end{frame}
+
+\begin{frame}{Revisiting regression assumptions}
+For multiple linear regression, we have models with multiple covariates, like this:
+$$
+Y_i = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p + \epsilon_i \text{ for } i = 1, \dots, n
+$$
+How do our assumptions change, if at all? \pause
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item \textcolor{red}{L}inearity: There is a linear relationship between \color{cyan}$X_1, \dots, X_p$ \color{black} and the true population conditional mean \color{cyan}$Y_i \mid X_1, \dots, X_p$
+	\begin{itemize}
+		\item i.e. \color{cyan} $E[Y_i \mid X_1, \dots, X_p] = \beta_0 + \beta_1 X_1 + \dots \beta_p X_p$  \color{black}
+	\end{itemize} 
+	\item \textcolor{red}{I}\color{black}ndependence: The errors $\epsilon_i$ are independent of each other
+	\item \textcolor{red}{N}ormality: $\epsilon_i$ are normally distributed
+	\item \textcolor{red}{E}qual variance: $\epsilon_i$ have the same variance
+	\begin{itemize}
+		\item $\epsilon_i \sim N(0, \sigma^2)$, where $\sigma^2$ does not depend on $i$
+	\end{itemize}
+\end{itemize}
+
+\vspace{0.2cm}
+
+Note that the only assumption that changed, is that we now require a linear relationship between \textit{all covariates} in our model and the true population conditional mean. This assumption can still be checked using the same diagnostic plots as in Chatper 1a!
+
+\end{frame}
+
+
+\begin{frame}{Multiple linear regression: Summary}
+You should now have all the tools you need to:
+
+\vspace{0.3cm}
+\begin{itemize}
+	\item Translate a scientific question into a statistical one that may include \textit{multiple} covariates in a regression model
+	\item Create causal diagrams to help determine the relationship between variables in a model (outcome, predictor of interest, confounder, effect modifier, precision variable)
+	\item Interpret coefficients and confidence intervals in multiple linear regression models (including interaction terms!)
+	\item Use \texttt{R} to fit multiple linear regression models
+	\item Create graphs to support your lienear regression analyses
+\end{itemize}
+\end{frame}
 
 \begin{frame}[c]
 \centering \huge Any Questions?
