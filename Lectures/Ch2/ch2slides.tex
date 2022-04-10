@@ -440,6 +440,7 @@ In our running example:
 	\end{itemize}
 \end{frame}
 
+\subsection{Simple logistic regression}
 % motivating logistic regression
 \begin{frame}
 	\frametitle{CHD versus Type A behavior: odds}
@@ -582,6 +583,7 @@ In our running example:
 	\end{enumerate} 
 \end{frame}
 
+\subsection{Multiple logistic regression}
 % interpretation: multiple/general, do the math
 %%% beta 0
 \begin{frame}
@@ -730,6 +732,7 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 \end{frame}
 
 \begin{frame}{Logistic regression: transforming \texttt{R} output}
+	\vspace{-0.7cm}
 	As you could infer by the fact that some estimates were negative, \texttt{R} has given us the raw regression coefficient estimates and intervals. But as we've seen, the exponentiated versions are much more interpretable!
 			\begin{center}
 		\includegraphics[width=\textwidth]{./figs/multiple_logistic_regression_arcus_exp}
@@ -737,7 +740,7 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 	We can use \texttt{coef} to pull out coefficients, and then exponentiate (same for \texttt{confint}).
 	\\ ~\
 	
-	The p-values for the hypothesis tests can be used directly since a test of $H_0: \beta_1 = 0$ is the same as a test of $H_0: \exp(\beta_1) = 1$. 
+	Note: The p-values for the hypothesis tests can be used directly since a test of $H_0: \beta_1 = 0$ is the same as a test of $H_0: \exp(\beta_1) = 1$. More on this in a few slides!
 \end{frame}
 
 \begin{frame}{Logistic regression: reporting results}
@@ -753,7 +756,105 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 	Based on logistic regression, we estimate that the odds of CHD are 1.28 times as high in subjects with \textit{arcus senilis} versus those without, comparing subjects of the same age, weight, systolic blood pressure, diastolic blood pressure, and cholesterol. The data would be consistent with a true odds ratio between 0.97 and 1.69. Based on a test of the null hypothesis of an odds ratio of 1, there is not sufficient evidence of an association between \textit{arcus senilis} and CHD (p = 0.08), after adjusting for age, weight, blood pressure, and cholesterol. 
 \end{frame}
 
+\begin{frame}{A note on confidence intervals and p-values}
+	\vspace{-0.7cm}
+	Suppose I fit the simple model $\log(\text{Odds}(\texttt{chd} \mid \texttt{arcus})) = \beta_0 + \beta_1 \texttt{arcus}$ and get the following \texttt{R} output, with exponentiated point estimates and intervals: 
+	
+	\begin{center}
+	\includegraphics[width=0.5\textwidth]{./figs/asymmetric_CI}
+	\end{center}
+	For the \texttt{arcus} predictor, we have a point estimate of 1.64 with 95\% CI (1.25, 2.12). It's a bit subtle, but this CI isn't actually symmetric about our point estimate!
+		\begin{center}
+		\includegraphics[width=0.5\textwidth]{./figs/asymmetric_CI_pic}
+	\end{center}
+\end{frame}
 
+\begin{frame}{A note on confidence intervals and p-values}
+	What's going on here? 
+	\\ ~\
+	
+	\texttt{glm} is working on the log-odds scale:
+	\begin{align*}
+		&\text{Confidence interval: }(\hat{\beta} - 1.96 \times \hat{\text{SE}}, \hat{\beta} + 1.96 \times \hat{\text{SE}})\\
+		&\text{Hypothesis test: }H_0: \beta = 0 \tab H_1: \beta \neq 0
+	\end{align*}
+	When you exponentiate to the odds scale, the interval is longer symmetric and the hypotheses are different:
+	\begin{align*}
+		&\text{Confidence interval: }(e^{\hat{\beta} - 1.96 \times \hat{\text{SE}}}, e^{\hat{\beta} + 1.96 \times \hat{\text{SE}}})\\
+		&\text{Hypothesis test: }H_0: \exp(\beta) = 1 \tab H_1: \exp(\beta) \neq 1
+	\end{align*} 
+	The p-values are unaffected (if the log-odds scale CI doesn't overlap 0, then the odds scale CI won't overlap 1)
+\end{frame}
+
+
+\subsection{Prediction}
+\begin{frame}{Logistic regression: Prediction}
+	We can also use logistic regression for prediction, though it takes a bit more work to get results on the scale we want. 
+	\\ ~\
+	
+	Let's start with the a single quantitative predictor, cholesterol:
+	\begin{align*}
+		\log(\text{Odds}(\texttt{chd} \mid \texttt{chol})) = \beta_0 + \beta_1 \texttt{chol}
+	\end{align*}
+	\begin{center}
+	\includegraphics[width=0.5\textwidth]{./figs/simple_logistic_regression_chol}
+\end{center}
+\end{frame}
+
+\begin{frame}{Logistic regression: Prediction}
+	\vspace{-1cm}
+		\begin{align*}
+		\log(\text{Odds}(\texttt{chd} \mid \texttt{chol})) = \beta_0 + \beta_1 \texttt{chol}
+	\end{align*}
+	Let's predict for a person with a cholesterol of 220 mg/dL:
+	\begin{enumerate}
+		\item Get estimates for each regression coefficient: 
+		\item[] $\hat{\beta}_0 = -5.359, \hat{\beta}_1 = 0.0124$
+		\item Plug in estimates and predictor values:
+		\begin{enumerate}
+			\item[a.] $\widehat{\log(\text{Odds})} = -5.359 + (0.0124\times220$) = -2.62
+			\item[b.] $\widehat{\text{Odds}} = e^{-2.62} = 0.0728$
+			\item[] \textcolor{blue}{(using that $e^{\log x} = x$)}
+			\item[c.] $\widehat{\text{Prob}} = \frac{0.0659}{1 + 0.0659} = 0.068$
+			\item[] \textcolor{blue}{(using that Odds = $\frac{\text{Prob}}{1-\text{Prob}}$ and so Prob = $\frac{\text{Odds}}{1  +\text{Odds}}$)}
+		\end{enumerate}
+	\end{enumerate}
+	There's a common shortcut to get from \textcolor{blue}{a.} to our final answer. 
+	\begin{align*}
+		\text{expit}(x) = \frac{e^x}{1 + e^x} \Rightarrow \text{expit}(-2.719) = 0.068
+	\end{align*}
+\end{frame}
+
+\begin{frame}{Logistic regression: Prediction}
+	Of course, \texttt{R} will do all the work for us: 
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{./figs/simple_logistic_regression_chol_prediction}
+	\end{center}
+	We need to use \texttt{type = "response"} to predict on the probability scale
+\end{frame}
+
+\begin{frame}{Logistic regression: Prediction}
+	Unlike linear regression (blue), logistic regression (red) keeps all fitted and predicted values in [0,1]
+		\begin{center}
+		\includegraphics[width=0.8\textwidth]{./figs/scatter_glm}
+	\end{center}
+\end{frame}
+
+\begin{frame}{Logistic regression: pros and cons}
+	\begin{align*}
+		\log(\text{Odds}[Y = 1 \mid X_1,\dots, X_p]) = \beta_0 + \beta_1X_1 + \beta_2X_2 + \cdots + \beta_pX_p
+	\end{align*}
+	Pros:
+	\begin{itemize}
+		\item Predicted/fitted values stay inside [0,1] range
+		\item Allows analysis of case-control studies (see next section!)
+		\item \includegraphics[scale=0.01]{./figs/chilipepper} Numerically stable: We don't get into the details here, but some other options for binary outcome regression have major computational issues!
+	\end{itemize}
+	Cons:
+	\begin{itemize}
+		\item Harder to interpret (odds and odds ratios)
+	\end{itemize}
+\end{frame}
 %\section{Simple logistic regression with binary outcome}
 %% motivate logistic regression
 
