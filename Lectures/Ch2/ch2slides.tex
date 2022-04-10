@@ -671,7 +671,86 @@ In our running example:
 \end{frame}
 
 \begin{frame}{Logistic regression: formulating a statistical question}
-	content...
+	\begin{enumerate}
+		\item \textbf{Scientific Question:} \pause Is \textit{arcus senilis} associated with risk of CHD? \pause
+		\item \textbf{Statistical Question:} \pause 
+		\begin{itemize}
+			\item How is our outcome quantified? \begin{tiny}The study is already completed -- we don't really have any control over this!\end{tiny}\pause
+			\item[] \textcolor{blue}{Binary: cardiovascular event = 1, no event = 0}\pause
+			\item How will we quantify association? \pause
+			\item[] \textcolor{blue}{Ratio of odds of CHD comparing groups with and without \textit{arcus senilis}}\pause
+			\item Are there other variables we should adjust for?\pause
+			\item[] \textcolor{blue}{Draw the causal diagram!}\pause
+		\end{itemize}
+	\end{enumerate}\pause
+\vspace{1cm}
+Is the odds ratio of CHD different from 1 comparing subjects with and without \textit{arcus senilis} of the same age, weight, systolic blood pressure, diastolic blood pressure, and cholesterol? 
+\end{frame}
+
+\begin{frame}{Logistic regression: writing the regression model}
+	Is the odds ratio of CHD different from 1 comparing subjects with and without \textit{arcus senilis} of the same age, weight, systolic blood pressure, diastolic blood pressure, and cholesterol? 
+	\\ ~\ 
+	
+	\textbf{Regression Model:} \pause
+	\begin{align*}
+		\log(&\text{Odds}[\texttt{chd} \mid \texttt{arcus}, \texttt{age}, \texttt{weight}, \texttt{sbp}, \texttt{dbp}, \texttt{chol}]) \\
+		&= \beta_0 + \beta_1\texttt{arcus} + \beta_2\texttt{age} + \beta_3\texttt{weight} \\
+		&\tab + \beta_4\texttt{sbp} + \beta_5\texttt{dbp} + \beta_6\texttt{chol}
+	\end{align*}
+\end{frame}
+
+\begin{frame}{\includegraphics[scale=0.01]{./figs/chilipepper} Terminology}
+	You will often seen logistic regression framed a bit differently than what we've seen so far. \pause
+	\\ ~\ 
+	
+	You may see
+	\begin{align*}
+		\text{logit}(P[Y = 1 \mid X]) = \beta_0 + \beta_1 X
+	\end{align*}
+where the logit function is defined as \pause
+\begin{align*}
+	\text{logit}(p) = \log\Big(\underbrace{\frac{p}{1-p}}_{\text{odds}}\Big)
+\end{align*}
+\pause
+Formally, the logit function is called a \textcolor{blue}{link} function, since it links our mean $E[Y \mid X] = P[Y = 1 \mid X]$ to our model $\beta_0 + \beta_1 X$. 
+\end{frame}
+
+\begin{frame}{Logistic regression: fitting the model in \texttt{R}}
+	The \texttt{lm} function won't do it for us anymore. Instead we use the \texttt{glm} function. 
+	\\ ~\ 
+	
+	GLM stands for ``generalized linear model" and represents a whole class of regression methods (more on that later!). For now, all you need to know is that \texttt{glm} syntax is a lot like \texttt{lm} syntax, but we must also specify $\texttt{family = binomial()}$. 
+\end{frame}
+
+\begin{frame}{Logistic regression: \texttt{R} output}
+	\vspace{-1cm}
+		\begin{center}
+		\includegraphics[width=0.6\textwidth]{./figs/multiple_logistic_regression_arcus}
+	\end{center}
+\end{frame}
+
+\begin{frame}{Logistic regression: transforming \texttt{R} output}
+	As you could infer by the fact that some estimates were negative, \texttt{R} has given us the raw regression coefficient estimates and intervals. But as we've seen, the exponentiated versions are much more interpretable!
+			\begin{center}
+		\includegraphics[width=\textwidth]{./figs/multiple_logistic_regression_arcus_exp}
+	\end{center}
+	We can use \texttt{coef} to pull out coefficients, and then exponentiate (same for \texttt{confint}).
+	\\ ~\
+	
+	The p-values for the hypothesis tests can be used directly since a test of $H_0: \beta_1 = 0$ is the same as a test of $H_0: \exp(\beta_1) = 1$. 
+\end{frame}
+
+\begin{frame}{Logistic regression: reporting results}
+	\begin{enumerate}
+		\item[4.] Perform \textit{statistical inference}:
+		\begin{itemize}
+			\item Calculate a test statistic: odds ratio of 1.28
+			\item Quantify uncertainty: 95\% CI of (0.97, 1.69)
+			\item Perform hypothesis test: $p = 0.08$
+		\end{itemize}
+		\item[5.] Add a conclusion
+	\end{enumerate}
+	Based on logistic regression, we estimate that the odds of CHD are 1.28 times as high in subjects with \textit{arcus senilis} versus those without, comparing subjects of the same age, weight, systolic blood pressure, diastolic blood pressure, and cholesterol. The data would be consistent with a true odds ratio between 0.97 and 1.69. Based on a test of the null hypothesis of an odds ratio of 1, there is not sufficient evidence of an association between \textit{arcus senilis} and CHD (p = 0.08), after adjusting for age, weight, blood pressure, and cholesterol. 
 \end{frame}
 
 
