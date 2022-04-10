@@ -14,6 +14,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{amsthm}
+\usepackage[normalem]{ulem}
 
 \newcommand\tab[1][1cm]{\hspace*{#1}}
 
@@ -905,7 +906,7 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 
 \begin{frame}{Case-control sampling: Example}
 	\vspace{-0.3cm}
-	To illustrate this, consider the following \textcolor{blue}{population} of 1 million individuals
+	To illustrate this, consider the following \textcolor{blue}{population} of 1 million individuals:
 	\begin{center}
 		\begin{table}
 			\begin{tabular}{|c|cc|c|}
@@ -1087,11 +1088,94 @@ The prevalence of lung cancer among smokers and nonsmokers is
 		\item $\text{OR}^* = \frac{P(\text{smoke} \mid \text{cancer})}{1 - P(\text{smoke} \mid \text{cancer})} / \frac{P(\text{smoke} \mid \text{no cancer})}{1 - P(\text{smoke} \mid \text{no cancer})}$
 	\end{itemize}
 	\vspace{0.2cm}\pause
-	This doesn't really answer our scientific question...but doing a bit of math shows us an interesting relationship between OR and OR$^*$!
+	This doesn't really answer our scientific question...but doing a bit of math shows us an interesting relationship between OR and OR$^*$: \textbf{they're identical}!
 \end{frame}
 
 \begin{frame}{\includegraphics[scale=0.01]{./figs/chilipepper} Symmetry of the odds ratio}
-	It turns out that 
+	Let $D$ denote disease and $E$ exposure, with $\bar{D}$ and $\bar{E}$ meaning ``no disease" and ``no exposure," respectively. It turns out that 
+	\begin{align*}
+		\text{OR} = \frac{\frac{P(D \mid E)}{1 - P(D \mid  E)}}{\frac{P(D \mid \bar{E})}{1 - P(D \mid \bar{E})}} = \frac{\frac{P(E \mid D)P(D)}{P(E \mid \bar{D})P(\bar{D})}}{\frac{P(\bar{E} \mid D)P(D)}{P(\bar{E} \mid \bar{D})P(\bar{D})}} = \frac{\frac{P(E \mid D)}{P(\bar{E} \mid D)}}{\frac{P(E \mid \bar{D})}{P(\bar{E} \mid \bar{D})}} = \frac{\frac{P(E \mid D)}{1 - P(E \mid D)}}{\frac{P(E\mid \bar{D})}{1 - P(E\mid \bar{D})}} = \text{OR}^*
+	\end{align*}
+	The key to this relationship is \textcolor{blue}{Bayes' rule}. Ask us if you're interested!
+\end{frame}
+
+\begin{frame}{Symmetry of the odds ratio: Example}
+	\vspace{-0.8cm}
+	Looking back at our example, we can see that the OR of cancer comparing smokers and nonsmokers is identical to the OR of smoking comparing those with and without cancer. 
+	\begin{center}
+		\begin{table}
+			\begin{tabular}{|c|cc|c|}
+				\hline 
+				& Lung Cancer & No Lung Cancer &  \\ 
+				& (Case) & (Control) & Total  \\
+				\hline 
+				Smoke & 184 & 2  & 186 \\ 
+				No Smoke & 16 & 198 & 214  \\ 
+				\hline 
+				Total & 200 & 200 & 400 \\ 
+				\hline 
+			\end{tabular}
+		\end{table}\pause
+	\end{center}
+	\begin{align*}
+		\text{OR} = \frac{\frac{P(\text{cancer} \mid \text{smoke})}{1 - P(\text{cancer} \mid \text{smoke})}}{\frac{P(\text{cancer} \mid \text{no smoke})}{1 - P(\text{cancer} \mid \text{no smoke})}}  = \frac{\frac{184/186}{2/186}}{\frac{16/214}{198/214}} = \frac{184\times 198}{16 \times 2} = 1138.5\\ \pause
+		\text{OR}^* =\frac{\frac{P(\text{smoke} \mid \text{cancer})}{1 - P(\text{smoke} \mid \text{cancer})}}{\frac{P(\text{smoke} \mid \text{no cancer})}{1 - P(\text{smoke} \mid \text{no cancer})}}  = \frac{\frac{184/200}{16/200}}{\frac{2/200}{198/200}} = \frac{184\times 198}{16 \times 2} = 1138.5
+	\end{align*}
+\vfill
+\begin{tiny}Note: We made up the numbers for this example! This odds ratio exaggerates the true association.\end{tiny}
+\end{frame}
+
+\begin{frame}{Logistic regression in case-control studies}
+	As we've seen, logistic regression allows us to estimate the odds ratio -- this is exactly what we want in a case-control study! But we still need to be careful. \pause
+	\begin{align*}
+		\log(\text{odds}[\text{cancer} \mid \text{smoke}]) = \beta_0 + \beta_1 \text{smoke}
+	\end{align*}\pause
+	\begin{itemize}
+		\item $e^{\beta_0}$: odds of cancer among nonsmokers\pause
+		\begin{itemize}
+			\item odds[cancer $\mid$ no smoke] = $\frac{P(\text{cancer} \mid \text{no smoke})}{1 - P(\text{cancer} \mid \text{no smoke})}$\pause
+			\item Remember: our estimate of $P(\text{cancer} \mid \text{no smoke})$ is biased! \pause
+			\item \textbf{In a case-control study, the intercept $\beta_0$ is not interpretable.} \pause
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Logistic regression in case-control studies}
+	As we've seen, logistic regression allows us to estimate the odds ratio -- this is exactly what we want in a case-control study! But we still need to be careful. 
+	\begin{align*}
+		\log(\text{odds}[\text{cancer} \mid \text{smoke}]) = \beta_0 + \beta_1 \text{smoke}
+	\end{align*}
+	\begin{itemize}
+		\item \sout{$e^{\beta_0}$: odds of cancer among nonsmokers}
+		\begin{itemize}
+			\item odds[cancer $\mid$ no smoke] = $\frac{P(\text{cancer} \mid \text{no smoke})}{1 - P(\text{cancer} \mid \text{no smoke})}$
+			\item Remember: our estimate of $P(\text{cancer} \mid \text{no smoke})$ is biased! 
+			\item \textbf{In a case-control study, the intercept $\beta_0$ is not interpretable.}
+		\end{itemize}
+	\item $e^{\beta_1}$: odds ratio for cancer comparing smokers to nonsmokers
+	\begin{itemize}
+		\item This \textit{is} interpretable because it's mathematically equivalent to the odds ratio for smoking comparing those with and without cancer, which we can estimate. 
+	\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Case-control studies: summary}
+	Case-control studies involve biased sampling, which can be useful with a rare outcome. 
+	\\ ~\ 
+	
+	We \textit{cannot} estimate
+	\begin{itemize}
+		\item Risk difference 
+		\item Relative risk
+	\end{itemize}
+	\vspace{0.2cm}
+	We \textit{can} estimate
+	\begin{itemize}
+		\item Odds ratio (via logistic regression)
+		\item[] \tab \dots but remember that we cannot interpret the intercept
+	\end{itemize}
+	\vspace{0.2cm}
+	This is a big reason for logistic regression's popularity in public health.  
 \end{frame}
 
 \section{Generalized linear models}
