@@ -1,0 +1,204 @@
+---
+title: "Problem Solving in R"
+subtitle: "BIOST 311, Discussion Section Week 3"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r preliminaries, message = FALSE, results = "hide"}
+library(readr)
+fev <- read_csv(url("https://raw.githubusercontent.com/cwolock/BIOST311/main/Datasets/fev.csv"))
+wcgs <- read_csv(url("https://raw.githubusercontent.com/cwolock/BIOST311/main/Datasets/wcgs.csv"))
+```
+
+# Introduction
+
+As you write `R` code for your data wrangling and statistical analysis, you will inevitably run into problems. Either `R` will throw an error (i.e., the code won't run), or -- possibly worse -- the code will run but not give you the result you expect. For the former, `R` will give you an error message, but this doesn't mean the message will be helpful or informative! Debugging and problem solving in `R` can be quite tricky when you're learning to the language. 
+
+In this tutorial, we'll discuss strategies for working through issues in `R` and get a lot of practice with examples. This material is aimed at people who are relatively new to `R`, and the techniques we discuss should not be taken as the "right" way to debug. In fact, there are many more sophisticated debugging strategies out there! See the end of this document for some resources on more advanced debugging. 
+
+# Types of feedback from `R`
+
+### Warnings
+
+When you run code in `R`, there are basically two types of feedback the console will give you to indicate that something might be wrong. (There's also a third type, called a `message`, that's not generally indicative of anything being wrong.)
+
+The first are `warning`s. A `warning` in `R` suggests that maybe you should pay attention to the code you just ran, although whatever happened wasn't serious enough to warrant a full stop. Up to this point, we've basically ignored `warning`s, but they can be really important in certain contexts. 
+
+You'll often see warnings when you load a package telling you that it was built under a different version of `R` than you're currently running. Generally, not a big deal!
+
+In general, even though it's tempting to ignore them, you should probably pay **some** attention to warnings. For example, what is `R` trying to tell us here?
+
+```{r warning_example}
+x <- c(1,1,1,1,1)
+y <- c(1,2,3,4,5)
+cor(x,y)
+```
+
+As you can see, `R` can continue running even when a `warning` is thrown -- here it just returns `NA`. That's because the correlation is undefined if one of the variables (`x` in this case) has a standard deviation of 0. 
+
+In general, if you don't understand what a `warning` is saying, it's worth looking into. Package developers put those `warning`s in there to let you know something is up. 
+
+### Errors
+
+On the other hand, an `error` will completely stop whatever function is running when the `error` is thrown. Issues with syntax will generally throw `error`s -- `R` just isn't sure what to do, and cannot continue. 
+
+```
+4 + ,
+```
+
+When `R` throws an `error` due to a syntax issue, it often gives a fairly informative message, as we see here: `unexpected ','`. But informative `error` messages are the exception with `R`, not the rule.
+
+Note that if you have an `error` in a `.Rmd` file, the file won't even knit! So you have to resolve all `error`s before knitting. 
+
+# Namespace errors
+
+The idea of a *namespace* is fundamental to `R`. The namespace refers to all of the named objects, like functions and variables, that are available to `R` at a particular moment. This includes base `R` functions, functions in packages you've loaded, and objects you've created. This is quite a complex topic, and not one that you'll need to worry about too much as you're getting started. But `error`s involving the namespace are quite common. 
+
+*Exercise:* Take a look at the code chunk below, which does some data manipulation. Try to run it. Based on the error you see, write a working version of the code in the following chunk. 
+
+```
+# this code is bugged
+fev %>% 
+  mutate(under10 = ifelse(age < 10, 1, 0)) %>%
+  filter(smoke == "yes")
+```
+
+*Exercise:* Take a look at the code chunk below, which does some data manipulation. Try to run it. Based on the `error` you see, write a working version of the code in the following chunk. 
+
+```
+# this code is bugged
+fev %>% mutate(under10 = ifelse(age < 10, 1, 0)) %>%
+  filter(smoke == "yes")
+fev %>% select(under10) %>% head()
+```
+
+# Syntax errors
+
+`R` has a fairly flexible syntax compared to some programming languages. For example, it doesn't care about indentation. That said, there are still some basic rules to follow. 
+
+*Exercise:* Take a look at the code below, which attempts to create a histogram, and try to run it. In the next chunk, write a working version of the code. 
+
+```
+# this code is bugged
+fev %>% ggplot() + 
+  geom_histogram(aes(x = fev, fill = smoke)) + 
+  labs(x = "FEV (l/sec)") + 
+  theme(axis.test.y = element_blank(),
+        axis.ticks.y = element_blank() + 
+  theme_bw()
+```
+
+*Exercise:* Using the `wcgs` dataset, we'll try to create some new variables in metric rather than imperial units. What's going wrong here? 
+
+```
+wcgs <- wcgs %>% mutate(height_m = 0.0254height, 
+                        weight_kg = weight/2.2,
+                        bmi = weight_kg/(height_m)(height_m))
+```
+
+*Exercise:* This code tries to calculate summary statistics for a couple variables in `fev`. What's going wrong?
+
+```
+fev %>% group_by(sex) %>% 
+  summarize(mean_height = mean[height],
+            sd_height = sd[height],
+            mean_fev = mean[fev],
+            sd_fev = sd[fev])
+```
+
+# Semantic errors
+
+A semantic error is one in which your code is valid, but it just doesn't return what you were expecting. This is often the most troublesome kind of coding error, because you may not even know that something has gone wrong.  
+
+*Exercise:* The following code tries to calculate summary statistics on some variables in the `wcgs` dataset. Figure out what's going wrong and, in the next chunk, write a working version. 
+ 
+```
+# this code is bugged
+wcgs %>% summarize(mean_weight = mean(weight),
+                   sd_weght = sd(weight),
+                   mean_height = mean(height),
+                   sd_height = sd(height),
+                   mean_chol = mean(chol),
+                   sd_chol = sd(chol),
+                   mean_bmi = mean(bmi),
+                   sd_bmi = sd(bmi))
+```
+
+*Exercise:* Below we create some new variables in `wcgs` and try to make a barplot. Figure out what the code is doing and make the appropriate fixes. `typchd` indicates the type of cardiovascular event experienced by the patient. 0 = none, 1 = MI, 2 = silent MI, 3 = angina. 
+
+```
+# this code is bugged
+wcgs <- wcgs %>% mutate(typef = factor(typchd, 
+                                       levels = c(0,1,2,3),
+                                       labels = c("none", "MI", "silent MI", "angina")))
+wcgs <- wcgs %>% mutate(angina = ifelse(typef == "Angina", "yes", "no"),
+                        smoke = ifelse(ncigs > 0, "yes", "no"))
+wcgs %>% ggplot(aes(x = angina, fill = smoke)) +
+  geom_bar(position = "dodge")
+```
+
+*Exercise:* Let's filter out every in `wcgs` who's (1) over 50, (2) has cholesterol > 200, and (3) either smokes or has BMI > 25. Does this work? Why or why not? Can you fix it?
+```
+wcgs <- wcgs %>% filter(age > 50 & smoke == "yes" | bmi > 25 & chol > 200)
+```
+
+# `ggplot2` errors
+
+I'd like to change the theme of this barplot using `theme_bw()`, which changes the background to white and the gridlines/axes to black. I also want to get rid of y-axis labels and tick marks, since they have no meaning in this boxplot, using the `theme` function. 
+
+*Exercise:* Why isn't the theme being properly applied in the code snippet below?
+```
+wcgs %>% ggplot(aes(x = sbp, fill = smoke)) + 
+  geom_boxplot() +  
+  theme(axis.text.y = element_blank(),
+        axis.ticks.y = element_blank()) + 
+  theme_bw()
+```
+*Exercise:* I want to make a scatterplot of `age` vs. `chol`, coloring by type of cardiovascular event. Why doesn't this work? Make a fix in the chunk below.
+
+```
+# continuous value applied to discrete scale
+wcgs %>% ggplot(aes(x = age, y = chol, color = typchd)) + 
+  geom_point() + 
+  scale_color_manual(values = c("red", "yellow", "green"))
+```
+
+```
+# insufficient values in manual scale
+wcgs %>% ggplot(aes(x = age, y = chol, color = typef)) + 
+  geom_point() + 
+  scale_color_manual(values = c("red", "yellow", "green"))
+```
+
+*Exercise:* The following code tries to plots some (made-up) data, with `month` on the x-axis and `value` on the y-axis. It should plot points and connect those points with lines. This type of plot is useful for looking at trends over time. Make a fix to the code below. 
+
+```
+df <- data.frame(month = factor(seq(1, 12), 
+                                labels = c("Jan", "Feb", "March", "April", "May", "June", 
+                                           "July", "August", "September", "October", "November", "December")),
+                 value = rnorm(12, 0, 1))
+df %>% ggplot(aes(x = month, y = value)) + 
+  geom_point() + 
+  geom_line()
+```
+
+# Additional resources
+
+The following references were used to create this tutorial. 
+
+* Wickham, Hadley. "22. Debugging". Advanced R. https://adv-r.hadley.nz/debugging.html
+* DataMentor. "R Operator Precedence and Associativity." https://www.datamentor.io/r-programming/precedence-associativity/
