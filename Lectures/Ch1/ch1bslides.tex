@@ -1098,9 +1098,25 @@ Thinking back to our \texttt{births} dataset, we are interested in the associati
 \vspace{0.3cm}
 
 \begin{itemize}
-	\item Age is associated with First Steps participation in the sample \textcolor{red}{CHARLIE: Should we have a graph here to visualize this?}
+	\item Age is associated with First Steps participation in the sample
 	\item Giving birth at a young age may increase the risk of birth complications, leading to low birthweights (a causal relationship)
-\end{itemize} \pause
+\end{itemize} 
+
+\begin{figure}
+	\centering \includegraphics[scale=0.2]{age_firstep.png}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Confounders: Example in \texttt{R}}
+Thinking back to our \texttt{births} dataset, we are interested in the association between First Steps participation and birthweight. Since this is an observational study, confounding is a potential concern. In particular, we think that age may be a confounding variable, since 
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item Age is associated with First Steps participation in the sample
+	\item Giving birth at a young age may increase the risk of birth complications, leading to low birthweights (a causal relationship)
+\end{itemize} 
 
 \vspace{0.3cm}
 
