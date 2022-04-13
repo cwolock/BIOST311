@@ -236,7 +236,7 @@ E[&\text{Outcome} \mid  \text{Region = Northeast}] - E[\text{Outcome} \mid \text
 \begin{frame}{Linear regression with a categorical predictor: summary}
 Our example:
 $$
-E[\text{Outcome} \mid  \text{Region = Northeast}] - E[\text{Outcome} \mid \text{Region = West}] 
+E[\text{Outcome} \mid \text{Region}] = \beta_0 + \beta_1 \times \text{Midwest} + \beta_2 \times \text{South} + \beta_3 \times \text{Northeast}
 $$
 
 \begin{itemize}
@@ -251,7 +251,7 @@ Hypothesis testing: If we want to test whether our outcome is associated with a 
 \end{frame}
 
 \begin{frame}{Linear regression with a categorical predictor: Example in \texttt{R}}
-Suppose we're interested in whether birthweight is associated with race, in our births dataset. We can fit a linear regression model as before with simple linear regression, and look at the output\dots
+Suppose we're interested in whether birthweight is associated with race, in our \texttt{births} dataset. We can fit a linear regression model as before with simple linear regression, and look at the output\dots
 
 \vspace{0.3cm}
 
@@ -284,7 +284,7 @@ A couple things to notice:
 
 A couple things to notice:
 \begin{itemize}
-	\item \texttt{R} has created dummy variables for us! The reference group by default will be the first category alphabetically (in this case, ``asian").
+	\item \texttt{R} has created dummy variables for us! The reference group by default will be the first category alphabetically (in this case, ``\texttt{asian}").
 \end{itemize}
 
 \end{frame}
@@ -305,9 +305,9 @@ A couple things to notice:
 \end{frame}
 
 \begin{frame}{Linear regression with a categorical predictor: Example in \texttt{R}}
-We're interested in whether birthweight is associated with race, in our births dataset. Our regression model has the form:
+We're interested in whether birthweight is associated with race, in our \texttt{births} dataset. Our regression model has the form:
 $$
-E[\text{bwt} \mid \text{race}] = \beta_0 + \beta_1 \times \text{black} + \beta_2 \times \text{hispanic} + \beta_3 \times \text{other} + \beta_4 \times \text{white}
+E[\texttt{bwt} \mid \texttt{race}] = \beta_0 + \beta_1 \times \texttt{black} + \beta_2 \times \texttt{hispanic} + \beta_3 \times \texttt{other} + \beta_4 \times \texttt{white}
 $$ \pause
 
 Our null hypthesis (in words) is that there is no association between race and birthweight. This would mean that \textcolor{blue}{all dummy variables for race} are \textit{simultaneously} equal to zero. \pause In math:
@@ -366,7 +366,7 @@ Our output from the \texttt{anova} function:
 
 \vspace{0.3cm}
 
-\textit{This} is the p-value for our hypothesis test. \textit{Not} the individual p-values from our linear regression output. \pause
+\textit{This} is the p-value for our hypothesis test. (The individual p-values from our linear regression output do \textit{not} correspond to the hypothesis test we want to run.) \pause
 
 \vspace{0.3cm}
 
@@ -380,7 +380,7 @@ Key Takeaway(s):
 \vspace{0.3cm}
 
 \begin{itemize}
-	\item The individual p-values for separate categories of a multilevel categorical variable \textit{do not} correspond to the hypothesis test for whether the variable is associatied with the outcome
+	\item The individual p-values for separate categories of a multilevel categorical variable \textit{do not} correspond to the hypothesis test for whether the variable is associated with the outcome
 	\item We use the \texttt{anova} function in \texttt{R} to get p-values that correspond to hypothesis tests where the null hypothesis involves setting \textit{more than one} coefficient equal to zero
 \end{itemize} \pause
 
@@ -401,7 +401,7 @@ Multiple linear regression involves having \textit{multiple} predictors in your 
 \subsection{Graphical examples}
 
 \begin{frame}{Multiple linear regression: Motivation}
-So far, we have considered the relationship between the outcome $Y$ and a single covariate/predictor $X$. Some terminology we'll use:
+So far, we have considered the relationship between the outcome $Y$ and a single covariate/predictor $X$. Some terminology we'll use now that we're dealing with multiple predictors:
 
 \vspace{0.3cm}
 
@@ -438,7 +438,7 @@ In everything we've done so far $X$ has been our predictor of interest, but it a
 \end{frame}
 
 \begin{frame}{Multiple linear regression: Motivation}
-(2) Suppose we also collected information on the binary variable $X_2$ for each individual. What is your best guess at the linear relationship between $X_1$ and $Y$, \textit{for each group} defined by the variable $X_2$? 
+(2) Suppose we also collected information on a binary variable $X_2$ for each individual. What is your best guess at the linear relationship between $X_1$ and $Y$, \textit{for each group} defined by the variable $X_2$? 
 
 \vspace{0.3cm}
 
@@ -456,20 +456,19 @@ In everything we've done so far $X$ has been our predictor of interest, but it a
 \end{frame}
 
 \begin{frame}{Multiple linear regression: Motivation}
+	\vspace{-0.5cm}
 \begin{figure}
 	\centering \includegraphics[scale=0.2]{multreg4.png}
 \end{figure}
 
-\vspace{0.1cm}
-
 A couple things to note:
 
 \begin{itemize}
-	\item The best fitting line for the relationship between $X_1$ and $Y$ is different when we ignore $X_2$ vs. the best fitting lines for the relationship between $X_1$ and $Y$ for each group defined by $X_2$
+	\item The best fitting line for the relationship between $X_1$ and $Y$ is different when we ignore $X_2$ vs. the best fitting lines for the relationship between $X_1$ and $Y$ within each group defined by $X_2$
 	\item The lines we drew were in response to \textit{different} questions:
 	\begin{enumerate}
 		\item What is your best guess at the linear relationship between $X_1$ and $Y$?
-		\item What is your best guess at the linear relationship between $X_1$ and $Y$, \textit{for each group} defined by the variable $X_2$? 
+		\item What is your best guess at the linear relationship between $X_1$ and $Y$, \textit{within each group} defined by the variable $X_2$? 
 	\end{enumerate}
 \end{itemize}
 
@@ -477,11 +476,11 @@ A couple things to note:
 
 \begin{frame}{Multiple linear regression: Motivation}
 \begin{itemize}
-	\item The best fitting line for the relationship between $X_1$ and $Y$ is different when we ignore $X_2$ vs. the best fitting lines for the relationship between $X_1$ and $Y$ for each group defined by $X_2$
+	\item The best fitting line for the relationship between $X_1$ and $Y$ is different when we ignore $X_2$ vs. the best fitting lines for the relationship between $X_1$ and $Y$ within each group defined by $X_2$
 	\item The lines we drew were in response to \textit{different} questions:
 	\begin{enumerate}
 		\item What is your best guess at the linear relationship between $X_1$ and $Y$?
-		\item What is your best guess at the linear relationship between $X_1$ and $Y$, \textit{for each group} defined by the variable $X_2$? 
+		\item What is your best guess at the linear relationship between $X_1$ and $Y$, \textit{within each group} defined by the variable $X_2$? 
 	\end{enumerate}
 \end{itemize}
 
@@ -506,8 +505,8 @@ If $Z$ is \textit{binary}, how might we account for it? \pause One way to accoun
 \vspace{0.3cm}
 
 \begin{itemize}
-	\item Fit a simple linear regression model with $Y$ as the outcome and $X$ as the predictor for those with $Z = 0$
-	\item Fit a simple linear regression model with $Y$ as the outcome and $X$ as the predictor for those with $Z = 1$
+	\item Fit a simple linear regression model with $Y$ as the outcome and $X$ as the predictor among those with $Z = 0$
+	\item Fit a simple linear regression model with $Y$ as the outcome and $X$ as the predictor among those with $Z = 1$
 \end{itemize}
 \end{frame}
 
@@ -524,8 +523,8 @@ E[Y \mid X, Z = 1] & = \gamma_0 + \gamma_1 X,
 \vspace{0.3cm}
 
 \begin{itemize}
-	\item $\beta_0$: The mean value of $Y$ for groups with $X  = 0$ and $Z = 0$ \pause
-	\item $\gamma_0$: The mean value of $Y$ for groups with $X = 0$ and $Z = 1$
+	\item $\beta_0$: The mean value of $Y$ for group with $X  = 0$ and $Z = 0$ \pause
+	\item $\gamma_0$: The mean value of $Y$ for group with $X = 0$ and $Z = 1$
 \end{itemize}
 \end{frame}
 
@@ -553,8 +552,8 @@ Suppose we are interested in knowing whether the association between birthweight
 We can write the two regression models implied by this stratified analysis as:
 
 \begin{align*}
-E[\text{bwt} \mid \text{age}, \text{smoke} = 0] & = \beta_0 + \beta_1 \times \text{age} \\
-E[\text{bwt} \mid \text{age}, \text{smoke} = 1] & = \gamma_0 + \gamma_1 \times \text{age}
+E[\texttt{bwt} \mid \texttt{age}, \texttt{smoke} = 0] & = \beta_0 + \beta_1 \times \texttt{age} \\
+E[\texttt{bwt} \mid \texttt{age}, \texttt{smoke} = 1] & = \gamma_0 + \gamma_1 \times \texttt{age}
 \end{align*}
 
 Each of these regression models is a simple linear regression model, which we know how to handle! The difference is that we are \textit{conditioning} on a specific value of a stratification variable (smoking yes/no).
@@ -580,14 +579,14 @@ In \texttt{R}, this means we need to create two separate dataframes containing (
 
 \begin{frame}{Stratified analysis: Example}
 
-The results of our regression analyses (including fitting simple linear regression model to everyone in the dataset) are found below:
+The results of our regression analyses (including the ``unstratified" model fitting simple linear regression on everyone in the dataset) are found below:
 
 \vspace{0.3cm}
 
 \begin{table}
 	\centering
 	\begin{tabular}{lll}
-		& \multicolumn{2}{l}{Estimated coefficient (95\% CI)} \\
+		& \multicolumn{2}{l}{Estimated coefficient} \\
 		\multicolumn{1}{l|}{Analysis}             & \multicolumn{1}{l|}{Intercept}        & Age         \\ \hline
 		\multicolumn{1}{l|}{Unstratified}           & \multicolumn{1}{l|}{3161.750}         & 8.609       \\ \hline
 		\multicolumn{1}{l|}{Stratified: Smoke}    & \multicolumn{1}{l|}{3136.125}         & 1.897       \\ \hline
@@ -700,9 +699,9 @@ Scientific questions typically address one of three questions about the relation
 \vspace{0.3cm}
 
 \begin{itemize}
-	\item does the predictor of interest \textit{causally} effect the outcome?
-	\item is there an association between the predictor of interest and the outcome?
-	\item does the association (if it exists) differ in groups defined by an additional covariate?
+	\item Does the predictor of interest \textit{causally} effect the outcome?
+	\item Is there an association between the predictor of interest and the outcome?
+	\item Does the association (if it exists) differ in groups defined by an additional covariate?
 \end{itemize} \pause
 
 \vspace{0.3cm}
@@ -716,11 +715,11 @@ Note that the inclusion of additional covariates in your model changes the scien
 
 \vspace{0.3cm}
 
-With simple linear regression, the model $E[Y \mid X_1] = \beta_0 + \beta_1 X_1$ was used to address the question, ``Is $X_1$ associated with $Y$"?  \pause
+With simple linear regression, the model $E[Y \mid X_1] = \beta_0 + \beta_1 X_1$ was used to address the question, ``Is $X_1$ linearly associated with $Y$"?  \pause
 
 \vspace{0.3cm}
 
-With multiple linear regression, the model $E[Y \mid X_1, \dots, X_p] = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p$ (for $p$ total covariates), we address the question, ``Is $X_1$ associated with $Y$, \textit{adjusting for covariates} $X_2$ through $X_p$?" \pause
+With multiple linear regression, the model $E[Y \mid X_1, \dots, X_p] = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p$ (for $p$ total covariates), we address the question, ``Is $X_1$ linearly associated with $Y$, \textit{adjusting for covariates} $X_2$ through $X_p$?" \pause
 
 \vspace{0.3cm}
 
@@ -854,7 +853,7 @@ $$
 \subsection{Causal diagrams}
 
 \begin{frame}{Adjusting for covariates}
-Throughout this section, we will consider three types of covariates that we may include in our multiple regression models:
+Throughout this section, we will consider \textcolor{blue}{three} types of covariates that we may include in our multiple regression models:
 
 \vspace{0.3cm}
 
@@ -954,6 +953,7 @@ Causal diagrams are useful tools we can use to determine whether or not variable
 \end{frame}
 
 \begin{frame}{Confounders}
+\vspace{-0.3cm}
 Causal diagrams are useful tools we can use to determine whether or not variables are confounders.
 
 \vspace{0.3cm}
@@ -964,13 +964,13 @@ Causal diagrams are useful tools we can use to determine whether or not variable
 
 \dots but confounders \textcolor{red}{cannot} look like this:
 
-\vspace{0.3cm}
+\vspace{0.2cm}
 
 \begin{figure}
 	\centering \includegraphics[scale=0.4]{confounder3.png}
 \end{figure}
 
-
+\vspace{-0.1cm}
 \small Confounder cannot be on the causal pathway from the predictor of interest to the outcome!
 
 \end{frame}
@@ -996,8 +996,8 @@ We now color the points by our potential confounding variable.
 	\centering \includegraphics[scale=0.4]{p1.png}
 \end{figure}
 
-\vspace{0.3cm} \pause
-\small We can see from the plot that the sets of points for each group identified by the potential confounder appear to be associated with the exposure (predictor of interest). This indicates that the potential confounder is associated with the predicted of interest \textit{in the sample} (one of the requirements for a confounding variable!).
+\vspace{0.1cm} \pause
+\small We can see from the plot that the potential confounder seems to be associated with exposure (predictor of interest) \textit{in the sample} (one of the requirements for a confounding variable!). The red dots are associated with larger values of exposure, and blue dots with smaller values of exposure. 
 
 \end{frame}
 
@@ -1009,7 +1009,7 @@ We now color the points by our potential confounding variable.
 
 % Example with a question and answer - could be from the worksheet
 \begin{frame}{Confounders: Example}
-
+\vspace{-0.6cm}
 \textcolor{blue}{Question}: Your friend shows you the following graph\dots
 
 \vspace{0.1cm}
@@ -1027,6 +1027,7 @@ We now color the points by our potential confounding variable.
 \end{frame}
 
 \begin{frame}{Confounders: Example}
+	\vspace{-0.6cm}
 \begin{figure}
 	\centering \includegraphics[scale=0.3]{lemons.png}
 \end{figure}
@@ -1037,24 +1038,25 @@ We now color the points by our potential confounding variable.
 
 \vspace{0.3cm}
 
-You think your friend is being mislead. What confounding variable is at play here, and what other possibly explanation could there be for this observed relationship?
+You think your friend is being mislead. What confounding variable is at play here, and what other possible explanation could there be for this observed relationship?
 \end{frame}
 
 \begin{frame}{Confounders: Example}
-\textcolor{blue}{Question}: You think your friend is being mislead. What confounding variable is at play here, and what other possibly explanation could there be for this observed relationship?
+\textcolor{blue}{Question}: You think your friend is being mislead. What confounding variable is at play here, and what other possible explanation could there be for this observed relationship?
 
 \vspace{0.3cm}
 
-\textcolor{blue}{Answer}: From the graph, we can see that highway fatality rates have decreased over time, and number of lemons imported has increased \textit{over time}. Time is a confounding variable in this case. Highway fatality rates have likely decreased over time because cars have gotten much safer with improved airbag quality and other innovations. Number of fresh lemon imported has increased over time, potentially because the US population has increased (and therefore demands more lemons).
+\textcolor{blue}{Answer}: From the graph, we can see that highway fatality rates have decreased \textit{over time}, and number of lemons imported has increased \textit{over time}. Time is a confounding variable in this case. Highway fatality rates have likely decreased over time because cars have gotten much safer with improved airbag quality and other innovations. Number of fresh lemons imported has increased over time, potentially because the US population has increased (and therefore demands more lemons).
 \end{frame}
 
 
 \begin{frame}{Confounders and study design}
+	\vspace{-0.3cm}
 When our scientific question involves a causal relationship, whether or not we \textit{need} to adjust for covariates depends on the study design.
 
 \vspace{0.3cm}
 
-When reviewing study design, we said that a randomized controlled trial is the only study design in which we can confidently make causal claims about relationships between variables. \textit{However}, if we are able to adjust for \textit{all possible confounders} in an observational study, we could also make causal statements for these study designs. In practice, situations where we can confidently say we've adjusted for all possible confounders are extremely rare. Nevertheless, it is good to adjust for any possible confounders we have regardless, so long as we are still answering a scientific question of interest. \pause
+When reviewing study design, we said that a randomized controlled trial is the only study design in which we can confidently make causal claims about relationships between variables. \textit{However}, if we are able to adjust for \textit{all possible confounders} in an observational study, we could also make causal statements for these study designs. In practice, situations where we can confidently say we've adjusted for all possible confounders are extremely rare. Nevertheless, it is good to adjust for any possible confounders we have, so long as we are still answering a scientific question of interest. \pause
 
 \vspace{0.3cm}
 
@@ -1091,20 +1093,20 @@ $$
 \end{frame}
 
 \begin{frame}{Confounders: Example in \texttt{R}}
-Thinking back to our births dataset, we are interested in the association between First Steps participation and birthweight. Since this is an observational study, confounding is a potential concern. In particular, we think that age may be a confounding variable, since 
+Thinking back to our \texttt{births} dataset, we are interested in the association between First Steps participation and birthweight. Since this is an observational study, confounding is a potential concern. In particular, we think that age may be a confounding variable, since 
 
 \vspace{0.3cm}
 
 \begin{itemize}
-	\item Age is associated with First Steps participation in the sample
-	\item Giving birth at a young age may cause more birth complications leading to low birthweights than giving birth at older ages (a causal relationship)
+	\item Age is associated with First Steps participation in the sample \textcolor{red}{CHARLIE: Should we have a graph here to visualize this?}
+	\item Giving birth at a young age may increase the risk of birth complications, leading to low birthweights (a causal relationship)
 \end{itemize} \pause
 
 \vspace{0.3cm}
 
 We can write our regression model as
 $$
-E[\text{bwt} \mid \text{FS}, \text{age}] = \beta_0 + \beta_1 \times \text{FS} + \beta_2 \times \text{age}
+E[\texttt{bwt} \mid \texttt{FS}, \texttt{age}] = \beta_0 + \beta_1 \times \texttt{FS} + \beta_2 \times \texttt{age}
 $$
 \end{frame}
 
@@ -1159,7 +1161,7 @@ From our multiple regression output, we have coefficient estimates and standard 
 
 \vspace{0.3cm}
 
-*we could of course interpret $\beta_0$ and $\beta_2$ in this model as well, but $\beta_1$ is the coefficient that corresponds to our scientific question!
+*We could of course interpret $\beta_0$ and $\beta_2$ in this model as well, but $\beta_1$ is the coefficient that corresponds to our scientific question!
 \end{frame}
 
 \subsection{Effect modifiers}
@@ -1170,7 +1172,7 @@ Causal diagrams are \textit{also} useful tools we can use to determine whether o
 
 \vspace{0.3cm}
 
-\textcolor{blue}{Effect modifiers}: a variable that modifies the association between the predictor of interest and the outcome. In other words, the association between the predictor of interest and the outcome \textit{depends on} the effect modifier \pause
+\textcolor{blue}{Effect modifiers}: a variable that modifies the association between the predictor of interest and the outcome. In other words, the association between the predictor of interest and the outcome \textit{depends on} the effect modifier. \pause
 
 \vspace{0.3cm}
 
@@ -1231,11 +1233,14 @@ The key thing to note here is that groups defined by a binary effect modifier wi
 \end{frame}
 
 \begin{frame}{Effect modifiers: always adjust}
-When our scientific question addresses whether or not the assication between a predictor of interest and the outcome differs by an additional covariate (effect modifier), you \textit{must} adjust for the covariate in your model. Otherwise, your model would not adequately answer the scientific question.
+When our scientific question addresses whether or not the association between a predictor of interest and the outcome differs by an additional covariate (effect modifier), you \textit{must} adjust for the covariate in your model. Otherwise, your model would not adequately answer the scientific question.
+\\ ~\ 
+
+When the scientific question doesn't address the association differing by a potential effect modifier, then you don't necessarily need to include it. 
 
 \vspace{0.3cm}
 
-(Note that this is different from a confounder, where we do not need to adjust for confounding variables in a randomized controlled trial, so long as randomization was successful.)
+(Note that this is different from a confounder, where we do not need to adjust for confounding variables in a randomized controlled trial, so long as randomization was successful, but we \textit{must} adjust in an observational study if we want to make causal claims.)
 
 
 \end{frame}
@@ -1259,13 +1264,11 @@ $$
 \end{frame}
 
 \begin{frame}{Effect modifiers: regression equation}
+\vspace{-0.5cm}
 $$
 E[Y \mid X, Z] = \beta_0 + \beta_1 X + \beta_2 Z + \beta_3 (X \times Z)
 $$
 New terminology:
-
-\vspace{0.3cm}
-
 \begin{itemize}
 	\item The terms $X$ and $Y$ are called \textcolor{blue}{main effects}
 	\item The multiplicative term $(X \times Z)$ is called the \textcolor{blue}{interaction term}
@@ -1278,18 +1281,19 @@ You must \textcolor{red}{always} include the main effects in your model if you i
 \end{frame}
 
 \begin{frame}{Effect modifiers: Example in \texttt{R}}
-Thinking back to our births dataset, suppose we are interested in whether or not the association between age and birthweight differs for individuals in First Steps vs. those not in First Steps. Since we are interested in how an association between a predictor of interest and outcome varies based on another variable, we are interested in \textcolor{blue}{effect modification}. \pause
+Thinking back to our \texttt{births} dataset, suppose we are interested in whether or not the association between age and birthweight differs for individuals in First Steps vs. those not in First Steps. Since we are interested in how an association between a predictor of interest and outcome varies based on another variable, we are interested in \textcolor{blue}{effect modification}. \pause
 
 \vspace{0.3cm}
 
 We can write our regression model as 
 $$
-E[\text{bwt} \mid FS, age] = \beta_0 + \beta_1 \times \text{FS} + \beta_2 \times \text{age} + \beta_3 \times (\text{FS} \times \text{age})
+E[\texttt{bwt} \mid \texttt{FS}, \texttt{age}] = \beta_0 + \beta_1 \times \texttt{FS} + \beta_2 \times \texttt{age} + \beta_3 \times (\texttt{FS} \times \texttt{age})
 $$
 
 \end{frame}
 
 \begin{frame}{Effect modifiers: Example in \texttt{R}}
+\vspace{-0.4cm}
 Fitting this model in \texttt{R} is similar to multiple linear regression models we've seen, but we now need to include an interaction term in our formula. There are a couple ways to do this:
 
 \vspace{0.3cm}
@@ -1418,11 +1422,11 @@ $$
 E[Y \mid X, Z] = \beta_0 + \beta_1 X + \beta_2 Z + \beta_3 (X \times Z)
 $$
 
-$\beta_3$: The average difference \textit{in difference} in $Y$ comparing two groups that differ in one unit of $X$, for groups that differ by one unit of $Z$ 
+$\beta_3$: The \textit{difference} in average differences in $Y$ comparing two groups that differ in one unit of $X$, for groups that differ by one unit of $Z$ 
 
 \vspace{0.3cm}
 
-OR: The average difference \textit{in difference} in $Y$ comparing two groups that differ in one unit of $Z$, for groups that differ by one unit of $X$
+OR: The \textit{difference} in average differences in $Y$ comparing two groups that differ in one unit of $Z$, for groups that differ by one unit of $X$
 
 
 \end{frame}
@@ -1434,11 +1438,11 @@ $$
 E[Y \mid X, Z] = \beta_0 + \beta_1 X + \beta_2 Z + \beta_3 (X \times Z)
 $$
 
-$\beta_3$: The average difference in [difference in $Y$ comparing two groups that differ in one unit of $X$], for groups that differ by one unit of $Z$ 
+$\beta_3$: The difference in [average differences in $Y$ comparing two groups that differ in one unit of $X$], for groups that differ by one unit of $Z$ 
 
 \vspace{0.3cm}
 
-OR: The average difference in [difference in $Y$ comparing two groups that differ in one unit of $Z$], for groups that differ by one unit of $X$
+OR: The difference in [average differences in $Y$ comparing two groups that differ in one unit of $Z$], for groups that differ by one unit of $X$
 
 \vspace{0.3cm}
 \pause
@@ -1495,12 +1499,12 @@ Back to our example from the births dataset:
 
 \vspace{0.3cm}
 
-\textcolor{cyan}{We estimate that the average birthweight is 7.6 grams higher for birth parents differing by 1 year in age who did not participate in FS, with the older group having higher birthweights. We estimate that the average birthweight is 10.8 grams higher for birth parents differing by 1 year in age who participated in FS, with the older group having higher birthweights. This observed difference in association between age and birthweight between those in FS and those not of 3.2 grams would not be surprising if the true difference were between -6.8 and 13.1 grams (p = 0.53).}
+\textcolor{cyan}{Among those who did not participate in FS, we estimate that the average birthweight is 7.6 grams higher for birth parents differing by 1 year in age, with the older group having higher birthweights. Among those who did participate in FS, we estimate that the average birthweight is 10.8 grams higher for birth parents differing by 1 year in age, with the older group having higher birthweights. The observed difference in association between age and birthweight comparing those in FS and those not would not be surprising if the true difference were between -6.8 and 13.1 grams (p = 0.53).}
 
 \end{frame}
 
 \begin{frame}{Effect modifiers: Example in \texttt{R}}
-\textcolor{cyan}{We estimate that the average birthweight is 7.6 grams higher for birth parents differing by 1 year in age who did not participate in FS, with the older group having higher birthweights. We estimate that the average birthweight is 10.8 grams higher for birth parents differing by 1 year in age who participated in FS, with the older group having higher birthweights. This observed difference in association between age and birthweight between those in FS and those not of 3.2 grams would not be surprising if the true difference were between -6.8 and 13.1 grams (p = 0.53).}
+\textcolor{cyan}{Among those who did not participate in FS, we estimate that the average birthweight is 7.6 grams higher for birth parents differing by 1 year in age, with the older group having higher birthweights. Among those who did participate in FS, we estimate that the average birthweight is 10.8 grams higher for birth parents differing by 1 year in age, with the older group having higher birthweights. The observed difference in association between age and birthweight comparing those in FS and those not would not be surprising if the true difference were between -6.8 and 13.1 grams (p = 0.53).}
 
 \vspace{0.3cm}
 
@@ -1508,20 +1512,21 @@ How did we get 7.6 and 10.8?
 \end{frame}
 
 \begin{frame}{Effect modifiers: Example in \texttt{R}}
+	\vspace{-0.4cm}
 How did we get 7.6 and 10.8?
 
 \vspace{0.3cm} If we substitute our estimated coefficients into our regression model statement, we have
 $$
-E[\text{bwt} \mid \text{FS}, \text{age}] = 3197.8 - 111.8 \text{FS} + 7.6 \text{age} + 3.2 (\text{FS} \times \text{age}) 
+E[\texttt{bwt} \mid \texttt{FS}, \texttt{age}] = 3197.8 - 111.8 \texttt{FS} + 7.6 \texttt{age} + 3.2 (\texttt{FS} \times \texttt{age}) 
 $$
-\pause Then when $\text{FS} = 1$, our regression equation becomes
+\pause Then when $\texttt{FS} = 1$, our regression equation becomes
 \begin{align*}
-E[\text{bwt} \mid \text{FS} = 1, \text{age}] & = 3197.8 - 111.8  + 7.6 \text{age} + 3.2 \text{age} \\
-& = 3086 + 10.8 \text{age}
+E[\texttt{bwt} \mid \texttt{FS} = 1, \texttt{age}] & = 3197.8 - 111.8  + 7.6 \texttt{age} + 3.2 \texttt{age} \\
+& = 3086 + 10.8 \texttt{age}
 \end{align*} \pause
-and when $\text{FS} = 0$, we have
+and when $\texttt{FS} = 0$, we have
 \begin{align*}
-E[\text{bwt} \mid \text{FS} = 0, \text{age}] & = 3197.8  + 7.6 \text{age} 
+E[\texttt{bwt} \mid \texttt{FS} = 0, \texttt{age}] & = 3197.8  + 7.6 \texttt{age} 
 \end{align*} \pause
 \small We can see now that the coefficient for age differs depending on the value of FS, and in particular it is different by exactly the value of the coefficient for the interaction term. When one variable in your interaction term is binary, it is often easier to interpret each regression slope (10.8 and 7.6) separately, as in the example interpretation we just gave.
 
@@ -1535,7 +1540,7 @@ We've now seen an example of how to interpret the coefficient for an interaction
 We can write our regression model as
 
 $$
-E[\text{bwt} \mid \text{wpre}, \text{age}] = \beta_0 + \beta_1 \times \text{wpre} + \beta_2 \times \text{age} + \beta_3 \times (\text{wpre} \times \text{age})
+E[\texttt{bwt} \mid \texttt{wpre}, \texttt{age}] = \beta_0 + \beta_1 \times \texttt{wpre} + \beta_2 \times \texttt{age} + \beta_3 \times (\texttt{wpre} \times \texttt{age})
 $$
 \end{frame}
 
@@ -1555,8 +1560,7 @@ The coefficient for our interaction term is -0.04 with confidence interval given
 \textcolor{blue}{Question:} How do we interpret this interaction term coefficient in our regression model, in the context of our scientific question? \pause
 
 \vspace{0.3cm}
-
-\textcolor{cyan}{We estimate that among birth parents who are one additional pound of pre-pregnancy weight heavier, average birthweight is lower by 0.04 grams more per additional year of age than among birth parents with one less pound of pre-pregnancy weight. This observed difference in association would not be surprising if the true difference were between -0.14 and 0.06 grams (p = 0.41).}
+\textcolor{cyan}{We estimate that among birth parents with one additional pound of pre-pregnancy weight, the difference in average birthweight between groups of parents one year apart in age is 0.04 grams lower, compared to birth parents with one less pound of pre-pregnancy weight. This observed difference in association would not be surprising if the true difference were between -0.14 and 0.06 grams (p = 0.41).}
 
 \end{frame}
 
@@ -1568,7 +1572,7 @@ Causal diagrams can also help us determine whether or not variables are precisio
 
 \vspace{0.3cm}
 
-\textcolor{blue}{Precision variable}: a variable that is associated with (or causes) the outcome \textit{in the population}, but is not associated with the predictor of interest \textit{in the sample} \pause
+\textcolor{blue}{Precision variable}: a variable that causally affects the outcome \textit{in the population}, but is not associated with the predictor of interest \textit{in the sample} \pause
 
 \vspace{0.3cm}
 
@@ -1578,22 +1582,6 @@ In a causal diagram, we denote precision variables as\dots
 
 \centering \includegraphics[scale=0.4]{precvar1.png}
 
-\end{frame}
-
-\begin{frame}{Precision variables}
-Causal diagrams can also help us determine whether or not variables are precision variables.
-
-\vspace{0.3cm}
-
-\textcolor{blue}{Precision variable}: a variable that is associated with (or causes) the outcome \textit{in the population}, but is not associated with the predictor of interest \textit{in the sample} 
-
-\vspace{0.3cm}
-
-\dots or we denote precision variables as:
-
-\vspace{0.3cm}
-
-\centering \includegraphics[scale=0.4]{precvar2.png}
 \end{frame}
 
 % Example of what to look for graphically in R
@@ -1628,6 +1616,7 @@ We now color the points by our potential precision variable\dots
 \end{frame}
 
 \begin{frame}{Precision variables: what to look for in a graph}
+	\vspace{-0.5cm}
 \begin{figure}
 	\centering \includegraphics[scale=0.4]{p7.png}
 \end{figure}
@@ -1638,7 +1627,7 @@ The key thing to note here is that the groups defined by a binary precision vari
 \end{frame}
 
 \begin{frame}{Precision variables: what to look for in a graph}
-\textcolor{red}{Important note}: A graph alone is not enough to determine if a variable is a precision variable! You still need to think about whether that variable is associated with the outcome \textit{in the population}. This should generally be true if your data is representative of your population.
+\textcolor{red}{Important note}: A graph alone is not enough to determine if a variable is a precision variable! You still need to think about whether that variable causally affects the outcome \textit{in the population}.
 \end{frame}
 
 \begin{frame}{Precision variables: regression equation}
