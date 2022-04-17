@@ -298,9 +298,9 @@ In our running example:
 	We'll leave the CHD and Type A behavior analyses for your homework! Another binary variable in our dataset is \texttt{arcus}, which is an indicator of whether or not the subject had \textit{arcus senilis} (a visible ring around the cornea that indicates high cholesterol). Here's \texttt{R} output from fitting the model $E[\texttt{chd} \mid \texttt{arcus}] = \beta_0 + \beta_1 \texttt{arcus}$:
 	
 	\begin{center}
-		\includegraphics[width=0.5\textwidth]{./figs/simple_linear_regression_arcus}
+		\includegraphics[width=0.6\textwidth]{./figs/simple_linear_regression_arcus}
 	\end{center}
-
+	\vspace{-0.2cm}
 	Based on this, we estimate the difference in risk of CHD comparing groups with and without \textit{arcus senilis} to be 0.039 (95\% CI 0.018 - 0.060). 
 	
 \end{frame}
@@ -735,13 +735,16 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 	The \texttt{lm} function won't do it for us anymore. Instead we use the \texttt{glm} function. 
 	\\ ~\ 
 	
-	GLM stands for ``generalized linear model" and represents a whole class of regression methods (more on that later!). For now, all you need to know is that \texttt{glm} syntax is a lot like \texttt{lm} syntax, but we must also specify $\texttt{family = binomial()}$. 
+	GLM stands for ``generalized linear model" and represents a whole class of regression methods (more on that later!). For now, all you need to know is that \texttt{glm} syntax is a lot like \texttt{lm} syntax, but we must also specify $\texttt{family = binomial()}$. Our command will look like
+	\\ ~\
+	
+	\texttt{glm(y $\sim$ x, family = binomial(), data = dat)}
 \end{frame}
 
 \begin{frame}{Logistic regression: \texttt{R} output}
 	\vspace{-1cm}
 		\begin{center}
-		\includegraphics[width=0.6\textwidth]{./figs/multiple_logistic_regression_arcus}
+		\includegraphics[width=0.7\textwidth]{./figs/multiple_logistic_regression_arcus}
 	\end{center}
 \end{frame}
 
@@ -811,7 +814,7 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 		\log(\text{Odds}(\texttt{chd} \mid \texttt{chol})) = \beta_0 + \beta_1 \texttt{chol}
 	\end{align*}
 	\begin{center}
-	\includegraphics[width=0.5\textwidth]{./figs/simple_logistic_regression_chol}
+	\includegraphics[width=0.6\textwidth]{./figs/simple_logistic_regression_chol}
 \end{center}
 \end{frame}
 
@@ -1299,8 +1302,145 @@ The prevalence of lung cancer among smokers and nonsmokers is
 	% Learning objectives
 	By the end of this section, you should be able to:
 	\begin{itemize}
-		\item 
+		\item Describe the purpose and structure of generalized linear models
+		\item Implement and interpret Poisson regression in \texttt{R}
 	\end{itemize}
+\end{frame}
+
+\begin{frame}{Generalized linear models}
+	Linear regression and logistic regression are two examples of a  larger class of models called \textcolor{blue}{generalized linear models} (GLMs).
+	\begin{align*}
+		g(E[Y \mid X_1,\dots, X_p]) = \beta_0 + \beta_1X_1 + \cdots + \beta_pX_p
+	\end{align*}
+	\begin{itemize}
+		\item \textbf{Linear regression:} $g(z) = z$ (the ``identity" function)
+		\begin{align*}
+			E[Y \mid X_1,\dots, X_p] = \beta_0 + \beta_1X_1 + \cdots + \beta_pX_p
+		\end{align*}
+	
+		\item \textbf{Logistic regression:} $g(z) = \text{logit}(z) = \log(\frac{z}{1-z})$
+		\begin{align*}
+			\log\biggr(\frac{E[Y \mid X_1,\dots, X_p]}{1 - E[Y \mid X_1,\dots, X_p]}\biggr) = \beta_0 + \beta_1X_1 + \cdots+ \beta_pX_p
+		\end{align*}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Generalized linear models: link functions}
+	The function $g$ is referred to as a \textcolor{blue}{link function}, since it \textit{links} the conditional mean $E[Y \mid X]$ to a linear model $\beta_0 + \beta_1X$. 
+	\\ ~\
+	
+	The link function determines how we interpret regression coefficients: 
+	\begin{itemize}
+		\item Identity link (linear regression): $\beta_1$ is a difference in means (or probabilities, for binary outcome)
+		\item Logit link (logistic regression): $\beta_1$ is a difference in log-odds \begin{footnotesize}($\exp(\beta_1)$ is a ratio of odds)\end{footnotesize}
+	\end{itemize}
+	A third useful link function is the \textcolor{blue}{log link} $g(z) = \log(z)$. 
+\end{frame}
+
+\begin{frame}{Poisson regression}
+	If we use a log link, our model is
+	\begin{align*}
+		\log(E[Y \mid X_1,\dots,X_p]) = \beta_0 + \beta_1X_1 + \cdots + \beta_pX_p
+	\end{align*}
+	When $Y$ is binary, this is the same as
+	\begin{align*}
+		\log(P[Y = 1 \mid X_1,\dots,X_p]) = \beta_0 + \beta_1X_1 + \cdots + \beta_pX_p
+	\end{align*}
+	\vfill
+	\begin{footnotesize}Note: This link function is widely used for \textcolor{blue}{count} outcomes, but we'll only talk about it in the context of binary outcomes. \end{footnotesize}
+\end{frame}
+
+\begin{frame}{Poisson regression: interpretation}
+		\begin{align*}
+		\log(P[Y = 1 \mid X_1,\dots,X_p]) = \beta_0 + \beta_1X_1 + \cdots + \beta_pX_p
+	\end{align*}
+	What's the coefficient interpretation for this model? You know the drill by now!
+	\begin{itemize}
+		\item $\beta_0$: log-probability of $Y = 1$ when $X_1 = \cdots = X_p = 0$ 
+		\item $\beta_1$: difference in log-probability of $Y = 1$ comparing groups differing by one unit in $X_1$, but equal in $X_2,\dots,X_p$
+	\end{itemize}
+	Exponentiating, we have
+	\begin{itemize}
+			\item $e^{\beta_0}$: probability of $Y = 1$ when $X_1 = \cdots = X_p = 0$ 
+	\item $e^{\beta_1}$: ratio of probabilities of $Y = 1$ comparing groups differing by one unit in $X_1$, but equal in $X_2,\dots,X_p$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Poisson regression: interpretation}
+	What exactly is the ``ratio of probabilities of $Y = 1$ comparing groups differing by one unit in $X_1$?" \textcolor{blue}{It's the relative risk!}
+	\begin{align*}
+		\frac{P(Y = 1 \mid X_1 = x+1, X_2 = x_2, \dots, X_p = x_p)}{P(Y = 1 \mid X_1 = x, X_2 = x_2, \dots, X_p = x_p)}
+	\end{align*}
+	Poisson regression can allow us to estimate the relative risk rather than the odds ratio, which is nice for interpretability. 
+\end{frame}
+
+\begin{frame}{Generalized linear models: error distribution}
+	Besides the \textcolor{blue}{link function} and \textcolor{blue}{mean model}, GLMs also require a distribution on the errors in the model:
+	\begin{itemize}
+		\item Linear regression: $Y$ has a Normal distribution with mean $E[Y \mid X] = \beta_0 + \beta_1X$ and variance $\sigma^2$.
+		\item Logistic regression: $Y$ has a Binomial distribution with probability (mean) $\text{logit}(E[Y \mid X]) = \beta_0 + \beta_1X$
+		\item \includegraphics[scale=0.01]{./figs/chilipepper} Poisson regression: $Y$ has a Poisson distribution with probability (mean) $\text{log}(E[Y \mid X]) = \beta_0 + \beta_1X$
+	\end{itemize}
+	If you're unfamiliar with the Poisson distribution, that's okay! Just know that there are three essential pieces of a GLM: 
+	\begin{enumerate}
+		\item link function 
+		\item mean model
+		\item error distribution
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Poisson regression: fitting the model in \texttt{R}}
+	We use the \texttt{glm} function to fit a Poisson regression in \texttt{R}. We just have to change the \texttt{family} argument to \texttt{poisson()}:
+	\\ ~\
+	
+	\texttt{glm(y $\sim$ x, family = poisson(), data = dat)}
+\end{frame}
+
+\begin{frame}{Poisson regression: \texttt{R} output}
+	\vspace{-0.6cm}
+	Fitting the model $\log(P(\texttt{chd} \mid \texttt{chol})) = \beta_0 + \beta_1 \texttt{chol}$:
+		\begin{center}
+		\includegraphics[width=0.6\textwidth]{./figs/simple_poisson_regression}
+	\end{center}
+\end{frame}
+
+\begin{frame}{Poisson regression: Hypothesis testing}
+	As with logistic regression, we can use the hypothesis tests directly since 
+	\begin{itemize}
+		\item $H_0: \beta_1 = 0$
+		\item $H_1: \beta_1 \neq 0$
+	\end{itemize}
+	is equivalent to 
+	\begin{itemize}
+		\item $H_0: e^{\beta_1} = 1$
+		\item $H_1: e^{\beta_1} \neq 1$
+	\end{itemize}
+	Testing $H_0: \beta_1 = 0$ is a test of the relative risk being equal to 1 (no association).
+\end{frame}
+
+\begin{frame}{Poisson regression: prediction}
+	Comparing predictions for linear regression (blue), logistic regression (red), and Poisson regression (green)
+	\begin{center}
+		\includegraphics[width=0.7\textwidth]{./figs/scatter_glm2}
+	\end{center}
+	As with linear regression, predictions from Poisson regression might fail to respect [0,1] bounds...
+\end{frame}
+
+\begin{frame}{Generalized linear models: Summary}
+	Summary of what we've seen in this section:
+	\begin{itemize}
+		\item Linear, logistic, and Poisson regression can all be viewed through the framework of GLMs, which involve a mean model, a link function, and an error distribution.
+		\item For binary outcomes, each of these methods gives us a different interpretation
+		\begin{itemize}
+			\item Linear regression: risk difference
+			\item Logistic regression: odds ratio
+			\item Poisson regression: relative risk
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[c]
+	\centering \huge Any Questions?
 \end{frame}
 
 
