@@ -1,0 +1,189 @@
+---
+title: "Problem Solving in R"
+subtitle: "BIOST 311, Discussion Section Week 4"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r preliminaries, message = FALSE, results = "hide"}
+library(tidyverse)
+# install.packages("car")
+library(car)
+data(UN)
+# ?UN # run this line for details on the dataframe
+```
+
+# Introduction
+
+In this discussion section, we'll walk through a statistical analysis involving linear regression and log transformations. We will use the `UN` dataset from the `car` package in R. If you do not have the `car` package installed, do so before loading the library. The `UN` dataset contains national-level health and welfare statistics for 213 regions/countries (mostly United Nations members).
+
+# Exploratory data analysis
+
+1. The primary outcome we are interested in for this analysis is infant mortality rate (IMR) in deaths per 1000 live births. Create a graph that shows the distribution of this variable and describe the distribution. Provide relevant summary statistics for this variable.
+
+```{r}
+UN %>%
+  ggplot(aes(infantMortality)) +
+  geom_histogram(bins = 10, col = "black") +
+  labs(x = "Infant Mortality Rate (deaths per 1000 live births)", y = "Count", title = "Distribution of IMR")
+
+UN %>% pull(infantMortality) %>% summary()
+```
+
+\textcolor{blue}{The distribution of IMR is right skewed. The mean IMR across countries is 29 deaths per 1000 live births, ranging from 2 to 125 deaths per 1000 lives births.}
+
+2. Does infant mortality rate appear to vary by region, fertility rate, or percent urban? Provide three separate graphs illustrating the relationships between these three variables and infant mortality rate, and comment on what you observe in each. Make sure your plots have informative labels. 
+
+NOTE: some observations have missing regions. Make sure that "NA" does not show up in any of your plots (this is separate from any warning messages that ggplot may give you). Additionally note that certain region(s) have no countries with observations for infant mortality rate. These region(s) should not appear in your exploratory plot.
+
+```{r}
+UN %>%
+  filter(!is.na(region)) %>%
+  filter(region != "NorthAtlantic") %>%
+  mutate(Region = region) %>% # so that the legend title is capitalized
+  ggplot(aes(Region, infantMortality, fill = Region)) +
+  geom_boxplot() +
+  labs(x = "Region", title = "IMR by Region", y = "Infant Mortality Rate (deaths per 1000 lives births")
+```
+
+\textcolor{blue}{IMR appears to vary quite a bit by region. In particular, median IMR is highest in Africa and Oceania (CHARLIE: It looks like Oceania and Asia are quite similar? I think Asia is actually a bit higher), and the range of IMR is much higher in African than in other regions. Asia and Oceania also have relatively high ranges of IMR. Europe and North America appear to have the lowest median IMR. The North Atlantic region (consisting only of Greenland) did not have a recorded IMR, and so it is excluded from the plot.}
+
+```{r}
+UN %>%
+  ggplot(aes(fertility, infantMortality)) +
+  geom_point() +
+  labs(x = "Fertility rate (births per mother)", y = "Infant Mortality Rate (deaths per 1000 lives births", title = "IMR by Fertility rate")
+
+# optionally, compute correlation
+cor(UN %>% pull(fertility), UN %>% pull(infantMortality), use = "complete.obs")
+```
+
+\textcolor{blue}{IMR and Fertility rate appear to be strongly, positively correlated. You were not expected to compute the correlation here, but of note it is 0.86, which is relatively high.}
+
+```{r}
+UN %>%
+  ggplot(aes(pctUrban, infantMortality)) +
+  geom_point()  +
+  labs(x = "Percent urban (%)", y = "Infant Mortality Rate (deaths per 1000 lives births", title = "IMR by Percent Urban")
+
+# optionally, compute correlation
+cor(UN %>% pull(pctUrban), UN %>% pull(infantMortality), use = "complete.obs")
+```
+
+\textcolor{blue}{IMR and percent urban appear to be weakly, negatively correlated. You were not expected to compute the correlation here, but of note it is -0.6, which aligns with our guess of weak, negative correlation. (CHARLIE: I wouldn't necessarily call 0.6 weak, maybe moderate?)}
+
+3. The primary predictor we are interested in for this analysis is GDP per capita in US dollars. Create a graph that shows the distribution of this variable, and describe the distribution. Provide relevant summary statistics for this variable.
+
+```{r}
+UN %>%
+  ggplot(aes(ppgdp)) +
+  geom_histogram(bins = 10, col = "black") +
+  labs(x = "GDP per capita (US dollars)", y = "Count", title = "Distribution of GDP")
+
+UN %>% pull(ppgdp) %>% summary()
+```
+
+\textcolor{blue}{The distribution of GDP per capita is right skewed. The mean GDP per capita across countries is \$13,012, ranging from \$115 to \$105,095.}
+
+4. Suppose we are interested in making statements about multiplicative differences in GDP per capita as it relates to IMR. To this end, create a graph that shows the distribution of log GDP per capita, and describe the distribution. 
+
+```{r}
+UN %>%
+  ggplot(aes(log(ppgdp))) +
+  geom_histogram(bins = 10, col = "black") +
+  labs(x = "Log GDP per capita (US dollars)", y = "Count", title = "Distribution of Log GDP")
+```
+
+\textcolor{blue}{The distribution of GDP per capita is roughly symmetric.}
+
+5. We decide for our analysis that we will fit two linear regression models: (1) IMR as our outcome, GDP per capita as our predictor, and (2) IMR as our outcome, log GDP per capita as our predictor. Create two separate plots that help visualize the association between the outcome (IMR) and each respective predictor. Comment on the relationship between the predictor and the outcome in each plot.
+
+```{r}
+UN %>%
+  ggplot(aes(ppgdp, infantMortality)) +
+  geom_point() +
+  labs(x = "GDP per capita (US dollars)", y = "Infant Mortality Rate (deaths per 1000 live births)", title = "GDP vs. IMR") 
+```
+
+\textcolor{blue}{In general, infant mortality rate is very high when GDP per capita is quite small (in particular, when GDP per capita is less than around \$10,000). Infant mortality rate appears to be roughly constant across countries with GDP per capita ranging from \$25,000 and up. The Pearson's correlation is likely quite weak since the two variables do not appear to be linearly related, but the correlation does appear to be slightly negative. (CHARLIE: Maybe it's worth emphasizing here that is a very clearly nonlinear relationship, so linear regression might not be a great choice.)}
+
+```{r}
+UN %>%
+  ggplot(aes(log(ppgdp), infantMortality)) +
+  geom_point() +
+  labs(x = "Log GDP per capita (US dollars)", y = "Infant Mortality Rate (deaths per 1000 live births)", title = "Log GDP vs. IMR")
+```
+
+\textcolor{blue}{Infant mortality rate and log GDP per capita appear to have a reasonably strong negative correlation.}
+
+# Simple linear regression
+
+Suppose we're interested in whether wealthier countries have lower infant mortality (a scientific question). Based on the variables available in the `UN` dataset, we should be able to translate this into a scientific question that we can answer with linear regression. 
+
+6. Translate our scientific question into a statistical one that we can answer using linear regression.
+
+\textcolor{blue}{Is higher GDP per capita (in US dollars) associated with lower infant mortality rates (death per 1000 live births)? Do countries that differ in GDP per capita by 1 US dollar have different infant mortality rates (deaths per 1000 live births)?}
+
+7. Fit the appropriate linear regression model to answer your statistical question in Question 6. State the null and alternative hypothesis, and interpret your results. Results should include a point estimate, confidence interval, and p-value.
+
+```{r}
+mod <- lm(data = UN, infantMortality ~ ppgdp)
+summary(mod)
+confint(mod)
+```
+
+\textcolor{blue}{Our null hypothesis is that there is no linear association between GDP per capita and infant mortality rate. In other words, our null hypothesis is that the regression slope in our model is 0, and the alternative is that the regression slope is not equal to zero. We estimate that the mean difference in infant mortality rate for countries that differ in GDP per capita by 1 US dollar is 0.0009 deaths per 1000 live births, which countries with higher GDP having lower IMR. This observed difference would not be surprising if the true difference were between 0.0007 and 0.001 deaths per 1000 live births (p < 0.001).}
+
+8. You should have noticed that your regression slope estimate is a bit unreasonable (CHARLIE: Do you mean it's not on a very useful scale, maybe? I think they might be confused/think you mean "unreasonble" as in "there's something wrong with this result."), in that we are comparing countries that differ in GDP per capita by a single US dollar. Fit a new linear regression model to answer your statistical question in Question 6 that allows you to compare countries that differ in GDP per capita by \$10,000. State the null and alternative hypothesis, and interpret your results. Results should include a point estimate, confidence interval, and p-value.
+
+```{r}
+mod2 <- lm(data = UN, infantMortality ~ I(ppgdp/10000))
+summary(mod2)
+confint(mod2)
+```
+
+\textcolor{blue}{Our null hypothesis is that there is no linear association between GDP per capita and infant mortality rate. In other words, our null hypothesis is that the regression slope in our model is 0, and the alternative is that the regression slope is not equal to zero. We estimate that the mean difference in infant mortality rate for countries that differ in GDP per capita by 1000 US dollars is 9 deaths per 1000 live births, which countries with higher GDP having lower IMR. This observed difference would not be surprising if the true difference were between 7 and 11 deaths per 1000 live births (p < 0.001).}
+
+9. Compare your point estimates, confidence intervals, and p-values from Questions 7 and 8. What do you notice?
+
+```{r}
+# point estimates
+coef(mod)
+coef(mod2)
+
+# confidence intervals
+confint(mod)
+confint(mod2)
+
+# p-values
+summary(mod)$coefficients[2,4]
+summary(mod2)$coefficients[2,4]
+```
+
+\textcolor{blue}{The intercept estimates from both models are the same. This makes sense, and they have the same interpretation: mean IMR for groups with 0 GDP per capita in US dollars. The point estimates and confidence intervals from Question 7 are 10,000 times smaller than the point estimates and confidence intervals from Question 8. The p-values from Question 7 and Question 8 are identical.}
+
+# Simple linear regression with a log-transformed predictor
+
+10. We are now interested in making statements about multiplicative differences in GDP per capita as it relates to IMR. To this end, fit a simple linear regression model with IMR as the outcome and log GDP per capita as the predictor. State the null and alternative hypothesis, and interpret your results. Results should include a point estimate, confidence interval, and p-value.
+
+```{r}
+mod3 <- lm(data = UN, infantMortality ~ log2(ppgdp))
+summary(mod3)
+confint(mod3)
+```
+
+\textcolor{blue}{Our null hypothesis is that there is no linear association between log GDP per capita and infant mortality rate. In other words, our null hypothesis is that the regression slope in our model is 0, and the alternative is that the regression slope is not equal to zero. The difference in average IMR comparing groups of countries that differ in GDP per capita by a multiplicative factor of 2 is 10.3 deaths per 1000 live births, with the countries with higher GDP having lower IMR. This observed difference would not be surprising if the true difference were between 9.1 and 11.5 deaths per 1000 live births (p < 0.001).}
+
