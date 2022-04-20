@@ -1,0 +1,92 @@
+---
+title: "Linear Regression Practice"
+subtitle: "BIOST 311, Discussion Section Week 4"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r preliminaries, message = FALSE, results = "hide"}
+library(tidyverse)
+# install.packages("car")
+library(car)
+data(UN)
+# ?UN # run this line for details on the dataframe
+```
+
+# Introduction
+
+In this discussion section, we'll walk through a statistical analysis involving linear regression and log transformations. We will use the `UN` dataset from the `car` package in R. If you do not have the `car` package installed, do so before loading the library. The `UN` dataset contains national-level health and welfare statistics for 213 regions/countries (mostly United Nations members).
+
+# Exploratory data analysis
+
+1. The primary outcome we are interested in for this analysis is infant mortality rate (IMR) in deaths per 1000 live births. Create a graph that shows the distribution of this variable and describe the distribution. Provide relevant summary statistics for this variable.
+
+```{r}
+UN %>%
+  ggplot(aes(infantMortality)) +
+  geom_boxplot()
+
+UN %>%
+  ggplot(aes(infantMortality)) +
+  geom_histogram(bins = 10, color = "black")
+
+UN %>% na.omit()
+
+UN %>% pull(infantMortality) %>% mean(na.rm = TRUE) 
+UN %>% na.omit() %>% pull(infantMortality) %>% mean()
+
+UN %>% pull(infantMortality) %>% sd(na.rm = TRUE)
+UN %>% pull(infantMortality) %>% summary()
+```
+
+2. Does infant mortality rate appear to vary by region, fertility rate, or percent urban? Provide three separate graphs illustrating the relationships between these three variables and infant mortality rate, and comment on what you observe in each. Make sure your plots have informative labels. 
+
+```{r}
+UN_new <- UN %>% na.omit()
+
+UN %>%
+  filter(!is.na(infantMortality)) %>%
+  filter(region != "NA") %>%
+  ggplot(aes(x = infantMortality, y = region)) +
+  geom_boxplot()
+```
+
+
+NOTE: some observations have missing regions. Make sure that "NA" does not show up in any of your plots (this is separate from any warning messages that ggplot may give you). Additionally note that certain region(s) have no countries with observations for infant mortality rate. These region(s) should not appear in your exploratory plot.
+
+3. The primary predictor we are interested in for this analysis is GDP per capita in US dollars. Create a graph that shows the distribution of this variable, and describe the distribution. Provide relevant summary statistics for this variable.
+
+4. Suppose we are interested in making statements about multiplicative differences in GDP per capita as it relates to IMR. To this end, create a graph that shows the distribution of log GDP per capita, and describe the distribution. 
+
+5. We decide for our analysis that we will fit two linear regression models: (1) IMR as our outcome, GDP per capita as our predictor, and (2) IMR as our outcome, log GDP per capita as our predictor. Create two separate plots that help visualize the association between the outcome (IMR) and each respective predictor. Comment on the relationship between the predictor and the outcome in each plot.
+
+# Simple linear regression
+
+Suppose we're interested in whether wealthier countries have lower infant mortality (a scientific question). Based on the variables available in the `UN` dataset, we should be able to translate this into a scientific question that we can answer with linear regression. 
+
+6. Translate our scientific question into a statistical one that we can answer using linear regression.
+
+7. Fit the appropriate linear regression model to answer your statistical question in Question 6. State the null and alternative hypothesis, and interpret your results. Results should include a point estimate, confidence interval, and p-value.
+
+8. You should have noticed that your regression slope estimate is on a scale that isn't particularly useful, in that we are comparing countries that differ in GDP per capita by a single US dollar. Fit a new linear regression model to answer your statistical question in Question 6 that allows you to compare countries that differ in GDP per capita by \$10,000. State the null and alternative hypothesis, and interpret your results. Results should include a point estimate, confidence interval, and p-value.
+
+9. Compare your point estimates, confidence intervals, and p-values from Questions 7 and 8. What do you notice?
+
+# Simple linear regression with a log-transformed predictor
+
+10. We are now interested in making statements about multiplicative differences in GDP per capita as it relates to IMR. To this end, fit a simple linear regression model with IMR as the outcome and log GDP per capita as the predictor. State the null and alternative hypothesis, and interpret your results. Results should include a point estimate, confidence interval, and p-value.
+
+

@@ -1,5 +1,9 @@
 ---
+<<<<<<< HEAD
 title: "Problem Solving in R"
+=======
+title: "Linear Regression Practice"
+>>>>>>> d526bb9a60fa780eca049673f4f123aa66fa1e2f
 subtitle: "BIOST 311, Discussion Section Week 4"
 author: "Taylor Okonek and Charlie Wolock"
 date: \today
@@ -59,7 +63,7 @@ UN %>%
   labs(x = "Region", title = "IMR by Region", y = "Infant Mortality Rate (deaths per 1000 lives births")
 ```
 
-\textcolor{blue}{IMR appears to vary quite a bit by region. In particular, median IMR is highest in Africa and Oceania (CHARLIE: It looks like Oceania and Asia are quite similar? I think Asia is actually a bit higher), and the range of IMR is much higher in African than in other regions. Asia and Oceania also have relatively high ranges of IMR. Europe and North America appear to have the lowest median IMR. The North Atlantic region (consisting only of Greenland) did not have a recorded IMR, and so it is excluded from the plot.}
+\textcolor{blue}{IMR appears to vary quite a bit by region. In particular, median IMR is highest in Africa, Asia, and Oceania, and the range of IMR is much higher in African than in other regions. Asia and Oceania also have relatively high ranges of IMR. Europe and North America appear to have the lowest median IMR. The North Atlantic region (consisting only of Greenland) did not have a recorded IMR, and so it is excluded from the plot.}
 
 ```{r}
 UN %>%
@@ -83,7 +87,7 @@ UN %>%
 cor(UN %>% pull(pctUrban), UN %>% pull(infantMortality), use = "complete.obs")
 ```
 
-\textcolor{blue}{IMR and percent urban appear to be weakly, negatively correlated. You were not expected to compute the correlation here, but of note it is -0.6, which aligns with our guess of weak, negative correlation. (CHARLIE: I wouldn't necessarily call 0.6 weak, maybe moderate?)}
+\textcolor{blue}{IMR and percent urban appear to be moderately, negatively correlated. You were not expected to compute the correlation here, but of note it is -0.6, which aligns with our guess of moderate, negative correlation.}
 
 3. The primary predictor we are interested in for this analysis is GDP per capita in US dollars. Create a graph that shows the distribution of this variable, and describe the distribution. Provide relevant summary statistics for this variable.
 
@@ -118,7 +122,7 @@ UN %>%
   labs(x = "GDP per capita (US dollars)", y = "Infant Mortality Rate (deaths per 1000 live births)", title = "GDP vs. IMR") 
 ```
 
-\textcolor{blue}{In general, infant mortality rate is very high when GDP per capita is quite small (in particular, when GDP per capita is less than around \$10,000). Infant mortality rate appears to be roughly constant across countries with GDP per capita ranging from \$25,000 and up. The Pearson's correlation is likely quite weak since the two variables do not appear to be linearly related, but the correlation does appear to be slightly negative. (CHARLIE: Maybe it's worth emphasizing here that is a very clearly nonlinear relationship, so linear regression might not be a great choice.)}
+\textcolor{blue}{In general, infant mortality rate is very high when GDP per capita is quite small (in particular, when GDP per capita is less than around \$10,000). Infant mortality rate appears to be roughly constant across countries with GDP per capita ranging from \$25,000 and up. The Pearson's correlation is likely quite weak since the two variables do not appear to be linearly related, but the correlation does appear to be slightly negative. Since the two variables are not clearly not linearly related, linear regression may not be a great choice of model.}
 
 ```{r}
 UN %>%
@@ -147,7 +151,7 @@ confint(mod)
 
 \textcolor{blue}{Our null hypothesis is that there is no linear association between GDP per capita and infant mortality rate. In other words, our null hypothesis is that the regression slope in our model is 0, and the alternative is that the regression slope is not equal to zero. We estimate that the mean difference in infant mortality rate for countries that differ in GDP per capita by 1 US dollar is 0.0009 deaths per 1000 live births, which countries with higher GDP having lower IMR. This observed difference would not be surprising if the true difference were between 0.0007 and 0.001 deaths per 1000 live births (p < 0.001).}
 
-8. You should have noticed that your regression slope estimate is a bit unreasonable (CHARLIE: Do you mean it's not on a very useful scale, maybe? I think they might be confused/think you mean "unreasonble" as in "there's something wrong with this result."), in that we are comparing countries that differ in GDP per capita by a single US dollar. Fit a new linear regression model to answer your statistical question in Question 6 that allows you to compare countries that differ in GDP per capita by \$10,000. State the null and alternative hypothesis, and interpret your results. Results should include a point estimate, confidence interval, and p-value.
+8. You should have noticed that your regression slope estimate is on a scale that isn't particularly useful, in that we are comparing countries that differ in GDP per capita by a single US dollar. Fit a new linear regression model to answer your statistical question in Question 6 that allows you to compare countries that differ in GDP per capita by \$10,000. State the null and alternative hypothesis, and interpret your results. Results should include a point estimate, confidence interval, and p-value.
 
 ```{r}
 mod2 <- lm(data = UN, infantMortality ~ I(ppgdp/10000))
