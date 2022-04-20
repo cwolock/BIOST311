@@ -1,5 +1,5 @@
 ---
-title: "Problem Solving in R"
+title: "Linear Regression Practice"
 subtitle: "BIOST 311, Discussion Section Week 4"
 author: "Taylor Okonek and Charlie Wolock"
 date: \today
@@ -34,7 +34,36 @@ In this discussion section, we'll walk through a statistical analysis involving 
 
 1. The primary outcome we are interested in for this analysis is infant mortality rate (IMR) in deaths per 1000 live births. Create a graph that shows the distribution of this variable and describe the distribution. Provide relevant summary statistics for this variable.
 
+```{r}
+UN %>%
+  ggplot(aes(infantMortality)) +
+  geom_boxplot()
+
+UN %>%
+  ggplot(aes(infantMortality)) +
+  geom_histogram(bins = 10, color = "black")
+
+UN %>% na.omit()
+
+UN %>% pull(infantMortality) %>% mean(na.rm = TRUE) 
+UN %>% na.omit() %>% pull(infantMortality) %>% mean()
+
+UN %>% pull(infantMortality) %>% sd(na.rm = TRUE)
+UN %>% pull(infantMortality) %>% summary()
+```
+
 2. Does infant mortality rate appear to vary by region, fertility rate, or percent urban? Provide three separate graphs illustrating the relationships between these three variables and infant mortality rate, and comment on what you observe in each. Make sure your plots have informative labels. 
+
+```{r}
+UN_new <- UN %>% na.omit()
+
+UN %>%
+  filter(!is.na(infantMortality)) %>%
+  filter(region != "NA") %>%
+  ggplot(aes(x = infantMortality, y = region)) +
+  geom_boxplot()
+```
+
 
 NOTE: some observations have missing regions. Make sure that "NA" does not show up in any of your plots (this is separate from any warning messages that ggplot may give you). Additionally note that certain region(s) have no countries with observations for infant mortality rate. These region(s) should not appear in your exploratory plot.
 
