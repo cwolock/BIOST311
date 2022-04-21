@@ -1,0 +1,76 @@
+---
+title: "Homework 4"
+subtitle: "BIOST 311"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(formatR)
+
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(results = "hide")
+```
+
+
+## Instructions
+
+This assignment should be submitted on Canvas as a .pdf by 12:30pm on Friday, April 29th. You are welcome to work together on the homework; however, final solutions should be written up individually. 
+
+Unedited software output in the body of your assignment is not acceptable. Please round numerical values to 2--3 significant digits, and include your R code (if applicable) in the same document. See the "How to Write a Proper Homework" document on Canvas for additional guidelines.  
+
+Each homework assignment is worth 20 points total. Problems are graded for correctness, according to the number of points given in the problem statement. 
+
+## 1. Stratified Analyses
+
+For this question, we will be using the `births` dataset to explore stratified analyses. We are interested in the association between age of birth parent (in years) and birth weight (in grams), and in particular, whether this association is different for birth parents who drank during pregnancy vs. those who did not drink during pregnancy.
+
+a. Load the `births` dataset (0 points)
+
+b. The `drink` variable gives birth parent's drinking status (drink yes/no) during pregnancy. Provide relevant summary statistics for this variable. Do you have any concerns about the sample size of individuals in either category (drank or did not drink) in terms of generalizing the results of analyses we may do to a larger population? (1 point)
+
+c. Make an appropriate graph to visualize the relationship between age of birth parent and birth weight of children. How would you describe the relationship between age of birth parent and birth weight of children?  (1 point)
+
+d. Create a new graph visualizing the same relationship, but using *jittered* points so that age of birth parent does not fall on exact years in your graph. Additionally, add `drink` information to your graph to help visualize whether the relationship between age of birth parent and birth weight varies by whether or not the birth parent drank during pregnancy. You may use whichever aesthetic (or facet) you deem appropriate for incorporating the binary variable `drink` into your graph. Based on your graph, do you think the relationship between age of birth parent and birth weight varies by whether or not the birth parent drank during pregnancy? Why or why not? (1 point)
+
+e. Perform a stratified analysis to assess the linear association between age of birth parent (our predictor of interest) and birth weight (our outcome), stratified by drinking status. Your analysis should include *three* linear regression models: one for each stratified group in addition to an overall, unstratified model. Interpret the output of all three models; don't just give numerical output. Be sure to include statistics quantifying the association with appropriate uncertainty quantification, as well as hypothesis tests. Be sure to state the null and alternative hypotheses. (6 points)
+
+f. Based on the results of your stratified analysis, comment on what you can conclude about the relationship between age of birth parent and child's birth weight, and in particular whether the relationship between these two variables varies by drinking status during pregnancy. Your answer should include (at a minimum) a comparison of slopes from each model. (1 point)
+
+g. Your friend believes that if you are a young parent (less than 25 years old), you should drink during pregnancy as it will increase your child's birth weight. Give your friend (at least) *one* reason why this is not a valid conclusion based on the models you fit. (1 point)
+
+## 2. Adjusting for covariates
+
+a. Suppose we are now interested in the association between age of birth parent (in years) and birth weight (in grams), for individuals with *the same* drinking status during pregnancy. Perform an appropriate multiple linear regression analysis to address this question. Identify the coefficient from your model that addresses this question, and interpret the output of your model; don't just give numerical output. Be sure to include a statistic quantifying the association with appropriate uncertainty quantification, as well as a hypothesis test. Be sure to state the null and alternative hypothesis. (2 points)
+
+b. Interpret the intercept from the model you fit in Question 2a in context. (1 point)
+
+c. Suppose we are now interested in the association between weight prior to pregnancy (in pounds) and birth weight (in grams), for individuals with *the same* drinking status during pregnancy and *the same* age. Perform an appropriate multiple linear regression analysis to address this question. Identify the coefficient from your model that addresses this question, and interpret the output of your model; don't just give numerical output. Be sure to include a statistic quantifying the association with appropriate uncertainty quantification, as well as a hypothesis test. Be sure to state the null and alternative hypothesis. (2 points)
+
+d. Interpret the intercept from the model you fit in Question 2c in context. (1 point)
+
+## 3. Confounding, Precision variables, and Effect Modification
+
+For the entirety of this question, suppose we are interested in the association between First Steps participation and birth weight (in grams). Recall that this was the original question our dataset was collected to try to answer! In particular, we are interested in whether or not First Steps participation *causes* higher birth weights, though we know that we cannot confidently make causal statements in an observational study. Nevertheless, it may still be useful to control for potential confounders in our study to get *as close as possible* to being able to make causal statements (remember that if we are able to adjust for *all* possible confounding variables in an observational study, we can make causal statements).
+
+a. Suppose we are interested in including `age` as an additional variable in our model. What role do you think age plays in the relationship between First Steps and birth weight (confounder, precision variable, or neither)? Explain your reasoning. If needed, provide a graph or table to support two variables being associated or not associated in the sample. (1 point)
+
+b. Suppose we are interested in including `married` as an additional variable in our model. What role do you think marital status plays in the relationship between First Steps and birth weight (confounder, precision variable, or neither)? Explain your reasoning. If needed, provide a graph or table to support two variables being associated or not associated in the sample. (1 point)
+
+c. Suppose we are interested in including `parity` as an additional variable in our model. What role do you think parity plays in the relationship between First Steps and birth weight (confounder, precision variable, or neither)? Explain your reasoning. If needed, provide a graph or table to support two variables being associated or not associated in the sample. (1 point)
+
+
+
+
