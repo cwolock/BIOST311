@@ -8,7 +8,7 @@ output: pdf_document
 
 # Instructions
 
-Statistical Analysis Plans (SAPs) are an integral part of any statistical analysis. In this document, you will outline the statistical analyses you plan to run and any output that you plan to create. SAPs are especially important for reproducibility of your results---the goal is that anyone should be able to exactly re-create your analysis after reading your SAP.
+Statistical Analysis Plans (SAPs) are an integral part of any statistical analysis. Using this document as a guide, you will outline the statistical analyses you plan to run and any output that you plan to create. SAPs are especially important for reproducibility of your results---the goal is that anyone should be able to exactly re-create your analysis after reading your SAP.
 
 This assignment is limited to **three pages (including your variables table and example figure)**, and your written text should use at least 12-point font. See the template below for a list of components that need to be included in your final *Statistical Analysis Plan.* You plan should be submitted as a .pdf file---whether you choose to use RMarkdown, Microsoft Word, or other software is up to you. (*Do not include the instructions or rubric in your report.*) 
 
@@ -18,14 +18,14 @@ This assignment is graded and is worth 5% of your overall course grade.
 
 # Template and Rubric
 
-## Formatting (0.5 point)
+## Formatting (0.5 points)
 
 To receive full credit for this portion of the assignment, you should...
 
 - use 12 point font
 - write no more than three pages (including your variables table and example figure)
 
-## Title (0.5 point)
+## Title (0.5 points)
 
 *Make up a title for your proposed study.*
 
@@ -37,7 +37,7 @@ To receive full credit for this portion of the assignment, your title should...
 NOTE: You can re-use what you wrote for your *Project Proposal,* but make sure to address any of the comments we gave you. 
 
 
-## Background and Introduction (3 point)
+## Background and Introduction (3 points)
 
 *Provide a brief description of your data to give perspective into the importance of the problem and the situation under study. In particular, why were the data collected?*
 
@@ -57,7 +57,7 @@ To receive full credit for this portion of the assignment, your background/intro
 NOTE: You can re-use what you wrote for your *Project Proposal,* but make sure to address any of the comments we gave you. You may need to add additional detail to address the criteria above. Do your best to locate the above information about your dataset. If you truly cannot answer some of the questions, acknowledge this in your writeup. 
 
 
-## Scientific Questions (3 point)
+## Scientific Questions (3 points)
 
 *In this section, you should lay out the scientific agenda of your analysis. In particular, you should state both the overall scientific goal and the specific scientific objectives.*
 
@@ -69,7 +69,7 @@ To receive full credit for this portion of the assignment, you should include...
 NOTE: You can re-use what you wrote for your *Project Proposal,* but make sure to address any of the comments we gave you.
 
 
-## Study Design (3 point)
+## Study Design (3 points)
 
 *How were the data collected? How many subjects are in the study? Include all necessary information for interpreting your analysis.*
 
@@ -123,7 +123,6 @@ To receive full credit for this portion of the assignment, you should...
 - provide all pieces of information mentioned above: name, description, type, units, scientific meaning, role in analysis
 - organize this information into a table
 
-
 ## Statistical Analysis
 
 ### Descriptive Analysis Planning (3 points)
@@ -145,9 +144,9 @@ To receive full credit for this portion of the assignment, you should include...
 
 ### Inferential Analysis Planning (3 points)
 
-*For each inferential analysis (e.g. regression) you plan on running, describe the variables you will include, types of estimates and uncertainty quantification you will report, and hypothesis tests you will run. Be specific! Details like confidence level, one- vs. two-sided tests, etc. are important!*
+*For each inferential analysis (e.g. regression) you plan on running, describe the variables you will include, types of estimates and uncertainty quantification you will report, and hypothesis tests you will run. Be specific! Details like confidence level are important!*
 
 To receive full credit for this portion of the assignment, you should include...
 
 - for each model: what is your outcome, what is your predictor of interest, what variables are you adjusting for
-- what numbers will you report/interpret; if this includes a p-value, what are your null and alterative hypotheses and what p-value threshold will you use for calling something "statistically significant"
+- what numbers will you report/interpret; if this includes a p-value, what are your null and alternative hypotheses and what p-value threshold will you use for calling something "statistically significant"
