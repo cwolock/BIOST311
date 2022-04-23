@@ -103,6 +103,8 @@ Examples we often see in biomedical research:
 	\end{itemize}
 	\vspace{0.7cm}
 	Type A behavior is a concept that was developed by cardiologists in the 1950s, and is characterized by being competitive, ambitious, work-driven, and time-conscious. The doctors who identified this ``personality type" thought it might be associated with the risk of CHD, and many studies investigated this association. 
+	\vfill
+	\footnotesize{It turns out that a lot of this research was funded by tobacco companies in an effort to claim that links between smoking and negative health outcomes were simply confounded by Type A personality\dots}
 \end{frame}
 
 \begin{frame}{The WCGS Study}
@@ -125,7 +127,7 @@ Examples we often see in biomedical research:
 	We can talk about the \textcolor{blue}{probability} of experiencing CHD among those with Type A behavior ($p_A$) and the probability of experiencing CHD among those without Type A behavior ($p_B$).
 	\begin{itemize}
 		\item Generally, ``probability," ``risk," ``proportion" refer to the same quantity.
-	\end{itemize}
+	\end{itemize}\pause 
 	\textcolor{blue}{Odds} are defined as $\frac{p}{1-p}$.
 	\begin{itemize}
 		\item Odds of CHD with Type A behavior: $\frac{p_A}{1-p_A}$
@@ -139,7 +141,7 @@ Probability:
 	\item Takes values in $[0,1]$.
 	\item Generally more intuitive than odds. 
 	\item In some study designs, are impossible to estimate! (More on this later.)
-\end{itemize}
+\end{itemize} \pause 
 Odds:
 \begin{itemize}
 	\item Take values in $(0,\infty)$.
@@ -162,7 +164,7 @@ Odds:
 Equal probabilities: If $p_m = p_w$, then
 	\begin{itemize}
 		\item[] $p_A - p_B = 0$ (\textcolor{red}{risk difference}) \quad \quad \quad $\frac{p_A}{p_B} = 1$ (\textcolor{red}{relative risk})
-	\end{itemize}
+	\end{itemize}\pause 
 	\vspace{0.8cm}
 Equal odds: If $\frac{p_A}{1-p_A} = \frac{p_B}{1-p_B}$, then
 	\begin{itemize}
@@ -178,12 +180,12 @@ When we are approaching a scientific question about association, we need to thin
 	\item \textcolor{blue}{Summary measure:} Probability or odds
 	\item \textcolor{red}{Contrast:} Difference or ratio
 \end{itemize}
-\vspace{0.5cm}
+\vspace{0.5cm}\pause 
 In our running example:
 \begin{itemize}
 	\item Is there a \textcolor{red}{difference} in the \textcolor{blue}{probability} of CHD between people with Type A behavior and those without? \pause
 	\item Is the \textcolor{red}{ratio} of \textcolor{blue}{probabilities} of CHD comparing people with and without Type A behavior equal to 1? \pause
-	\item Is the \textcolor{red}{ratio} of \textcolor{blue}{odds} of CHD comparing people with and without a Type A behavior equal to 1? \pause
+	\item Is the \textcolor{red}{ratio} of \textcolor{blue}{odds} of CHD comparing people with and without a Type A behavior equal to 1? 
 \end{itemize}
 \end{frame}
 
@@ -838,7 +840,7 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 	\end{enumerate}
 	There's a common shortcut to get from \textcolor{blue}{a.} to our final answer. 
 	\begin{align*}
-		\text{expit}(x) = \frac{e^x}{1 + e^x} \Rightarrow \text{expit}(-2.719) = 0.068
+		\text{expit}(x) = \frac{e^x}{1 + e^x} \Rightarrow \text{expit}(-2.62) = 0.068
 	\end{align*}
 \end{frame}
 
@@ -855,6 +857,158 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 		\begin{center}
 		\includegraphics[width=0.8\textwidth]{./figs/scatter_glm}
 	\end{center}
+\end{frame}
+
+\begin{frame}{Prediction for binary outcomes}
+	For quantitative outcomes, we discussed predictive accuracy in terms of \textcolor{blue}{$R^2$} (using the training data) and \textcolor{blue}{MSE} (using the test data). \pause
+	\\ ~\
+	
+	Neither of these metrics makes much sense for predicting binary outcomes, where we want to be able to say whether an individual is a 0 or a 1 based on their covariate values. \pause
+	\\ ~\
+	
+	What's more, logistic regression gives us predictions on a probability scale, not a binary scale. \pause
+	\\ ~\
+	
+	Two unsettled questions: 
+	\begin{enumerate}
+		\item How do we turn predictions on probability scale into binary predictions? \pause
+		\item How do we evaluate the quality of these predictions? 
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Binary predictions}
+	We fit the model
+	\begin{align*}
+		\log(\text{Odds}(Y = 1 \mid X_1, \dots, X_p)) = \beta_0 + \beta_1X_1 + \cdots + \beta_pX_p
+	\end{align*}\pause
+	Using our estimated coefficients, we get a probability prediction
+	\begin{align*}
+		\widehat{P}(Y = 1 \mid X_1, \dots, X_p) = \text{expit}(\hat{\beta}_0 + \hat{\beta}_1X_1 + \cdots + \hat{\beta}_pX_p)
+	\end{align*}\pause
+	$\hat{P}$ is a number in (0,1). We want to predict whether $Y = 1$ or $Y = 0$ based on $X_1,\dots, X_p$.\pause
+	\\ ~\ 
+	
+	\textbf{Question:} What are some ideas for turning a probability prediction into a binary prediction?\pause
+	\\ ~\  
+	
+	\textbf{Answer:} Choose a threshold and assign 1 to all predicted values above the threshold, and 0 to all below. 
+\end{frame}
+
+\begin{frame}{Binary predictions}
+	Our procedure for binarizing predictions:\pause
+	\begin{enumerate}
+		\item Pick a cutoff $c$ between 0 and 1.\pause
+		\item For each individual $i$ in the test set, generate a probability prediction 
+		\begin{align*}
+			\widehat{P}(Y_i = 1 \mid X_{i,1}, \dots, X_{i,p}) = \text{expit}(\hat{\beta}_0 + \hat{\beta}_1X_{i,1} + \cdots + \hat{\beta}_pX_{i,p})
+		\end{align*} \pause
+		\item Given a prediction $\hat{P}_i$, generate a binary prediction $\hat{Y}_i$ by declaring this individual a 1 if $\hat{P}_i> c$, and 0 otherwise. \pause
+	\end{enumerate}
+	So, now that we've got binary predictions, let's see how we did. 
+\end{frame}
+
+\begin{frame}{Sensitivity and specificity}
+	You may remember \textcolor{blue}{sensitivity} and \textcolor{blue}{specificity} from 310, in the context of testing for a disease. We'll be a bit more general here. \pause
+	\begin{itemize}
+		\item \textcolor{blue}{Sensitivity}: the probability that $\hat{Y} = 1$ given that $Y = 1$, or $P(\hat{Y}= 1 \mid Y = 1)$. Sometimes called the ``true positive rate"\pause
+		\item \textcolor{blue}{Specificity}: the probability that $\hat{Y}= 0$ given that $Y = 0$, or $P(\hat{Y} = 0 \mid Y = 0)$. $1 - $specificity is sometimes called the ``false positive rate"$^*$\pause
+	\end{itemize}
+	How do we estimate these quantities?\pause
+	\begin{itemize}
+		\item \textcolor{blue}{Sensitivity}: $\frac{\text{\# of individuals with }\hat{Y}= 1 \text{ and } Y = 1}{\text{\# of individuals with }Y = 1}$\pause
+		\item \textcolor{blue}{Specificity}: $\frac{\text{\# of individuals with }\hat{Y}= 0 \text{ and } Y = 0}{\text{\# of individuals with }Y = 0}$\pause
+	\end{itemize}
+\vfill
+	\footnotesize $^*$This is because $1 - P(\hat{Y}= 0 \mid Y = 0) = P(\hat{Y}= 1 \mid Y = 0)$, which is the probability of a false positive. 
+\end{frame}
+
+\begin{frame}{Sensitivity and specificity}
+	How are sensitivity and specificity affected by our choice of cutoff $c$? \pause
+	\begin{itemize}
+		\item $c = 0$: Since $\hat{P} > 0$ for all individuals, we will classify everyone as a 1\pause
+		\item $c = 1$: Since $\hat{P} < 1$ for all individuals, we will classify everyone as a 0\pause
+		\item $0 < c < 1$: Something in the middle \pause
+	\end{itemize}
+	\textbf{Key point:} As we increase $c$, we are guaranteed to both (1) increase specificity and (2) decrease sensitivity: \pause
+	\begin{itemize}
+		\item Higher $c$  = fewer individiuals classified as 1 (true number of individuals that have $Y = 1$ does not change), more individuals classified as 0 (true number of individuals that have $Y = 0$ does not change). \pause
+		\begin{itemize}
+			\item Sensitivity $P(\hat{Y}= 1 \mid Y = 1)$ goes down \pause
+			\item Specificity $P(\hat{Y}= 0 \mid Y = 0)$ goes up
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Sensitivity and specificity in \texttt{R}}
+	Back to our predictions of CHD using cholesterol level!
+	\\ ~\ 
+	
+	Let's take $c =0.5$. This is a sensible place to start --- if we predict someone has a greater than 50\% chance of experiencing a cardiovascular event, we classify them as a case. 
+    \begin{center}
+	\includegraphics[width=0.8\textwidth]{./figs/sensitivity_specificity_code}
+	\end{center}
+
+\end{frame}
+
+\begin{frame}{Sensitivity and specificity in \texttt{R}}
+	\vspace{-0.5cm}
+	Taking a look at our predictions, it's clear why we got these numbers...
+			\begin{center}
+		\includegraphics[width=0.8\textwidth]{./figs/glm_test_predictions}
+	\end{center}
+	No one had a predicted probability over 0.5, so we classified everyone as \texttt{chd }$ = 0$. (Not surprising, since CHD isn't \textit{that} common.)
+\end{frame}
+
+\begin{frame}{ROC curve}
+	Choosing a single cutoff $c$ doesn't give us a very good idea of the predictive performance of our logistic regression model. 
+	\\ ~\
+	
+	What if we looked at the sensitivity and specificity of our predictive model as we vary $c$ between 0 and 1? 
+	\\ ~\ 
+	
+	Plotting sensitivity (true positive rate) vs. $1-$specificity (false positive rate) gives the \textcolor{blue}{receiver operating characteristic (ROC) curve}. 
+\end{frame}
+
+\begin{frame}{ROC curve}
+	\vspace{-0.3cm}
+	\begin{center}
+	\includegraphics[width=0.7\textwidth]{./figs/roc_curve_example}
+	\end{center}
+\end{frame}
+
+\begin{frame}{ROC curve facts}
+	What you should know about ROC curves:
+	\begin{itemize}
+		\item A curve passing through the top left corner indicates a perfect binary prediction model --- this says you can achieve a sensitivity and specificity of 1. (Of course, this will never happen in practice) \pause
+		\item The diagonal represents a random prediction model, or a coin flip. \pause
+		\item The closer an ROC curve comes to the upper left corner, the better the prediction model. \pause
+	\end{itemize}
+	By taking the \textcolor{blue}{area under the ROC curve}, we can get a single number telling us how well we've done. This is called the \textcolor{blue}{AUC}. \pause
+	\begin{itemize}
+		\item AUC of 1 is perfect\pause
+		\item AUC of 0.5 is a completely random model\pause
+		\item AUC $<0.5$ means you probably shouldn't use your prediction model --- you'd be better off flipping a coin
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{ROC curves in \texttt{R}}
+	\vspace{-0.5cm}
+	You could make an ROC curve ``by hand" in \texttt{R}, but we'll use the \texttt{pROC} package
+	\begin{center}
+		\includegraphics[width=0.6\textwidth]{./figs/roc_example_code}
+	\end{center}
+	\begin{center}
+	\includegraphics[width=0.5\textwidth]{./figs/wcgs_roc}
+\end{center}
+\end{frame}
+
+\begin{frame}{Logistic regression: Prediction summary}
+	\begin{itemize}
+		\item Just as with linear regression, we get predictions for logistic regression but plugging covariate values into our regression model with estimated coefficients \pause
+		\item These predictions are naturally on the log-odds scale, but we can transform them to probabilities\pause
+		\item We can make our predictions binary by choosing a probability cutoff and predicting 0/1 values using that cutoff \pause
+		\item We assess the predictive performance of a binary regression model using ROC curves and AUC
+	\end{itemize}
 \end{frame}
 
 \subsection{Adjustment variables}
