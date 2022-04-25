@@ -1717,16 +1717,16 @@ as,
 \begin{frame}{Revisiting regression assumptions}
 For multiple linear regression, we have models with multiple covariates, like this:
 $$
-Y_i = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p + \epsilon_i \text{ for } i = 1, \dots, n
+Y_i = \beta_0 + \beta_1 X_{1,i} + \dots + \beta_p X_{p,i} + \epsilon_i \text{ for } i = 1, \dots, n
 $$
 How do our assumptions change, if at all? \pause
 
 \vspace{0.3cm}
 
 \begin{itemize}
-	\item \textcolor{red}{L}inearity: There is a linear relationship between \color{cyan}$X_1, \dots, X_p$ \color{black} and the true population conditional mean \color{cyan}$Y_i \mid X_1, \dots, X_p$
+	\item \textcolor{red}{L}inearity: There is a linear relationship between \color{cyan}$X_{1,i}, \dots, X_{p,i}$ \color{black} and the true population conditional mean \color{cyan}$Y_i \mid X_{1,i}, \dots, X_{p,i}$
 	\begin{itemize}
-		\item i.e. \color{cyan} $E[Y_i \mid X_1, \dots, X_p] = \beta_0 + \beta_1 X_1 + \dots \beta_p X_p$  \color{black}
+		\item i.e. \color{cyan} $E[Y_i \mid X_{1,i}, \dots, X_{p,i}] = \beta_0 + \beta_1 X_{1,i} + \dots + \beta_p X_{p,i}$  \color{black}
 	\end{itemize} 
 	\item \textcolor{red}{I}\color{black}ndependence: The errors $\epsilon_i$ are independent of each other
 	\item \textcolor{red}{N}ormality: $\epsilon_i$ are normally distributed
