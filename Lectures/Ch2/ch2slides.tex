@@ -91,7 +91,7 @@ Examples we often see in biomedical research:
 		\item Are variants in the HLA-DRB1 gene associated with \textcolor{blue}{Type I diabetes}? 
 		\item Are \textcolor{blue}{surgery complications} after upper endoscopy associated with who (anesthesiologist vs nurse) performed the sedation?
 		\item Is the use of e-cigarettes associated with \textcolor{blue}{smoking}?
-		\item \textcolor{red}{Insert question from Taylor here}
+		\item Is having an HIV positive birth parent associated with the risk of \textcolor{blue}{neonatal mortality}?
 		\item Is Vitamin D intake associated with the risk of \textcolor{blue}{testing positive for COVID}?
 	\end{itemize}
 \end{frame}
@@ -140,7 +140,7 @@ Probability:
 \begin{itemize}
 	\item Takes values in $[0,1]$.
 	\item Generally more intuitive than odds. 
-	\item In some study designs, are impossible to estimate! (More on this later.)
+	\item In some study designs, is impossible to estimate! (More on this later.)
 \end{itemize} \pause 
 Odds:
 \begin{itemize}
@@ -161,7 +161,7 @@ Odds:
 \end{frame}
 
 \begin{frame}{Measures of association}
-Equal probabilities: If $p_m = p_w$, then
+Equal probabilities: If $p_A = p_B$, then
 	\begin{itemize}
 		\item[] $p_A - p_B = 0$ (\textcolor{red}{risk difference}) \quad \quad \quad $\frac{p_A}{p_B} = 1$ (\textcolor{red}{relative risk})
 	\end{itemize}\pause 
@@ -211,6 +211,7 @@ In our running example:
 \section{Linear regression with binary outcomes}
 \begin{frame}
 	\frametitle{SECTION 2: LINEAR REGRESSION WITH BINARY OUTCOMES}
+	\textcolor{red}{TAYLOR: this is maybe picky but do we want huge section titles if we already have the outline repeating before each section? if yes, then the first section should also have a title like this}
 	
 	% Learning objectives
 	By the end of this section, you should be able to:
@@ -276,22 +277,22 @@ In our running example:
 % linear regression: diabetes vs sex
 \begin{frame}
 	\frametitle{Simple linear regression: Type A personality and CHD}
-	\vspace{-0.5cm}
+	
 	In our \texttt{wcgs} dataset, \texttt{chd} is a binary variable indicating CHD over follow-up, and \texttt{tabp} is a binary variable indicating Type A behavior. 
 	\\ ~\
 	
 	We can fit the linear regression model $E[\texttt{chd} \mid \texttt{tabp}] = \beta_0 + \beta_1\texttt{tabp} $.
 	
-	How do we interpret the regression coefficients? \vspace{-0.2cm}
+	How do we interpret the regression coefficients? \vspace{0.3cm}
 	
 	\begin{itemize}
 		\item \color{blue} $\beta_0$: \pause the probability of CHD among those without Type A behavior \pause \color{black}\vspace{-0.2cm}
 		\item[] \ \ \begin{scriptsize} (the average value of \texttt{chd} among those with $\texttt{tabp} = 0$) \end{scriptsize} \pause
 		\item \color{blue} $\beta_1$: \pause the difference in probability of CHD between those with and without Type A behavior \pause \color{black} \vspace{-0.2cm}
 		\item[] \ \ \begin{scriptsize}(the difference in average value of \texttt{chd} between \texttt{tabp} = 1 and \texttt{tabp} = 0 groups) \pause \end{scriptsize}
-	\end{itemize}
+	\end{itemize} 
 	
-	\vspace{-0.2cm}
+	\vspace{0.3cm}
 	To answer our statistical question \begin{small}\textit{(is there a difference in probability of CHD between Type A and others?)}\end{small} we just need to look at $\beta_1$!
 \end{frame}
 
@@ -414,10 +415,10 @@ In our running example:
 	Another issue is the mean-variance relationship. Recall that for traditional linear regression, we assume equal variance across predictor values.
 	\\ ~\ 
 	
-	A binary variable with mean (probability) of $p$ has variance $p(1-p)$. There is an inherent mean-variance relationship. 
+	A binary variable with mean (probability) of $p$ has variance $p(1-p)$. There is an inherent mean-variance relationship. \textcolor{red}{TAYLOR: maybe give an example of why this means we don't have equal variances across predictor values, I could see this not being clear to them mathematically}
 	\\ ~\ 
 	
-	What are the implications of this? \textcolor{blue}{In linear regression we assume separation between mean and variance. This is not realistic for a binary outcome.}
+	What are the implications of this? \textcolor{blue}{In linear regression we assume separation between mean and variance. This is not realistic for a binary outcome.} \textcolor{red}{TAYLOR: Similary, I don't think we ever explicitly said that there needs to be a separation between mean and variance, so maybe detail this a bit more}
 \end{frame}
 
 \begin{frame}{Linear regression with binary outcomes: pros and cons}
@@ -433,8 +434,9 @@ In our running example:
 	Cons: 
 	\begin{itemize}
 		\item Predicted/fitted values can be outside the (0,1) range (as we just saw in the cholesterol example)
-		\item Our mean model might not be correct (particularly the linearity assumption)% is one of the assumptions for linear regression that actually is important
+		\item Our mean model might not be correct (particularly the linearity assumption)% is one of the assumptions for linear regression that actually is important 
 	\end{itemize}
+\textcolor{red}{TAYLOR: I don't think it's going to be obvious to them why the linearity assumption might be a problem. Maybe show an example?}
 	
 	\textbf{What can we do instead?}
 \end{frame}
@@ -461,7 +463,7 @@ In our running example:
 \begin{frame}
 	\frametitle{CHD versus Type A behavior: odds}
 	\vspace{-0.5cm}
-	\begin{small} What if we wanted to quantify the association between CHD and Type A behavior via the \textit{odds ratio} rather than the \textit{risk difference}? \end{small} \pause
+	\begin{small} What if we wanted to quantify the association between CHD and Type A behavior via the \textit{odds ratio} rather than the \textit{risk difference}? \end{small} \pause \vspace{0.1cm}
 
 	\begin{enumerate}
 			\item \textbf{Scientific Question:} is Type A behavior \textcolor{orange}{associated} with the risk of CHD? \pause
@@ -478,7 +480,7 @@ In our running example:
 				\end{itemize}
 		\end{enumerate}
 	
-	\vspace{-0.2cm}
+	\vspace{0.1cm}
 	We can use \textcolor{blue}{logistic} regression to answer this question!
 \end{frame}
 
@@ -700,9 +702,9 @@ In our running example:
 			\item Are there other variables we should adjust for?\pause
 			\item[] \textcolor{blue}{Draw the causal diagram!}\pause
 		\end{itemize}
-	\end{enumerate}\pause
+	\end{enumerate}\pause \textcolor{red}{Taylor: Just to clarify, you're imagining we actually draw the causal diagram here on this extra slide with blank space at the bottom?}
 \vspace{1cm}
-Is the odds ratio of CHD different from 1 comparing subjects with and without \textit{arcus senilis} of the same age, weight, systolic blood pressure, diastolic blood pressure, and cholesterol? 
+Is the odds ratio of CHD different from 1, comparing subjects with and without \textit{arcus senilis} of the same age, weight, systolic blood pressure, diastolic blood pressure, and cholesterol? 
 \end{frame}
 
 \begin{frame}{Logistic regression: writing the regression model}
@@ -737,7 +739,7 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 	The \texttt{lm} function won't do it for us anymore. Instead we use the \texttt{glm} function. 
 	\\ ~\ 
 	
-	GLM stands for ``generalized linear model" and represents a whole class of regression methods (more on that later!). For now, all you need to know is that \texttt{glm} syntax is a lot like \texttt{lm} syntax, but we must also specify $\texttt{family = binomial()}$. Our command will look like
+	GLM stands for ``generalized linear model" and represents a whole class of regression methods (more on that later!). For now, all you need to know is that \texttt{glm} syntax is a lot like \texttt{lm} syntax, but we must also specify $\texttt{family = binomial()}$ for logistic regression. Our command will look like
 	\\ ~\
 	
 	\texttt{glm(y $\sim$ x, family = binomial(), data = dat)}
@@ -797,7 +799,7 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 		&\text{Confidence interval: }(\hat{\beta} - 1.96 \times \hat{\text{SE}}, \hat{\beta} + 1.96 \times \hat{\text{SE}})\\
 		&\text{Hypothesis test: }H_0: \beta = 0 \tab H_1: \beta \neq 0
 	\end{align*}
-	When you exponentiate to the odds scale, the interval is longer symmetric and the hypotheses are different:
+	When you exponentiate to the odds scale, the interval is no longer symmetric and the hypotheses are different:
 	\begin{align*}
 		&\text{Confidence interval: }(e^{\hat{\beta} - 1.96 \times \hat{\text{SE}}}, e^{\hat{\beta} + 1.96 \times \hat{\text{SE}}})\\
 		&\text{Hypothesis test: }H_0: \exp(\beta) = 1 \tab H_1: \exp(\beta) \neq 1
@@ -862,7 +864,7 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 \begin{frame}{Prediction for binary outcomes}
 	For quantitative outcomes, we discussed predictive accuracy in terms of \textcolor{blue}{$R^2$} (using the training data) and \textcolor{blue}{MSE} (using the test data). \pause
 	\\ ~\
-	
+	\textcolor{red}{TAYLOR: They could still use R2 for some sort of model selection though, right? Like determining which covariates to include in their prediction model? Maybe explain this (below) a bit more}
 	Neither of these metrics makes much sense for predicting binary outcomes, where we want to be able to say whether an individual is a 0 or a 1 based on their covariate values. \pause
 	\\ ~\
 	
@@ -908,7 +910,7 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 \end{frame}
 
 \begin{frame}{Sensitivity and specificity}
-	You may remember \textcolor{blue}{sensitivity} and \textcolor{blue}{specificity} from 310, in the context of testing for a disease. We'll be a bit more general here. \pause
+	You may remember \textcolor{blue}{sensitivity} and \textcolor{blue}{specificity} from BIOST 310, in the context of testing for a disease. We'll be a bit more general here. \pause
 	\begin{itemize}
 		\item \textcolor{blue}{Sensitivity}: the probability that $\hat{Y} = 1$ given that $Y = 1$, or $P(\hat{Y}= 1 \mid Y = 1)$. Sometimes called the ``true positive rate"\pause
 		\item \textcolor{blue}{Specificity}: the probability that $\hat{Y}= 0$ given that $Y = 0$, or $P(\hat{Y} = 0 \mid Y = 0)$. $1 - $specificity is sometimes called the ``false positive rate"$^*$\pause
@@ -923,7 +925,7 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 \end{frame}
 
 \begin{frame}{Sensitivity and specificity}
-	How are sensitivity and specificity affected by our choice of cutoff $c$? \pause
+	How are sensitivity and specificity affected by our choice of cutoff $c$? \pause \textcolor{red}{TAYLOR: I think $\hat{P}$ is new notation here, maybe clarify what that means}
 	\begin{itemize}
 		\item $c = 0$: Since $\hat{P} > 0$ for all individuals, we will classify everyone as a 1\pause
 		\item $c = 1$: Since $\hat{P} < 1$ for all individuals, we will classify everyone as a 0\pause
@@ -1004,7 +1006,7 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 
 \begin{frame}{Logistic regression: Prediction summary}
 	\begin{itemize}
-		\item Just as with linear regression, we get predictions for logistic regression but plugging covariate values into our regression model with estimated coefficients \pause
+		\item Just as with linear regression, we get predictions for logistic regression by plugging covariate values into our regression model with estimated coefficients \pause
 		\item These predictions are naturally on the log-odds scale, but we can transform them to probabilities\pause
 		\item We can make our predictions binary by choosing a probability cutoff and predicting 0/1 values using that cutoff \pause
 		\item We assess the predictive performance of a binary regression model using ROC curves and AUC
@@ -1017,8 +1019,8 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 	In Chapter 1, we discussed three types of variables we might include in a linear regression model in addition to the predictor of interest:
 	\begin{itemize}
 		\item Confounder: associated with predictor of interest and causally related to outcome. Necessary to include in order to understand the association between predictor of interest and outcome
-		\item Effect modifier: Association between predictor of interest and outcome varies by values of the effect modifier 
-		\item Precision variable. Causally related to outcome but not predictor of interest. Including in model increases precision
+		\item Effect modifier: association between predictor of interest and outcome varies by values of the effect modifier 
+		\item Precision variable: causally related to outcome but not associated with predictor of interest. Including in model increases precision
 	\end{itemize}
 \end{frame}
 
@@ -1026,7 +1028,7 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 	What do we do in logistic regression?
 	\\ ~\ 
 	
-	The good news is: \textcolor{blue}{The strategy of adjusting for confounders in our model has not changed!} We're just working on log-odds scale now. 
+	The good news is: \textcolor{blue}{The strategy of adjusting for confounders in our model has not changed!} We're just working on the log-odds scale now. 
 	\\ ~\ 
 	
 	What about effect modifiers and precision variables?
@@ -1036,7 +1038,7 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 	Just as in (multiple) linear regression, we can include interaction terms in logistic regression to study effect modification. The mechanics are the same. If $X$ is our predictor of interest and $W$ our potential effect modifier: 
 	\begin{align*}
 				\log(\text{Odds}[Y = 1 \mid X, W]) = \beta_0 + \beta_1X + \beta_2W + \beta_3XW
-	\end{align*}]pause
+	\end{align*}\pause
 	In linear regression, \textcolor{blue}{interaction coefficients represent a difference of differences}.\pause
 	\\ ~\ 
 	
@@ -1044,7 +1046,7 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 \end{frame}
 
 \begin{frame}{Logistic regression: Interaction/effect modification}
-	Suppose $W$ is ibinary. Let's look at the difference in log-odds comparing groups differing by one unit in $X$, among those with $W = 0$:
+	Suppose $W$ is binary. Let's look at the difference in log-odds comparing groups differing by one unit in $X$, among those with $W = 0$:
 	\begin{small}
 	\begin{align*}
 		&\log(\text{Odds}[Y = 1 \mid X = x+1, W = 0]) - \log(\text{Odds}[Y = 1 \mid X = x, W = 0])\\
@@ -1095,7 +1097,7 @@ So, $e^{\beta_3}$ is the \textcolor{blue}{ratio of odds ratios} for groups 1 uni
 \end{frame}
 
 \begin{frame}{Logistic regression: Precision variables}
-	Recall from our linear regression unit that a precision variable $Z$ is 
+	Recall from our \textit{linear} regression unit that a precision variable $Z$ is 
 	\begin{enumerate}
 		\item Causally related to the outcome $Y$
 		\item NOT associated with the predictor of interest $X$ 
@@ -1103,7 +1105,7 @@ So, $e^{\beta_3}$ is the \textcolor{blue}{ratio of odds ratios} for groups 1 uni
 	Including $Z$ in our linear regression model increases the precision with which we can estimate the coefficient for $X$. 
 	\\ ~\ 
 	
-	For this class, all you need to know is that precision variables don't work the same way in logistic regression. In some cases, adjusting for $Z$ in logistic regression can \textit{increase} our standard error on the coefficient for $X$. 
+	For this class, all you need to know is that precision variables \textcolor{red}{don't} work the same way in logistic regression. In some cases, adjusting for $Z$ in logistic regression can \textit{increase} our standard error on the coefficient for $X$. 
 	\\ ~\ 
 	
 	The story is very complicated! If you're interested in details, ask us in office hours. 
@@ -1152,7 +1154,7 @@ So, $e^{\beta_3}$ is the \textcolor{blue}{ratio of odds ratios} for groups 1 uni
 	\begin{itemize}
 		\item In some scenarios, may not know time sequence of disease and exposure\pause
 		\item \textcolor{red}{Cannot use to estimate relative risk or outcome prevalence}\pause
-		\item Potential confounding (cannot make conclusions about causality)\pause
+		\item Potential confounding (cannot make conclusions about causality)
 	\end{itemize}
 \end{frame}
 
@@ -1285,13 +1287,14 @@ The prevalence of lung cancer among smokers and nonsmokers is
 \end{frame}
 
 \begin{frame}{Case-control sampling: Example}
-	\vspace{-1cm}
+	\small
+	\vspace{-0.7cm}
 	What about the prevalence of smoking among those with and without lung cancer? \textcolor{red}{Because we randomly sampled within cases and within controls, we can estimate these!}
 	\\ ~\
 	
 	\textbf{Exercise:} In both the population and the sample, calculate the prevalence of smoking among cases and controls.
 	\\ ~\
-	\vspace{-0.2cm}
+
 	\textcolor{blue}{Population:} 
 		\begin{center}
 		\begin{table}
@@ -1389,8 +1392,9 @@ The prevalence of lung cancer among smokers and nonsmokers is
 		\text{OR} = \frac{\frac{P(\text{cancer} \mid \text{smoke})}{1 - P(\text{cancer} \mid \text{smoke})}}{\frac{P(\text{cancer} \mid \text{no smoke})}{1 - P(\text{cancer} \mid \text{no smoke})}}  = \frac{\frac{184/186}{2/186}}{\frac{16/214}{198/214}} = \frac{184\times 198}{16 \times 2} = 1138.5\\ \pause
 		\text{OR}^* =\frac{\frac{P(\text{smoke} \mid \text{cancer})}{1 - P(\text{smoke} \mid \text{cancer})}}{\frac{P(\text{smoke} \mid \text{no cancer})}{1 - P(\text{smoke} \mid \text{no cancer})}}  = \frac{\frac{184/200}{16/200}}{\frac{2/200}{198/200}} = \frac{184\times 198}{16 \times 2} = 1138.5
 	\end{align*}
-\vfill
+\vfill \textcolor{red}{TAYLOR: this slide is appearing twice for some reason and I can't figure out why...}
 \begin{tiny}Note: We made up the numbers for this example! This odds ratio exaggerates the true association.\end{tiny}
+
 \end{frame}
 
 \begin{frame}{Logistic regression in case-control studies}
@@ -1541,6 +1545,7 @@ The prevalence of lung cancer among smokers and nonsmokers is
 		\item mean model
 		\item error distribution
 	\end{enumerate}
+\textcolor{red}{TAYLOR: you write distribution on the errors, but then talk about Y having a specific distribution}
 \end{frame}
 
 \begin{frame}{Poisson regression: fitting the model in \texttt{R}}

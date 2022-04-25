@@ -1,0 +1,267 @@
+---
+title: "Homework 3: Key"
+subtitle: "BIOST 311"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(formatR)
+
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(results = "hide")
+```
+
+
+## Instructions
+
+This assignment should be submitted on Canvas as a .pdf by 12:30pm on Friday, April 22nd. You are welcome to work together on the homework; however, final solutions should be written up individually. 
+
+Unedited software output in the body of your assignment is not acceptable. Please round numerical values to 2--3 significant digits, and include your R code (if applicable) in the same document. See the "How to Write a Proper Homework" document on Canvas for additional guidelines.  
+
+Each homework assignment is worth 20 points total. Problems are graded for correctness, according to the number of points given in the problem statement. 
+
+## 1. Transformations
+
+For this question, we will be using the `births` dataset to explore transformations in linear regression. We are interested in the association between birth parent's weight prior to pregnancy and child's birth weight.
+
+
+```{r preliminaries}
+library(readr)
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+```
+
+a. Load the `births` dataset (0 points)
+
+```{r 1a}
+births <- read_csv(url("https://raw.githubusercontent.com/cwolock/BIOST311/main/Datasets/births.csv"))
+```
+
+b. The `wpre` variable gives birth parent's weight (in pounds) prior to pregnancy. Make a histogram to visualize the distribution of this variable with an appropriate number of bars. Would you describe the distribution as roughly symmetric, left skewed, or right skewed? (1 point)
+
+\textcolor{blue}{The distribution of birth parent's weight (in pounds) prior to pregnancy is right-skewed.}
+
+```{r 1b, results = "markup"}
+births %>%
+  ggplot(aes(wpre)) +
+  geom_histogram(bins = 20, color = "black") +
+  labs(x = "Weight prior to pregnancy (pounds)", y = "Count", title = "Distribution of weight prior to pregnancy") 
+```
+
+c. Make two exploratory plots that could be used to visualize (1) the association between birth weight *in pounds* and weight prior to pregnancy and (2) the association between birth weight *in pounds* and *mean-centered* weight prior to pregnancy. How would you describe the relationship between birth weight and weight prior to pregnancy in each plot? Comparing the two plots, what is the same and what is different? Hint: 1 pounds = 453.592 grams. (2 points)
+
+\textcolor{blue}{There does not seem to be a strong linear association between birth weight and weight prior to pregnancy, though it appears there may be a weak positive correlation between the two variables. Similarly, there does not seem to be a strong linear association between birth weight and mean-centered weight prior to pregnancy, though it appears there may be a weak positive correlation between the two variables. Comparing the two plots, the association appears to be the same (the shape of the points is identical in both plots), but in the mean-centered plot the points are all shifted to the left by 146.944 (the mean weight prior to pregnancy observed in our dataset).}
+
+```{r}
+births <- births %>% mutate(bwt_pounds = bwt / 453.592)
+births %>%
+  ggplot(aes(wpre, bwt_pounds)) +
+  geom_point() +
+  labs(x = "Weight prior to pregnancy (pounds)", y = "Birth weight (pounds)", title = "Birth weight vs. Weight prior to pregnancy") 
+
+births <- births %>% mutate(wpre_meancenter = wpre - mean(wpre))
+births %>%
+  ggplot(aes(wpre_meancenter, bwt_pounds)) +
+  geom_point() +
+  labs(x = "Mean-centered weight prior to pregnancy (pounds)", y = "Birth weight (pounds)", title = "Birth weight vs. Mean-centered weight prior to pregnancy") 
+```
+
+d. Perform a linear regression analysis to assess the linear association between weight prior to pregnancy (not mean-centered, our predictor) and birth weight in pounds (our outcome). Be sure to include a statistic quantifying this association with appropriate uncertainty quantification, as well as a hypothesis test. Be sure to state the null and alternative hypotheses. You should interpret your results; don't just give numerical output. (2 points)
+
+\textcolor{blue}{The estimated difference in mean birthweight comparing two groups of birth parents differing by one pound in pre-pregnancy weight is 0.007 pounds (95\% CI: 0.005 - 0.008), with heavier groups having a higher birthweight on average. This estimated difference would not be unusual if the true difference were between 0.005 and 0.008 pounds. These data provide strong evidence of a difference in mean birthweight between groups differing by one pound in pre-pregnancy weight (p < 0.001) based on a test of the null hypothesis that the regression slope is 0, versus an alternative that the regression slope is not equal to 0.}
+
+```{r}
+mod <- lm(data = births, bwt_pounds ~ wpre)
+summary(mod)
+confint(mod)
+```
+
+e. Interpret the intercept estimate (in context) from the model you fit in part (d). Is the estimate for the intercept scientifically relevant? (1 point)
+
+\textcolor{blue}{We estimate that mean birthweight for birth parent's weighing 0 pounds pre-pregnancy is 6.52 pounds. This estimate is not scientifically relevant because birth parents with this pre-pregnancy weight do not exist. It is biologically impossible to weigh 0 pounds.}
+
+f. Fit a linear regression model to assess the linear association between mean-centered weight prior to pregnancy (our predictor) and birth weight in pounds (our outcome). Interpret the intercept estimate (in context). Is the estimate for the intercept scientifically relevant? Hint: there are a few ways to include a mean-centered variable in a linear regression model. Try googling to figure out an appropriate way to do so! (1 point)
+
+```{r}
+mod2 <- lm(data = births, bwt_pounds ~ wpre_meancenter)
+summary(mod2)
+```
+
+\textcolor{blue}{We estimate that mean birthweight for birth parent's of average pre-pregnancy weight (146.9 pounds) is 7.53 pounds. This estimate is scientifically relevant because birth parents with this pre-pregnancy weight exist in our dataset and also in the population. It is biologically possible to give birth to a child if you have this pre-pregnancy weight.}
+
+g. The four traditional linear regression assumptions are linearity, independence, Normality of errors, and equal variance. For each of these assumptions, assess whether or not you think the assumption is violated for the model you fit in part (d). If appropriate, use graphs to support your argument. (1 point)
+
+```{r}
+resids <- residuals(mod)
+fittedvals <- predict(mod)
+
+# residuals vs fitted values scatterplot
+data.frame(resids = resids,
+           fittedvals = fittedvals) %>%
+  ggplot(aes(x = fittedvals, y = resids)) + 
+  geom_point() + 
+  geom_hline(yintercept = 0, col = "red") + 
+  xlab("Fitted values") + 
+  ylab("Residuals") + 
+  ggtitle("Scatterplot of residuals vs. fitted values") + 
+  theme_bw()
+
+# histogram of residuals
+data.frame(resids = resids) %>% 
+  ggplot(aes(x = resids)) +
+  geom_histogram(bins = 15, col = "black") + 
+  xlab("Residuals") + 
+  ggtitle("Histogram of residuals") + 
+  theme_bw()
+```
+
+\textcolor{blue}{Based on the scatterplot of residuals vs. fitted values, there does not seem to be a strong pattern, and the points are largely in a cloud around the $y = 0$ line. This does not suggest strong violations of linearity. Arguments could be made either way for whether or not the equal variance assumption is satisfied. On the one hand, the spread of points seems to be smaller for higher fitted values, which may suggest the equal variance assumption is violated. On the other hand, there are fewer observations with large fitted values, and so it may be hard to tell whether or not the smaller spread in residuals for those larger fitted values is just by chance.}
+
+\textcolor{blue}{The histogram of residuals shows a slight left skew, so the residuals do not seem to follow a Normal distribution perfectly. However, the overall shape appears roughly Normal.}
+
+\textcolor{blue}{Based on the way the data were collected, independence seems to be a reasonable assumption. As far as we know, each birth parent appears in the dataset only one time; if they were sampled multiple times that would be a major cause for concern.} 
+
+h. Suppose we are instead interested in making statements about multiplicative changes in weight prior to pregnancy and birth weight. Toward this end, make a histogram to visualize the distribution of log-transformed weight prior to pregnancy, with an appropriate number of bars. Would you describe the distribution as roughly symmetric, left skewed, or right skewed? (1 point)
+
+\textcolor{blue}{The distribution of the log of birth parent's weight (in pounds) prior to pregnancy is roughly normal.}
+
+```{r}
+births <- births %>% mutate(log_wpre = log(wpre))
+births %>%
+  ggplot(aes(log_wpre)) +
+  geom_histogram(bins = 20, color = "black") +
+  labs(x = "Log weight prior to pregnancy (pounds)", y = "Count", title = "Distribution of log weight prior to pregnancy") 
+```
+
+i. Make an exploratory plot that could be used to visualize the association between birth weight in pounds and log weight prior to pregnancy. How would you describe the relationship between birth weight and log weight prior to pregnancy? (1 point)
+
+```{r}
+births %>%
+  ggplot(aes(log_wpre, bwt_pounds)) +
+  geom_point() +
+  labs(x = "Log weight prior to pregnancy (pounds)", y = "Birth weight (pounds)", title = "Birth weight vs. Log weight prior to pregnancy") 
+```
+
+\textcolor{blue}{There appears to be a weak positive correlation between the log weight prior to pregnancy and birth weight.}
+
+j. Perform a linear regression analysis to assess the linear association between log weight prior to pregnancy (our predictor) and birth weight in pounds (our outcome). Be sure to include a statistic quantifying this association with appropriate uncertainty quantification, as well as a hypothesis test. Be sure to state the null and alternative hypotheses. You should interpret your results; don't just give numerical output. Hint: there are a few ways to include a logged variable in a linear regression model. Try googling to figure out an appropriate way to do so! (2 points)
+
+```{r}
+mod3 <- lm(data = births, bwt_pounds ~ log_wpre)
+summary(mod3)
+exp(coef(mod3))
+# multiply slope by log(1.2) for interpretation
+coef(mod3)[2] * log(1.2)
+confint(mod3)[2,] * log(1.2)
+```
+
+\textcolor{blue}{The difference in average birth weight comparing two groups of birth parents that differ in pre-pregnancy weight by 20\% is 0.22 pounds, with the heavier group having the higher birthweight. This estimated difference would not be unusual if the true difference were between 0.18 and 0.26 pounds. These data provide strong evidence of a difference in mean birth weight between groups with a multiplicative difference in pre-pregnancy weight (p < 0.001) based on a test of the null hypothesis that the regression slope is 0 versus an alternative that the regression slope is not equal to 0. Equivalently, the null hypothesis could be written as the exponentiated regression slope being equal to 1, versus the alternative that the exponentiated regression slope is not equal to 1.}
+
+k. Interpret the intercept estimate (in context) from the model you fit in part (j). Is the estimate for the intercept scientifically relevant? (1 point)
+
+\textcolor{blue}{We estimate that the average birth weight among birth parents weighing one pound pre-pregnancy is 5.05 pounds. This estimate is not scientifically relevant because birth parents with this pre-pregnancy weight do not exist. It is biologically impossible to weigh 1 pound and give birth to a child.}
+
+l. The four traditional linear regression assumptions are linearity, independence, Normality of errors, and equal variance. For each of these assumptions, assess whether or not you think the assumption is violated for the model you fit in part (j). If appropriate, use graphs to support your argument. (1 point)
+
+```{r}
+resids <- residuals(mod3)
+fittedvals <- predict(mod3)
+
+# residuals vs fitted values scatterplot
+data.frame(resids = resids,
+           fittedvals = fittedvals) %>%
+  ggplot(aes(x = fittedvals, y = resids)) + 
+  geom_point() + 
+  geom_hline(yintercept = 0, col = "red") + 
+  xlab("Fitted values") + 
+  ylab("Residuals") + 
+  ggtitle("Scatterplot of residuals vs. fitted values") + 
+  theme_bw()
+
+# histogram of residuals
+data.frame(resids = resids) %>% 
+  ggplot(aes(x = resids)) +
+  geom_histogram(bins = 15, col = "black") + 
+  xlab("Residuals") + 
+  ggtitle("Histogram of residuals") + 
+  theme_bw()
+```
+
+\textcolor{blue}{Based on the scatterplot of residuals vs. fitted values, there does not seem to be a strong pattern, and the points are largely in a cloud around the $y = 0$ line. This does not suggest strong violations of linearity. The equal variance assumption appears to be satisfied, as the spread of residuals around the x-axis is roughly equal across different fitted values.}
+
+\textcolor{blue}{The histogram of residuals shows a slight left skew, so the residuals do not seem to follow a Normal distribution perfectly. However, the overall shape appears roughly Normal.}
+
+\textcolor{blue}{Based on the way the data were collected, independence seems to be a reasonable assumption. As far as we know, each birth parent appears in the dataset only one time; if they were sampled multiple times that would be a major cause for concern.} 
+
+m. Your friend believes that a model using log-transformed weight prior to pregnancy is more appropriate than a model using weight prior to pregnancy on its original scale, because the normality assumption will be better satisfied when quantitative variables are less skewed. Explain to your friend why their reasoning is not sufficient to justify using the model with log-transformed weight prior to pregnancy, regardless of how diagnostic plots appear. (1 point)
+
+\textcolor{blue}{Since we have a large sample size (2500 individuals), we do not need the normality assumption to hold, because the Central Limit Theorem tells us that in large samples, our regression coefficient estimates will be approximately normally distributed. The normality assumption concerns residuals, not predictors, and regardless we do not need the classical linear regression assumption of normality in this problem. A more justifiable reason for preferring the model using log-transformed weight prior to pregnancy would be if we wanted to make statements based on our model about multiplicative changes in pre-pregnancy weight as opposed to differences in pre-pregnancy weight.}
+
+## 2. Categorical predictors
+
+a. The `age` variable gives birth parent's age (in years). Make a histogram to visualize the distribution of this variable with an appropriate number of bars. Would you describe the distribution as roughly symmetric, left skewed, or right skewed? (1 point)
+
+```{r}
+births %>%
+  ggplot(aes(age)) +
+  geom_histogram(bins = 10, color = "black") +
+  labs(x = "Birth parent's age (years)", y = "Count", title = "Distribution of birth parent's age") 
+```
+
+\textcolor{blue}{The distribution of birth parent's age is roughly symmetric.}
+
+b. Create a new categorical variable for age group in the `births` dataset. There should be three categories: (1) age less than 25 (2) age 25 - 34 (3) age 35 and over. Your categorical variable should contain groups "Under 25", "25-34", and "35 and over", respectively. Provide relevant descriptive statistics for the age group variable in either a table or sentences. (1 point)
+
+```{r}
+births <- births %>% mutate(age_group = ifelse(age < 25, "Under 25", ifelse(age < 35, "25-34", "35 and over"))) 
+counts <- births %>% pull(age_group) %>% table
+props <- births %>% pull(age_group) %>% table %>% prop.table() 
+counts
+props
+```
+
+There are 581 individuals (23\% of all observations) younger than 25, 1396 individuals between the ages of 25 and 34 (56\% of all observations), and 523 individuals 35 and over (21\% of all observations).
+
+c. Make a graph containing side-by-side boxplots comparing birth weight across these three different age groups. Make sure that ages are ordered from youngest to oldest, left to right (Hint: you can make age group a factor variable with levels in a particular order), and that the legend title is informative. (1 point)
+
+```{r}
+births %>%
+  mutate(age_group = factor(age_group, levels = c("Under 25", "25-34", "35 and over"))) %>%
+  ggplot(aes(age_group, bwt, fill = age_group)) +
+  geom_boxplot() +
+  labs(x = "Age Group", y = "Birthweight (grams)", title = "Birthweight by Age of birth parent") +
+  guides(fill = guide_legend("Age Group"))
+```
+
+d. Perform a linear regression analysis to assess the association between categorical age (our predictor) and birth weight in grams (our outcome). Interpret all coefficients in your model. State the null and alternative hypotheses for testing the association between categorical age and birth weight, and conduct this hypothesis test, reporting an appropriate p-value. For this question you do not need to report uncertainty. (2 points)
+
+```{r}
+mod4 <- lm(data = births, bwt ~ age_group)
+summary(mod4)
+```
+
+\textcolor{blue}{We estimate that mean birth weight for birth parents between 25 and 34 years of age is 3431.72 grams. We estimate that the difference in mean birth weight comparing birth parents aged 25-34 to birth parents aged 35+ is 31.47 grams, with the older group having higher birth weights. We estimate the difference in mean birth weight comparing birth parents less than 25 years old to birth parents aged 25-34 is 104.49 grams, with the older group having higher birth weights.}
+
+\textcolor{blue}{Alternative interpretations: We estimate that mean birth weight for birth parents between 25 and 34 years of age is 3431.72 grams. We estimate that mean birth weight for birth parents less than 25 years old is 3327.23 grams. We estimate that mean birth weight for birth parents aged 35+ is 3463.19 grams.}
+
+```{r}
+mod5 <- lm(data = births, bwt ~ 1)
+anova(mod5, mod4)
+```
+
+\textcolor{blue}{Our null hypothesis is that the coefficients for each age group (in this case "35 and over" and "Under 25", with "25-34" being the reference group) are simultaneously equal to zero. Our alternative hypothesis is that at least one of these two coefficients is not equal to zero. We have statistically significant evidence that age group and birth weight are associated (p < 0.001).}
+
