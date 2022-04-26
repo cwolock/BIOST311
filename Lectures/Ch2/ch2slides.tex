@@ -209,18 +209,17 @@ In our running example:
 
 %% Linear regression
 \section{Linear regression with binary outcomes}
-\begin{frame}
-	\frametitle{SECTION 2: LINEAR REGRESSION WITH BINARY OUTCOMES}
-	\textcolor{red}{TAYLOR: this is maybe picky but do we want huge section titles if we already have the outline repeating before each section? if yes, then the first section should also have a title like this}
-	
-	% Learning objectives
-	By the end of this section, you should be able to:
-	\begin{itemize}
-		\item Interpret linear regression coefficients when the outcome $Y$ is binary
-		\item Write a summary of results from a linear regression analysis with a binary outcome
-		\item List at least one advantage and one disadvantage of using linear regression with a binary outcome
-	\end{itemize}
-\end{frame}
+%\begin{frame}
+%	\frametitle{SECTION 2: LINEAR REGRESSION WITH BINARY OUTCOMES}
+%	
+%	% Learning objectives
+%	By the end of this section, you should be able to:
+%	\begin{itemize}
+%		\item Interpret linear regression coefficients when the outcome $Y$ is binary
+%		\item Write a summary of results from a linear regression analysis with a binary outcome
+%		\item List at least one advantage and one disadvantage of using linear regression with a binary outcome
+%	\end{itemize}
+%\end{frame}
 \begin{frame}
 	\frametitle{Simple linear regression with a binary outcome}
 	Can we use linear regression to look at the association between an exposure and a binary outcome? Yes!
@@ -415,10 +414,10 @@ In our running example:
 	Another issue is the mean-variance relationship. Recall that for traditional linear regression, we assume equal variance across predictor values.
 	\\ ~\ 
 	
-	A binary variable with mean (probability) of $p$ has variance $p(1-p)$. There is an inherent mean-variance relationship. \textcolor{red}{TAYLOR: maybe give an example of why this means we don't have equal variances across predictor values, I could see this not being clear to them mathematically}
+	A binary variable with mean (probability) of $p$ has variance $p(1-p)$. There is an inherent mean-variance relationship. So if we're claiming that $E[Y \mid X] = \beta_0 + \beta_1X$, we're also implying that $\text{Var}[Y \mid X] = (\beta_0 + \beta_1 X)(1 - \beta_0 - \beta_1 X)$. But linear regression assumes that $\text{Var}[Y \mid X] = \sigma^2$, which doesn't depend on $X$!
 	\\ ~\ 
 	
-	What are the implications of this? \textcolor{blue}{In linear regression we assume separation between mean and variance. This is not realistic for a binary outcome.} \textcolor{red}{TAYLOR: Similary, I don't think we ever explicitly said that there needs to be a separation between mean and variance, so maybe detail this a bit more}
+	 \textcolor{blue}{In linear regression we assume separation between mean and variance. This is not realistic for a binary outcome.} 
 \end{frame}
 
 \begin{frame}{Linear regression with binary outcomes: pros and cons}
@@ -434,9 +433,8 @@ In our running example:
 	Cons: 
 	\begin{itemize}
 		\item Predicted/fitted values can be outside the (0,1) range (as we just saw in the cholesterol example)
-		\item Our mean model might not be correct (particularly the linearity assumption)% is one of the assumptions for linear regression that actually is important 
+		\item Separation of mean and variance not realistic for binary outcome
 	\end{itemize}
-\textcolor{red}{TAYLOR: I don't think it's going to be obvious to them why the linearity assumption might be a problem. Maybe show an example?}
 	
 	\textbf{What can we do instead?}
 \end{frame}
@@ -444,19 +442,19 @@ In our running example:
 
 %%% LOGISTIC REGRESSION %%%
 \section{Logistic regression}
-\begin{frame}
-	\frametitle{SECTION 3: LOGISTIC REGRESSION}
-	% Learning objectives
-	By the end of this section, you should be able to:
-	\begin{itemize}
-		\item Interpret regression coefficients for simple and multiple logistic regression models
-		\item Formulate a logistic regression model given a scientific or statistical question 
-		\item Use \texttt{R} to fit a logistic regression model and extract relevant results
-		\item Write a summary of results from a logistic regression analysis
-		\item Describe the impact of including (or not including) a confounder or precision variable in logistic regression
-		\item List at least one advantage and one disadvantage of using logistic regression with a binary outcome
-	\end{itemize}
-\end{frame}
+%\begin{frame}
+%	\frametitle{SECTION 3: LOGISTIC REGRESSION}
+%	% Learning objectives
+%	By the end of this section, you should be able to:
+%	\begin{itemize}
+%		\item Interpret regression coefficients for simple and multiple logistic regression models
+%		\item Formulate a logistic regression model given a scientific or statistical question 
+%		\item Use \texttt{R} to fit a logistic regression model and extract relevant results
+%		\item Write a summary of results from a logistic regression analysis
+%		\item Describe the impact of including (or not including) a confounder or precision variable in logistic regression
+%		\item List at least one advantage and one disadvantage of using logistic regression with a binary outcome
+%	\end{itemize}
+%\end{frame}
 
 \subsection{Simple logistic regression}
 % motivating logistic regression
@@ -702,9 +700,15 @@ In our running example:
 			\item Are there other variables we should adjust for?\pause
 			\item[] \textcolor{blue}{Draw the causal diagram!}\pause
 		\end{itemize}
-	\end{enumerate}\pause \textcolor{red}{Taylor: Just to clarify, you're imagining we actually draw the causal diagram here on this extra slide with blank space at the bottom?}
-\vspace{1cm}
-Is the odds ratio of CHD different from 1, comparing subjects with and without \textit{arcus senilis} of the same age, weight, systolic blood pressure, diastolic blood pressure, and cholesterol? 
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Causal diagram}
+	Here's a reasonable causal diagram:
+	\begin{center}
+		\includegraphics[width=\textwidth]{./figs/DAG}
+		\end{center}
+	
 \end{frame}
 
 \begin{frame}{Logistic regression: writing the regression model}
@@ -864,7 +868,7 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 \begin{frame}{Prediction for binary outcomes}
 	For quantitative outcomes, we discussed predictive accuracy in terms of \textcolor{blue}{$R^2$} (using the training data) and \textcolor{blue}{MSE} (using the test data). \pause
 	\\ ~\
-	\textcolor{red}{TAYLOR: They could still use R2 for some sort of model selection though, right? Like determining which covariates to include in their prediction model? Maybe explain this (below) a bit more}
+	
 	Neither of these metrics makes much sense for predicting binary outcomes, where we want to be able to say whether an individual is a 0 or a 1 based on their covariate values. \pause
 	\\ ~\
 	
@@ -925,7 +929,7 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 \end{frame}
 
 \begin{frame}{Sensitivity and specificity}
-	How are sensitivity and specificity affected by our choice of cutoff $c$? \pause \textcolor{red}{TAYLOR: I think $\hat{P}$ is new notation here, maybe clarify what that means}
+	How are sensitivity and specificity affected by our choice of cutoff $c$? \pause (Remember that $\hat{P}$ is our estimated probability of $Y = 1$ given covariate values.)
 	\begin{itemize}
 		\item $c = 0$: Since $\hat{P} > 0$ for all individuals, we will classify everyone as a 1\pause
 		\item $c = 1$: Since $\hat{P} < 1$ for all individuals, we will classify everyone as a 0\pause
@@ -1128,15 +1132,15 @@ So, $e^{\beta_3}$ is the \textcolor{blue}{ratio of odds ratios} for groups 1 uni
 \end{frame}
 
 \section{Case-control studies}
-\begin{frame}
-	\frametitle{SECTION 4: CASE-CONTROL STUDIES}
-	% Learning objectives
-	By the end of this section, you should be able to:
-	\begin{itemize}
-		\item Describe why logistic regression is useful for the analysis of case-control data
-		\item Explain how and why logistic regression interpretation changes when we analyze case-control data
-	\end{itemize}
-\end{frame}
+%\begin{frame}
+%	\frametitle{SECTION 4: CASE-CONTROL STUDIES}
+%	% Learning objectives
+%	By the end of this section, you should be able to:
+%	\begin{itemize}
+%		\item Describe why logistic regression is useful for the analysis of case-control data
+%		\item Explain how and why logistic regression interpretation changes when we analyze case-control data
+%	\end{itemize}
+%\end{frame}
 
 \begin{frame}{Recall: case-control study}
 	Description:
@@ -1392,8 +1396,8 @@ The prevalence of lung cancer among smokers and nonsmokers is
 		\text{OR} = \frac{\frac{P(\text{cancer} \mid \text{smoke})}{1 - P(\text{cancer} \mid \text{smoke})}}{\frac{P(\text{cancer} \mid \text{no smoke})}{1 - P(\text{cancer} \mid \text{no smoke})}}  = \frac{\frac{184/186}{2/186}}{\frac{16/214}{198/214}} = \frac{184\times 198}{16 \times 2} = 1138.5\\ \pause
 		\text{OR}^* =\frac{\frac{P(\text{smoke} \mid \text{cancer})}{1 - P(\text{smoke} \mid \text{cancer})}}{\frac{P(\text{smoke} \mid \text{no cancer})}{1 - P(\text{smoke} \mid \text{no cancer})}}  = \frac{\frac{184/200}{16/200}}{\frac{2/200}{198/200}} = \frac{184\times 198}{16 \times 2} = 1138.5
 	\end{align*}
-\vfill \textcolor{red}{TAYLOR: this slide is appearing twice for some reason and I can't figure out why...}
-\begin{tiny}Note: We made up the numbers for this example! This odds ratio exaggerates the true association.\end{tiny}
+\vfill 
+\tiny Note: We made up the numbers for this example! This odds ratio exaggerates the true association.
 
 \end{frame}
 
@@ -1455,15 +1459,15 @@ The prevalence of lung cancer among smokers and nonsmokers is
 \end{frame}
 
 \section{Generalized linear models}
-\begin{frame}
-	\frametitle{SECTION 5: GENERALIZED LINEAR MODELS}
-	% Learning objectives
-	By the end of this section, you should be able to:
-	\begin{itemize}
-		\item Describe the purpose and structure of generalized linear models
-		\item Implement and interpret Poisson regression in \texttt{R}
-	\end{itemize}
-\end{frame}
+%\begin{frame}
+%	\frametitle{SECTION 5: GENERALIZED LINEAR MODELS}
+%	% Learning objectives
+%	By the end of this section, you should be able to:
+%	\begin{itemize}
+%		\item Describe the purpose and structure of generalized linear models
+%		\item Implement and interpret Poisson regression in \texttt{R}
+%	\end{itemize}
+%\end{frame}
 
 \begin{frame}{Generalized linear models}
 	Linear regression and logistic regression are two examples of a  larger class of models called \textcolor{blue}{generalized linear models} (GLMs).
@@ -1495,7 +1499,7 @@ The prevalence of lung cancer among smokers and nonsmokers is
 	A third useful link function is the \textcolor{blue}{log link} $g(z) = \log(z)$. 
 \end{frame}
 
-\begin{frame}{Poisson regression}
+\begin{frame}{The log link}
 	If we use a log link, our model is
 	\begin{align*}
 		\log(E[Y \mid X_1,\dots,X_p]) = \beta_0 + \beta_1X_1 + \cdots + \beta_pX_p
@@ -1504,8 +1508,9 @@ The prevalence of lung cancer among smokers and nonsmokers is
 	\begin{align*}
 		\log(P[Y = 1 \mid X_1,\dots,X_p]) = \beta_0 + \beta_1X_1 + \cdots + \beta_pX_p
 	\end{align*}
+	We're going to estimate the parameters of this model using \textcolor{blue}{Poisson regression}. 
 	\vfill
-	\begin{footnotesize}Note: This link function is widely used for \textcolor{blue}{count} outcomes, but we'll only talk about it in the context of binary outcomes. \end{footnotesize}
+	\begin{footnotesize}Note: Poisson regression with a log link function is widely used for \textcolor{blue}{count} outcomes, but we'll only talk about it in the context of binary outcomes. \end{footnotesize}
 \end{frame}
 
 \begin{frame}{Poisson regression: interpretation}
@@ -1533,7 +1538,7 @@ The prevalence of lung cancer among smokers and nonsmokers is
 \end{frame}
 
 \begin{frame}{Generalized linear models: error distribution}
-	Besides the \textcolor{blue}{link function} and \textcolor{blue}{mean model}, GLMs also require a distribution on the errors in the model:
+	Besides the \textcolor{blue}{link function} and \textcolor{blue}{mean model}, GLMs also require a \textcolor{blue}{distribution} on the outcome in the model:
 	\begin{itemize}
 		\item Linear regression: $Y$ has a Normal distribution with mean $E[Y \mid X] = \beta_0 + \beta_1X$ and variance $\sigma^2$.
 		\item Logistic regression: $Y$ has a Binomial distribution with probability (mean) $\text{logit}(E[Y \mid X]) = \beta_0 + \beta_1X$
@@ -1543,9 +1548,8 @@ The prevalence of lung cancer among smokers and nonsmokers is
 	\begin{enumerate}
 		\item link function 
 		\item mean model
-		\item error distribution
+		\item outcome distribution
 	\end{enumerate}
-\textcolor{red}{TAYLOR: you write distribution on the errors, but then talk about Y having a specific distribution}
 \end{frame}
 
 \begin{frame}{Poisson regression: fitting the model in \texttt{R}}
