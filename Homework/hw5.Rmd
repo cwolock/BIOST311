@@ -1,5 +1,5 @@
 ---
-title: "Homework 5: Key"
+title: "Homework 5"
 subtitle: "BIOST 311"
 author: "Taylor Okonek and Charlie Wolock"
 date: \today
