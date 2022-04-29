@@ -1,0 +1,70 @@
+---
+title: "Homework 5: Key"
+subtitle: "BIOST 311"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(formatR)
+
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(results = "hide")
+```
+
+
+## Instructions
+
+This assignment should be submitted on Canvas as a .pdf by 12:30pm on Friday, May 6th. You are welcome to work together on the homework; however, final solutions should be written up individually. 
+
+Unedited software output in the body of your assignment is not acceptable. Please round numerical values to 2--3 significant digits, and include your R code (if applicable) in the same document. See the "How to Write a Proper Homework" document on Canvas for additional guidelines.  
+
+Each homework assignment is worth 20 points total. Problems are graded for correctness, according to the number of points given in the problem statement. 
+
+## 1. Effect modification
+
+For this question, we will explore effect modification in the `births` dataset. For Homework 4, you conducted a stratified analysis examining the association beteween age and birthweight within strata of birth parents who drank versus did not drink during pregnancy.  
+
+a. Load the `births` dataset (0 points)
+
+b. Perform one multiple linear regression analysis to assess whether and how drinking modifies the relationship between parental age and birthweight (i.e., do NOT perform a stratified analyses). You can choose to communicate your answer however you like, but your answer must include relevant point estimate(s), confidence interval(s), hypothesis test(s), etc., along with interpretation of any parameter estimates you give.  
+
+c. Create a graph visualizing the relationship between `bwt` and `age`, and include information on `drink` however you see fit. Use jittered points. Add two linear regression lines to your plot: one for the relationship between `bwt` and `age` among those who did not drink, and one for the relationship between `bwt` and `age` among those who did drink. Use labels to make clear what each part of your plot represents. 
+
+d. Compare your results from part (c) to Questions 1(e) and 1(f) on Homework 4 (if you did not answer those questions correctly, please compare your results to the Homework 4 answer key). Do the results agree or disagree? Note any differences you see. 
+
+e. Evaluate the four classical linear regression assumptions for the model you fit in part (c). Include plots, and discuss whether or not you believe each assumption is met. 
+
+## 2. Precision variables
+
+For this question, we will explore precision variables in the `births` dataset.
+
+a. Suppose we are interested in estimating the association between First Steps participation and birthweight. I suggest that we include gestational age (in weeks) and parental age (in years) in order to increase the precision of our estimate. For each of these variables, explain why it is or is not likely to be a precision variable. Use your scientific knowledge and include graphs where appropriate to back up your claims. 
+
+b. Fit an unadjusted linear regression model of birthweight on First Steps (i.e., a simple linear regression). Give a point estimate and confidence interval for the association between First Steps and birthweight. 
+
+c. Using whichever precision variable(s) you chose in part (a), fit an adjusted model of birthweight on First Steps (i.e., a multiple linear regression). Give a point estimate and confidence interval for the association between First Steps and birthweight, holding other covariates equal. How does the standard error of the First Steps coefficient in this analysis compare to the standard error of the First Steps coefficient in your analysis in part (b)? 
+
+## 3. Prediction
+
+For this question, we will use the `births` dataset to explore prediction. Specifically, we will aim to predict a child's birthweight based on characteristics of the birth parent and their pregnancy.
+
+a. Split your data into a testing dataset and a training dataset, with 70% of your observations in the training dataset and 30% in the testing dataset. Provide descriptive statistics and a descriptive plot of the `bwt` variable in each dataset. Does the distribution of `bwt` look similar or different in the two datasets?
+
+b. Build a linear model to predict birthweight using gestational age. Make a plot of predictions vs. observed birthweights, and evaluate the model in terms of both $R^2$ and mean-squared error. 
+
+c. Build a linear model to predict birthweight using gestational age and assigned sex. Make a plot of predictions vs. observed birthweights, and evaluate the model in terms of both $R^2$ and mean-squared error. 
+
+d. Based on your results from parts (b) and (c), which model would you say has better predictive performance on out-of-sample data? Why? 
