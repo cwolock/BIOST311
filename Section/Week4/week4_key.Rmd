@@ -1,10 +1,6 @@
 ---
-<<<<<<< HEAD
-title: "Problem Solving in R"
-=======
 title: "Linear Regression Practice"
->>>>>>> d526bb9a60fa780eca049673f4f123aa66fa1e2f
-subtitle: "BIOST 311, Discussion Section Week 4"
+subtitle: "BIOST 311, Discussion Section Week 4: Key"
 author: "Taylor Okonek and Charlie Wolock"
 date: \today
 output: 

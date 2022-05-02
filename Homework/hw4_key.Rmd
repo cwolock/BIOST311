@@ -1,0 +1,189 @@
+---
+title: "Homework 4: Key"
+subtitle: "BIOST 311"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(formatR)
+
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(results = "hide")
+```
+
+
+## Instructions
+
+This assignment should be submitted on Canvas as a .pdf by 12:30pm on Friday, April 29th. You are welcome to work together on the homework; however, final solutions should be written up individually. 
+
+Unedited software output in the body of your assignment is not acceptable. Please round numerical values to 2--3 significant digits, and include your R code (if applicable) in the same document. See the "How to Write a Proper Homework" document on Canvas for additional guidelines.  
+
+Each homework assignment is worth 20 points total. Problems are graded for correctness, according to the number of points given in the problem statement. 
+
+## 1. Stratified Analyses
+
+For this question, we will be using the `births` dataset to explore stratified analyses. We are interested in the association between age of birth parent (in years) and birth weight (in grams), and in particular, whether this association is different for birth parents who drank during pregnancy vs. those who did not drink during pregnancy.
+
+
+```{r preliminaries}
+library(readr)
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+```
+
+a. Load the `births` dataset (0 points)
+
+```{r 1a}
+births <- read_csv(url("https://raw.githubusercontent.com/cwolock/BIOST311/main/Datasets/births.csv"))
+```
+
+b. The `drink` variable gives birth parent's drinking status (drink yes/no) during pregnancy. Provide relevant summary statistics for this variable. Do you have any concerns about the sample size of individuals in either category (drank or did not drink) in terms of generalizing the results of analyses we may do to a larger population? (1 point)
+
+```{r}
+births %>% pull(drink) %>% table()
+births %>% pull(drink) %>% table() %>% prop.table()
+```
+
+\textcolor{blue}{We have 29 individuals (1.2\%) in our dataset who drank during pregnancy, and 2471 individuals (98.8\%) in our dataset who did not drink during pregnancy. As we only have 29 individuals in our dataset who drank during pregnancy, we might be cautious about generalizing the results from any model we fit solely for individuals who drank during pregnancy to all birth parents in the population who drank during pregnancy.}
+
+c. Make an appropriate graph to visualize the relationship between age of birth parent and birth weight of children. How would you describe the relationship between age of birth parent and birth weight of children?  (1 point)
+
+```{r}
+births %>% 
+  ggplot(aes(age, bwt)) +
+  geom_point() +
+  labs(x = "Age of birth parent (years)", y = "Birth weight (grams)", title = "Age of birth parent vs. birth weight of child")
+```
+
+\textcolor{blue}{There does not appear to be a strong linear association between age of birth parent and birth weight of children, as the points in our scatterplot lie roughly in a cloud. There may be a weak positive correlation between the two variables, but it is difficult to say for certain from this plot alone.}
+
+d. Create a new graph visualizing the same relationship, but using *jittered* points so that age of birth parent does not fall on exact years in your graph. Additionally, add `drink` information to your graph to help visualize whether the relationship between age of birth parent and birth weight varies by whether or not the birth parent drank during pregnancy. You may use whichever aesthetic (or facet) you deem appropriate for incorporating the binary variable `drink` into your graph. Based on your graph, do you think the relationship between age of birth parent and birth weight varies by whether or not the birth parent drank during pregnancy? Why or why not? (1 point)
+
+```{r}
+births %>% 
+  mutate(Drink = ifelse(drink == 1, "Drank", "Did not drink")) %>%
+  ggplot(aes(age, bwt)) +
+  geom_point(position = "jitter", alpha = 0.4) +
+  labs(x = "Age of birth parent (years)", y = "Birth weight (grams)", title = "Age of birth parent vs. birth weight of child") +
+  facet_wrap(~Drink)
+```
+
+\textcolor{blue}{It does appear as though the relationship between age of birth parent and birth weight of children varies by drinking status. For groups of birth parents who did not drink during pregnancy, there does not appear to be a strong linear relationship between age of birth parent and birth weight (although there may be a weak positive correlation between the two variables), whereas for groups of birth parents who drank during pregnancy, there appears to be a weak negative correlation between age of birth parent and birth weight. Of course, it is difficult to say for certain whether or not this relationship holds in the population, as there were only 29 individuals who drank during pregnancy in our dataset.}
+
+e. Perform a stratified analysis to assess the linear association between age of birth parent (our predictor of interest) and birth weight (our outcome), stratified by drinking status. Your analysis should include *three* linear regression models: one for each stratified group in addition to an overall, unstratified model. Interpret the output of all three models; don't just give numerical output. Be sure to include statistics quantifying the association with appropriate uncertainty quantification, as well as hypothesis tests. Be sure to state the null and alternative hypotheses. (6 points)
+
+```{r}
+mod1 <- lm(data = births, bwt ~ age)
+summary(mod1)
+confint(mod1)
+
+# create dataframes for drink, not drink
+births_drink <- births %>% filter(drink == 1)
+births_nodrink <- births %>% filter(drink == 0)
+
+mod2 <- lm(data = births_drink, bwt ~ age)
+summary(mod2)
+confint(mod2)
+
+mod3 <- lm(data = births_nodrink, bwt ~ age)
+summary(mod3)
+confint(mod3)
+```
+
+\textcolor{blue}{The estimated difference in mean birthweight comparing two groups of birth parents differing by one year in age is 8.6 grams (95\% CI: 5.0, 12.2), with older groups having a higher birthweight on average. This estimated difference would not be unusual if the true difference were between 5.0 and 12.2 grams. These data provide strong evidence of a difference in mean birthweight between groups differing by one year in age (p < 0.001) based on a test of the null hypothesis that the regression slope is 0, versus an alternative that the regression slope is not equal to 0.}
+
+\textcolor{blue}{The estimated difference in mean birthweight comparing two groups of birth parents differing by one year in age who drank during pregnancy is 14.6 grams (95\% CI: -20.1, 49.2), with younger groups having a higher birthweight on average. This estimated difference would not be unusual if the true difference were between -20.1 and 49.2 grams. These data do not provide statistically significant evidence of a difference in mean birthweight between groups differing by one year in age who drank during pregnancy (p = 0.4) based on a test of the null hypothesis that the regression slope is 0, versus an alternative that the regression slope is not equal to 0.}
+
+\textcolor{blue}{The estimated difference in mean birthweight comparing two groups of birth parents differing by one year in age who did not drink during pregnancy is 8.9 grams (95\% CI: 5.3, 12.6), with older groups having a higher birthweight on average. This estimated difference would not be unusual if the true difference were between 5.3 and 12.6 grams. These data provide statistically significant evidence of a difference in mean birthweight between groups differing by one year in age who did not drink during pregnancy (p < 0.001) based on a test of the null hypothesis that the regression slope is 0, versus an alternative that the regression slope is not equal to 0.}
+
+f. Based on the results of your stratified analysis, comment on what you can conclude about the relationship between age of birth parent and child's birth weight, and in particular whether the relationship between these two variables varies by drinking status during pregnancy. Your answer should include (at a minimum) a comparison of slopes from each model. (1 point)
+
+\textcolor{blue}{Our analysis suggests that the relationship between age of birth parent and child's birth weight may differ by drinking status. In particular, the association between age of birth parent and child's birth weight is positive for individuals who did not drink during pregnancy, and is negative for individuals who did drink during pregnancy. However, we note that the relationship we observe for individuals who drank during pregnancy is not statistically significant. It is possible that this lack of statistical significance is due to the small sample size (29) in this particular strata, and so we hesitate to make conclusions about the population of birth parents who drank during pregnancy based on our analysis. The observed regression slope would be consistent with either a positve or negative relationship. Also of note, the relationship between age of birth parent and child's birth weight marginally (including all birth parents) is quite similar to the relationship observed between the two variables for parents who did not drink during pregnancy. This is likely due to the data in the non-drinking stratum being very similar to that used in our marginal analysis (all 2500 individuals vs. 2471 of those individuals). It is possible that if we had observed a greater proportion of birth parents who drank during pregnancy, we would obtain different stratified results.}
+
+g. Your friend believes that if you are a young parent (less than 25 years old), you should drink during pregnancy as it will increase your child's birth weight. Give your friend (at least) *one* reason why this is not a valid conclusion based on the models you fit. (1 point)
+
+\textcolor{blue}{Your friend is concluding that drinking is causally related to birth weight (note the use of the word "increase"), which is not something you can conclude from this analysis as you used observational data. Furthermore, the data are consistent with either a positive or negative relationship, as shown by the confidence interval for the regression slope. Another acceptable answer would be that the sample size of individuals in your dataset for individuals who drank is only 29, which is rather small. We would hesitate to make conclusions about a broader population of birth parents who drink with such a small sample size.}
+
+## 2. Adjusting for covariates
+
+a. Suppose we are now interested in the association between age of birth parent (in years) and birth weight (in grams), for individuals with *the same* drinking status during pregnancy. Perform an appropriate multiple linear regression analysis to address this question. Identify the coefficient from your model that addresses this question, and interpret the output of your model; don't just give numerical output. Be sure to include a statistic quantifying the association with appropriate uncertainty quantification, as well as a hypothesis test. Be sure to state the null and alternative hypothesis. (2 points)
+
+```{r}
+mod4 <- lm(data = births, bwt ~ age + drink)
+summary(mod4)
+confint(mod4)
+```
+
+\textcolor{blue}{The estimated difference in mean birthweight comparing two groups of birth parents differing by one year in age who have the same drinking status is 8.7 grams (95\% CI: 5.0, 12.3), with older groups having a higher birthweight on average. This estimated difference would not be unusual if the true difference were between 5.0 and 12.3 grams. These data provide strong evidence of a difference in mean birthweight between groups differing by one year in age who have the same drinking status (p < 0.001) based on a test of the null hypothesis that the regression coefficient for age is 0, versus an alternative that the regression coefficient for age is not equal to 0.}
+
+b. Interpret the intercept from the model you fit in Question 2a in context. (1 point)
+
+\textcolor{blue}{We estimate that mean birthweight for individuals who did not drink during pregnancy and are 0 years old 3160.6 grams.}
+
+c. Suppose we are now interested in the association between weight prior to pregnancy (in pounds) and birth weight (in grams), for individuals with *the same* drinking status during pregnancy and *the same* age. Perform an appropriate multiple linear regression analysis to address this question. Identify the coefficient from your model that addresses this question, and interpret the output of your model; don't just give numerical output. Be sure to include a statistic quantifying the association with appropriate uncertainty quantification, as well as a hypothesis test. Be sure to state the null and alternative hypothesis. (2 points)
+
+```{r}
+mod5 <- lm(data = births, bwt ~ wpre + age + drink)
+summary(mod5)
+confint(mod5)
+```
+
+\textcolor{blue}{The estimated difference in mean birthweight comparing two groups of birth parents differing by one pound in pre-pregnancy weight who have the same age and drinking status is 3.1 grams (95\% CI: 2.4, 3.7), with heavier groups having a higher birthweight on average. This estimated difference would not be unusual if the true difference were between 2.4 and 3.7 grams. These data provide strong evidence of a difference in mean birthweight between groups differing by one pound in pre-pregnancy weight who have the same age and drinking status (p < 0.001) based on a test of the null hypothesis that the regression coefficient for pre-pregnancy weight is 0, versus an alternative that the regression coefficient for pre-pregnancy weight is not equal to 0.}
+
+d. Interpret the intercept from the model you fit in Question 2c in context. (1 point)
+
+\textcolor{blue}{We estimate that mean birthweight for individuals who did not drink during pregnancy, were 0 years old, and weighed 0 pounds prior to pregnancy is 3160.6 grams.}
+
+## 3. Confounding, Precision variables, and Effect Modification
+
+For the entirety of this question, suppose we are interested in the association between First Steps participation and birth weight (in grams). Recall that this was the original question our dataset was collected to try to answer! In particular, we are interested in whether or not First Steps participation *causes* higher birth weights, though we know that we cannot confidently make causal statements in an observational study. Nevertheless, it may still be useful to control for potential confounders in our study to get *as close as possible* to being able to make causal statements (remember that if we are able to adjust for *all* possible confounding variables in an observational study, we can make causal statements).
+
+a. Suppose we are interested in including `age` as an additional variable in our model. What role do you think age plays in the relationship between First Steps and birth weight (confounder, precision variable, or neither)? Explain your reasoning. If needed, provide a graph or table to support two variables being associated or not associated in the sample. (1 point)
+
+```{r}
+# show that age is associated with FS in the sample
+births %>%
+  mutate(`First Steps` = ifelse(firstep == 1, "Yes", "No")) %>%
+  ggplot(aes(`First Steps`, age)) +
+  geom_boxplot() +
+  labs(x = "First Steps Participation", y = "Age (years)", title = "Age by First Steps participation")
+```
+
+
+\textcolor{blue}{Age is likely a confounding variable. Giving birth at a younger age can lead to birth complications which then cause low birthweights, and additionally age is associated with First Steps participation in the sample.}
+
+b. Suppose we are interested in including `married` as an additional variable in our model. What role do you think marital status plays in the relationship between First Steps and birth weight (confounder, precision variable, or neither)? Explain your reasoning. If needed, provide a graph or table to support two variables being associated or not associated in the sample. (1 point)
+
+```{r, results = "asis"}
+# show that age is associated with FS in the sample
+table(births %>% mutate(firstep = ifelse(firstep == 1, "FS: Yes", "FS: No")) %>% pull(firstep) , 
+      births %>% mutate(married = ifelse(married == 1, "Married: Yes", "Married: No")) %>% pull(married)) %>%
+  kable("latex") # the kable function in the "knitr" package makes nice tables in R!
+```
+
+\textcolor{blue}{Marital status is likely neither a confounder or precision variable. There is no reason to believe that being married would cause you to have higher or lower birthweight children, thus ruling out precision variables and confounders as options.}
+
+\textcolor{blue}{You could make an argument that if you are married perhaps you have more support during pregnancy, which could in turn mean you have better access to health care. If you made this argument, you could then argue that being married may cause you to *not* participate in First Steps because you have found support during pregnancy elsewhere. In this case, marital status would be a confounding variable.}
+
+\textcolor{blue}{You cannot make an argument that marital status is a precision variable because marital status and First Steps participation are associated in the sample. Note that 37.5\% of unmarried people in our dataset participated in First Steps compared to only 10.2\% of married people.}
+
+c. Suppose we are interested in including `parity` as an additional variable in our model. What role do you think parity plays in the relationship between First Steps and birth weight (confounder, precision variable, or neither)? Explain your reasoning. If needed, provide a graph or table to support two variables being associated or not associated in the sample. (1 point)
+
+\textcolor{blue}{Parity is likely a potential confounding variable. It is likely that if you have already had a child and therefore have already gone through pregnancy, you would be less likely to utilize First Steps since you already have an idea as to what pregnancy entails. Additionally, it's possible that having a child already (or multiple children) may causally effect the birth weight of your next child. In particular, if a child you have previously had is premature, you are more at risk for having another premature child, which is associated with lower birth weights.}
+
+
+
