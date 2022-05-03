@@ -1,0 +1,78 @@
+---
+title: "Prediction in Linear Regression"
+subtitle: "BIOST 311, Discussion Section Week 6: Key"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r preliminaries, message = FALSE, results = "hide"}
+library(tidyverse)
+```
+
+# Introduction
+
+In this discussion section, we'll walk through a linear regression prediction problem. We will use a simulated dataset on Medical insurance cost, from https://www.kaggle.com/datasets/mirichoi0218/insurance, to try to predict individual medical costs billed by health insurance for individuals based on a variety of health-related and demographic variables. The dataset comes from the book Machine Learning with R by Brett Lantz, and it is simulated on the basis of demographic statistics from the US Census Bureau. The data does not represent real individuals, but should be roughly representative of real trends in the US.
+
+
+The dataset is called `insurance.csv`, and is available on the Canvas site on the Week 6 page, or on the course github site. The code is provided below to load the dataset direclty from github, but you may download it to your personal machine and load it in that way if you prefer.
+
+```{r}
+library(readr)
+# load dataset from github
+insurance <- read_csv(url("https://raw.githubusercontent.com/cwolock/BIOST311/main/Datasets/insurance.csv"))
+```
+
+Variables in the insurance dataset include:
+
+* age: Age of primary beneficiary
+
+* sex: Binarized sex of insurance beneficiary (male/female)
+
+* bmi: Body mass index (kg / m^2)
+
+* children: Number of children covered by health insurance / Number of dependents
+
+* smoker: Smoking status (yes/no)
+
+* region: The beneficiary's residential area in the US (northeast, southeast, southwest, northwest)
+
+* charges: Individual medical costs billed by health insurance
+
+# Exploratory data analysis
+
+1. Before we begin building models, it might be useful to do some exploratory analysis to determine which variables might be predictive of our outcome (`charges`). Make separate exploratory plots displaying the relationship between each of the variables in our dataset and our outcome, `charges`. Which variables seem like they may be predictive of individual medical costs, and which variables do not seem like they will be predictive of individual medical costs?
+
+2. The age and bmi plots should have looked a bit odd to you. Try coloring the points in your scatterplots to see if there are other variables at play in the relationships between age and medical costs, and bmi and medical costs. Which variable seems to involved in these relationships? Based on your plots, do you think that including interaction terms between these pairs of variables may give you better predictions?
+
+3. Based on your answers to questions 1 and 2, what prediction model do you think may be good to start with, in terms of best predicting our outcome?
+
+# First prediction model
+
+1. Create a training and testing dataset based on a 70/30 training/testing split, and obtain predictions for a model using `age`, `bmi`, and `smoker` as predictors (no interaction terms yet). Report the Adjusted $R^2$ value from fitting your model to the training data, and the MSE calculated from making predictions on the testing data. 
+
+Set the seed to 1234 before splitting your data so that your results are replicable (use the code `set.seed(1234)` to do this). Using the code from lecture slides, you may find that you don't sample quite enough people due to rounding down. To fix this, try putting the `round()` function around your code for `0.7*nrow(df)` and `0.3*nrow(df)`.
+
+2. Make a scatterplot comparing predictions to observed values from your testing dataset. Based on this plot, do you think your predictive model is terrible, okay, or great?
+
+3. Using the same training and testing dataset, obtain predictions for a model using `age`, `bmi`, and `smoker` as predictors, *including* an interaction term between `bmi` and `smoker`. Report the Adjusted $R^2$ value from fitting your model to the training data, and the MSE calculated from making predictions on the testing data. Compare your results to those from the model fit in Question 1, and determine based on these measures of prediction accuracy which model is better at predicting medical costs.
+
+4. Make a scatterplot comparing predictions to observed values from your testing dataset. Based on this plot, do you think your predictive model is terrible, okay, or great? Do you think your predictive model is better than the one fit in Question 1, comparing only the diagnostic plots (not measures of prediction accuracy)?
+
+5. Using *whatever variables you want*, try to find the model with the lowest MSE on the test dataset using the variables available to you. Your model can include transformations of variables, interactions, categorical version of continuous variables, etc., but must still be a multiple linear regression model (no fancy machine learning, if you know how to do it). Report the MSE on the testing dataset for your best predictive model, and make a plot comparing observed to predicted values for your best predictive model.
+
+
+
+
