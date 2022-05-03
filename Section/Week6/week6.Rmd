@@ -1,6 +1,6 @@
 ---
 title: "Prediction in Linear Regression"
-subtitle: "BIOST 311, Discussion Section Week 6: Key"
+subtitle: "BIOST 311, Discussion Section Week 6"
 author: "Taylor Okonek and Charlie Wolock"
 date: \today
 output: 
