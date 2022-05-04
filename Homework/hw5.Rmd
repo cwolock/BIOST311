@@ -43,7 +43,7 @@ b. Perform one multiple linear regression analysis to assess whether and how dri
 
 c. Create a graph visualizing the relationship between `bwt` and `age`, and include information on `drink` however you see fit. Use jittered points. Add two linear regression lines to your plot: one for the relationship between `bwt` and `age` among those who did not drink, and one for the relationship between `bwt` and `age` among those who did drink. Use labels to make clear what each part of your plot represents. 
 
-d. Compare your results from part (c) to Questions 1(e) and 1(f) on Homework 4 (if you did not answer those questions correctly, please compare your results to the Homework 4 answer key). Do the results agree or disagree? Note any differences you see. 
+d. Compare your results from part (b) to Questions 1(e) and 1(f) on Homework 4 (if you did not answer those questions correctly, please compare your results to the Homework 4 answer key). Do the results agree or disagree? Note any differences you see. 
 
 e. Evaluate the four classical linear regression assumptions for the model you fit in part (c). Include plots, and discuss whether or not you believe each assumption is met. 
 
