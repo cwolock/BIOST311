@@ -599,6 +599,68 @@ In our running example:
 	\end{enumerate} 
 \end{frame}
 
+\begin{frame}{Logistic regression: fitting the model in \texttt{R}}
+	The \texttt{lm} function won't do it for us anymore. Instead we use the \texttt{glm} function. 
+	\\ ~\ 
+	
+	GLM stands for ``generalized linear model" and represents a whole class of regression methods (more on that later!). For now, all you need to know is that \texttt{glm} syntax is a lot like \texttt{lm} syntax, but we must also specify $\texttt{family = binomial()}$ for logistic regression. Our command will look like
+	\\ ~\
+	
+	\texttt{glm(y $\sim$ x, family = binomial(), data = dat)}
+\end{frame}
+
+\begin{frame}{Simple logistic regression: example}
+	\vspace{-0.5cm}
+	Let's fit our logistic regression model 
+	\begin{align*}
+		\log(\text{Odds}(\texttt{chd} \mid \texttt{arcus})) = \beta_0 + \beta_1 \texttt{arcus}
+	\end{align*}
+		\begin{center}
+	\includegraphics[width=0.6\textwidth]{./figs/simple_logistic_regression_arcus}
+\end{center}
+\end{frame}
+
+\begin{frame}{Logistic regression}
+	As you could infer by the fact that some estimates were negative, \texttt{R} has given us the raw regression coefficient estimates and intervals (log-odds scale). But as we've seen, the exponentiated versions are much more interpretable!
+	\begin{center}
+	\includegraphics[width=0.5\textwidth]{./figs/simple_logistic_regression_arcus_exponentiated}
+\end{center}
+	We can use \texttt{coef} to pull out coefficients, and then exponentiate (same for \texttt{confint}). 
+	\\ ~\ 
+	
+	Note: The p-values for the hypothesis tests can be used directly since a test of $H_0: \beta_1 = 0$ is the same as a test of $H_0: \exp(\beta_1) = 1$. More on this next!
+\end{frame}
+
+\begin{frame}{A note on confidence intervals and p-values}
+	\vspace{-0.7cm}
+	Here are our exponentiated confidence intervals:
+	
+	\begin{center}
+		\includegraphics[width=0.5\textwidth]{./figs/asymmetric_CI}
+	\end{center}
+	For the \texttt{arcus} predictor, we have a point estimate of 1.64 with 95\% CI (1.25, 2.12). It's a bit subtle, but this CI isn't actually symmetric about our point estimate!
+	\begin{center}
+		\includegraphics[width=0.5\textwidth]{./figs/asymmetric_CI_pic}
+	\end{center}
+\end{frame}
+
+\begin{frame}{A note on confidence intervals and p-values}
+	What's going on here? 
+	\\ ~\
+	
+	\texttt{glm} is working on the log-odds scale:
+	\begin{align*}
+		&\text{Confidence interval: }(\hat{\beta} - 1.96 \times \hat{\text{SE}}, \hat{\beta} + 1.96 \times \hat{\text{SE}})\\
+		&\text{Hypothesis test: }H_0: \beta = 0 \tab H_1: \beta \neq 0
+	\end{align*}
+	When you exponentiate to the odds scale, the interval is no longer symmetric and the hypotheses are different:
+	\begin{align*}
+		&\text{Confidence interval: }(e^{\hat{\beta} - 1.96 \times \hat{\text{SE}}}, e^{\hat{\beta} + 1.96 \times \hat{\text{SE}}})\\
+		&\text{Hypothesis test: }H_0: \exp(\beta) = 1 \tab H_1: \exp(\beta) \neq 1
+	\end{align*} 
+	The p-values are unaffected (if the log-odds scale CI doesn't overlap 0, then the odds scale CI won't overlap 1)
+\end{frame}
+
 \subsection{Multiple logistic regression}
 % interpretation: multiple/general, do the math
 %%% beta 0
@@ -723,31 +785,7 @@ In our running example:
 	\end{align*}
 \end{frame}
 
-\begin{frame}{\includegraphics[scale=0.01]{./figs/chilipepper} Terminology}
-	You will often seen logistic regression framed a bit differently than what we've seen so far. \pause
-	\\ ~\ 
-	
-	You may see
-	\begin{align*}
-		\text{logit}(P[Y = 1 \mid X]) = \beta_0 + \beta_1 X
-	\end{align*}
-where the logit function is defined as \pause
-\begin{align*}
-	\text{logit}(p) = \log\Big(\underbrace{\frac{p}{1-p}}_{\text{odds}}\Big)
-\end{align*}
-\pause
-Formally, the logit function is called a \textcolor{blue}{link} function, since it links our mean $E[Y \mid X] = P[Y = 1 \mid X]$ to our model $\beta_0 + \beta_1 X$. 
-\end{frame}
 
-\begin{frame}{Logistic regression: fitting the model in \texttt{R}}
-	The \texttt{lm} function won't do it for us anymore. Instead we use the \texttt{glm} function. 
-	\\ ~\ 
-	
-	GLM stands for ``generalized linear model" and represents a whole class of regression methods (more on that later!). For now, all you need to know is that \texttt{glm} syntax is a lot like \texttt{lm} syntax, but we must also specify $\texttt{family = binomial()}$ for logistic regression. Our command will look like
-	\\ ~\
-	
-	\texttt{glm(y $\sim$ x, family = binomial(), data = dat)}
-\end{frame}
 
 \begin{frame}{Logistic regression: \texttt{R} output}
 	\vspace{-1cm}
@@ -758,14 +796,9 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 
 \begin{frame}{Logistic regression: transforming \texttt{R} output}
 	\vspace{-0.7cm}
-	As you could infer by the fact that some estimates were negative, \texttt{R} has given us the raw regression coefficient estimates and intervals. But as we've seen, the exponentiated versions are much more interpretable!
-			\begin{center}
+	\begin{center}
 		\includegraphics[width=\textwidth]{./figs/multiple_logistic_regression_arcus_exp}
 	\end{center}
-	We can use \texttt{coef} to pull out coefficients, and then exponentiate (same for \texttt{confint}).
-	\\ ~\
-	
-	Note: The p-values for the hypothesis tests can be used directly since a test of $H_0: \beta_1 = 0$ is the same as a test of $H_0: \exp(\beta_1) = 1$. More on this in a few slides!
 \end{frame}
 
 \begin{frame}{Logistic regression: reporting results}
@@ -781,34 +814,20 @@ Formally, the logit function is called a \textcolor{blue}{link} function, since 
 	Based on logistic regression, we estimate that the odds of CHD are 1.28 times as high in subjects with \textit{arcus senilis} versus those without, comparing subjects of the same age, weight, systolic blood pressure, diastolic blood pressure, and cholesterol. The data would be consistent with a true odds ratio between 0.97 and 1.69. Based on a test of the null hypothesis of an odds ratio of 1, there is not sufficient evidence of an association between \textit{arcus senilis} and CHD (p = 0.08), after adjusting for age, weight, blood pressure, and cholesterol. 
 \end{frame}
 
-\begin{frame}{A note on confidence intervals and p-values}
-	\vspace{-0.7cm}
-	Suppose I fit the simple model $\log(\text{Odds}(\texttt{chd} \mid \texttt{arcus})) = \beta_0 + \beta_1 \texttt{arcus}$ and get the following \texttt{R} output, with exponentiated point estimates and intervals: 
+\begin{frame}{\includegraphics[scale=0.01]{./figs/chilipepper} Terminology}
+	You will often seen logistic regression framed a bit differently than what we've seen so far. \pause
+	\\ ~\ 
 	
-	\begin{center}
-	\includegraphics[width=0.5\textwidth]{./figs/asymmetric_CI}
-	\end{center}
-	For the \texttt{arcus} predictor, we have a point estimate of 1.64 with 95\% CI (1.25, 2.12). It's a bit subtle, but this CI isn't actually symmetric about our point estimate!
-		\begin{center}
-		\includegraphics[width=0.5\textwidth]{./figs/asymmetric_CI_pic}
-	\end{center}
-\end{frame}
-
-\begin{frame}{A note on confidence intervals and p-values}
-	What's going on here? 
-	\\ ~\
-	
-	\texttt{glm} is working on the log-odds scale:
+	You may see
 	\begin{align*}
-		&\text{Confidence interval: }(\hat{\beta} - 1.96 \times \hat{\text{SE}}, \hat{\beta} + 1.96 \times \hat{\text{SE}})\\
-		&\text{Hypothesis test: }H_0: \beta = 0 \tab H_1: \beta \neq 0
+		\text{logit}(P[Y = 1 \mid X]) = \beta_0 + \beta_1 X
 	\end{align*}
-	When you exponentiate to the odds scale, the interval is no longer symmetric and the hypotheses are different:
+	where the logit function is defined as \pause
 	\begin{align*}
-		&\text{Confidence interval: }(e^{\hat{\beta} - 1.96 \times \hat{\text{SE}}}, e^{\hat{\beta} + 1.96 \times \hat{\text{SE}}})\\
-		&\text{Hypothesis test: }H_0: \exp(\beta) = 1 \tab H_1: \exp(\beta) \neq 1
-	\end{align*} 
-	The p-values are unaffected (if the log-odds scale CI doesn't overlap 0, then the odds scale CI won't overlap 1)
+		\text{logit}(p) = \log\Big(\underbrace{\frac{p}{1-p}}_{\text{odds}}\Big)
+	\end{align*}
+	\pause
+	Formally, the logit function is called a \textcolor{blue}{link} function, since it links our mean $E[Y \mid X] = P[Y = 1 \mid X]$ to our model $\beta_0 + \beta_1 X$. 
 \end{frame}
 
 
