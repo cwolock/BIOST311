@@ -1,0 +1,232 @@
+---
+title: "Prediction in Linear Regression"
+subtitle: "BIOST 311, Discussion Section Week 6: Key"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r preliminaries, message = FALSE, results = "hide"}
+library(tidyverse)
+```
+
+# Introduction
+
+In this discussion section, we'll walk through a linear regression prediction problem. We will use a simulated dataset on Medical insurance cost, from https://www.kaggle.com/datasets/mirichoi0218/insurance, to try to predict individual medical costs billed by health insurance for individuals based on a variety of health-related and demographic variables. The dataset comes from the book Machine Learning with R by Brett Lantz, and it is simulated on the basis of demographic statistics from the US Census Bureau. The data does not represent real individuals, but should be roughly representative of real trends in the US.
+
+
+The dataset is called `insurance.csv`, and is available on the Canvas site on the Week 6 page, or on the course github site. The code is provided below to load the dataset direclty from github, but you may download it to your personal machine and load it in that way if you prefer.
+
+```{r}
+library(readr)
+# load dataset from github
+insurance <- read_csv(url("https://raw.githubusercontent.com/cwolock/BIOST311/main/Datasets/insurance.csv"))
+```
+
+Variables in the insurance dataset include:
+
+* age: Age of primary beneficiary
+
+* sex: Binarized sex of insurance beneficiary (male/female)
+
+* bmi: Body mass index (kg / m^2)
+
+* children: Number of children covered by health insurance / Number of dependents
+
+* smoker: Smoking status (yes/no)
+
+* region: The beneficiary's residential area in the US (northeast, southeast, southwest, northwest)
+
+* charges: Individual medical costs billed by health insurance
+
+# Exploratory data analysis
+
+1. Before we begin building models, it might be useful to do some exploratory analysis to determine which variables might be predictive of our outcome (`charges`). Make separate exploratory plots displaying the relationship between each of the variables in our dataset and our outcome, `charges`. Which variables seem like they may be predictive of individual medical costs, and which variables do not seem like they will be predictive of individual medical costs?
+
+```{r}
+# Age
+insurance %>%
+  ggplot(aes(age, charges)) +
+  geom_point() +
+  labs(x = "Age (years)", y = "Individual medical costs billed by health insurance (USD)", title = "Age vs. Costs")
+
+# Sex
+insurance %>%
+  ggplot(aes(sex, charges)) +
+  geom_boxplot() +
+  labs(x = "Sex", y = "Individual medical costs billed by health insurance (USD)", title = "Sex vs. Costs")
+
+# BMI
+insurance %>%
+  ggplot(aes(bmi, charges)) +
+  geom_point() +
+  labs(x = "BMI (kg/m^2)", y = "Individual medical costs billed by health insurance (USD)", title = "BMI vs. Costs")
+
+# Children
+insurance %>%
+  mutate(children = as.factor(children)) %>%
+  ggplot(aes(children, charges)) +
+  geom_boxplot() +
+  labs(x = "No. Children", y = "Individual medical costs billed by health insurance (USD)", title = "Number of children vs. Costs")
+
+# Smoker
+insurance %>%
+  ggplot(aes(smoker, charges)) +
+  geom_boxplot() +
+  labs(x = "Smoking status", y = "Individual medical costs billed by health insurance (USD)", title = "Smoking vs. Costs")
+
+# Region
+insurance %>%
+  ggplot(aes(region, charges)) +
+  geom_boxplot() +
+  labs(x = "Region", y = "Individual medical costs billed by health insurance (USD)", title = "Region vs. Costs")
+```
+
+\textcolor{blue}{Age, BMI, and smoking status appear to be associated with individual medical costs, suggesting those three variables may be predictive of our outcome. The remaining variables in our dataset do not appear particularly predictive of individual medical costs.}
+
+2. The age and bmi plots should have looked a bit odd to you. Try coloring the points in your scatterplots to see if there are other variables at play in the relationships between age and medical costs, and bmi and medical costs. Which variable seems to involved in these relationships? Based on your plots, do you think that including interaction terms between these pairs of variables may give you better predictions?
+
+```{r}
+# Age
+insurance %>%
+  ggplot(aes(age, charges, col = smoker)) +
+  geom_point() +
+  labs(x = "Age (years)", y = "Individual medical costs billed by health insurance (USD)", title = "Age vs. Costs by smoking status")
+
+# BMI
+insurance %>%
+  ggplot(aes(bmi, charges, col = smoker)) +
+  geom_point() +
+  labs(x = "BMI (kg/m^2)", y = "Individual medical costs billed by health insurance (USD)", title = "BMI vs. Costs by smoking status")
+```
+
+\textcolor{blue}{Smoking status seems to influence the relationship between age and medical costs, as well as the relationship between bmi and medical costs. For the relationship between age and medical costs. However, the slope denoting the relationship between age and medical costs does not seem to be different for those who smoke and those who do not smoke. For the relationship between bmi and medical costs, the slope denoting the relationship between bmi and medical costs does seem different for those who smoke and those who do not smoke. Based on these plots, it is possible that including an interaction term between smoking and bmi may aid predictions, but it is unlikely that an interaction term between smoking and age would aid predictions.}
+
+3. Based on your answers to questions 1 and 2, what prediction model do you think may be good to start with, in terms of best predicting our outcome?
+
+\textcolor{blue}{As sex, number of children, and region do not appear predictive of of medical costs, we may not want to include them in our prediction model. We would want to include age, bmi, and smoking status. We would also want to include an interaction term between bmi and smoking status to capture the difference in association between bmi and medical costs by smoking status. Therefore our final model would look something like $E[\text{charges} \mid \text{age, bmi, smoker}] = \beta_0 + \beta_1 \text{age} + \beta_2 \text{bmi} + \beta_3\text{smoker} + \beta_4\text{bmi:smoker}$.}
+
+# First prediction model
+
+1. Create a training and testing dataset based on a 70/30 training/testing split, and obtain predictions for a model using `age`, `bmi`, and `smoker` as predictors (no interaction terms yet). Report the Adjusted $R^2$ value from fitting your model to the training data, and the MSE calculated from making predictions on the testing data. 
+
+Set the seed to 1234 before splitting your data so that your results are replicable (use the code `set.seed(1234)` to do this). Using the code from lecture slides, you may find that you don't sample quite enough people due to rounding down. To fix this, try putting the `round()` function around your code for `0.7*nrow(df)` and `0.3*nrow(df)`.
+
+```{r}
+set.seed(1234)
+values <- c(rep(0, round(0.7*nrow(insurance))),
+            rep(1, round(0.3*nrow(insurance))))
+insurance <- insurance %>% mutate(test = sample(values))
+test_df <- insurance %>%
+  mutate(test_indicator = test) %>%
+  filter(test_indicator == 1)
+train_df <- insurance %>%
+  mutate(test_indicator = test) %>%
+  filter(test_indicator == 0)
+
+mod <- lm(data = train_df, charges ~ age + bmi + smoker)
+summary(mod)
+
+predictions <- predict(mod, newdata = test_df)
+observations <- test_df %>% pull(charges)
+mse <- mean((predictions - observations)^2)
+mse
+```
+
+\textcolor{blue}{Adjusted $R^2$ is 0.74. MSE is 34497215}
+
+2. Make a scatterplot comparing predictions to observed values from your testing dataset. Based on this plot, do you think your predictive model is terrible, okay, or great?
+
+```{r}
+data.frame(predictions = predictions,
+           observations = observations) %>%
+  ggplot(aes(observations, predictions)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, col = "red") +
+  coord_fixed()
+```
+
+\textcolor{blue}{The predictive model seems to be doing relatively well for individuals with lower observed values, but seems to be off by a constant for individuals with higher observed values (higher than 10,000, approximately). I think the predictive model is okay, but could be better.}
+
+3. Using the same training and testing dataset, obtain predictions for a model using `age`, `bmi`, and `smoker` as predictors, *including* an interaction term between `bmi` and `smoker`. Report the Adjusted $R^2$ value from fitting your model to the training data, and the MSE calculated from making predictions on the testing data. Compare your results to those from the model fit in Question 1, and determine based on these measures of prediction accuracy which model is better at predicting medical costs.
+
+```{r}
+mod2 <- lm(data = train_df, charges ~ age + bmi + smoker + bmi:smoker)
+summary(mod2)
+
+predictions <- predict(mod2, newdata = test_df)
+observations <- test_df %>% pull(charges)
+mse <- mean((predictions - observations)^2)
+mse
+```
+
+\textcolor{blue}{Adjusted $R^2$ is 0.84. MSE is 24517558. As the Adjusted $R^2$ is higher and the MSE is lower for this model than the one fit in Question 1, our measures of prediction suggest the model including the interaction term is better at predicting our outcome.}
+
+4. Make a scatterplot comparing predictions to observed values from your testing dataset. Based on this plot, do you think your predictive model is terrible, okay, or great? Do you think your predictive model is better than the one fit in Question 1, comparing only the diagnostic plots (not measures of prediction accuracy)?
+
+```{r}
+data.frame(predictions = predictions,
+           observations = observations) %>%
+  ggplot(aes(observations, predictions)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, col = "red") +
+  coord_fixed()
+```
+
+\textcolor{blue}{The predictive model seems to be doing very well for individuals with lower observed values, but seems to be relatively off for individuals with higher observed values (higher than 10,000, approximately). However, this model does seem to be better than the model fit in Question 1, as the points fall closer to the 0,1 line in this plot than the plot in Question 2. I think the predictive model is okay, but could be better still for indviduals with higher observed values.}
+
+5. Using *whatever variables you want*, try to find the model with the lowest MSE on the test dataset using the variables available to you. Your model can include transformations of variables, interactions, categorical version of continuous variables, etc., but must still be a multiple linear regression model (no fancy machine learning, if you know how to do it). Report the MSE on the testing dataset for your best predictive model, and make a plot comparing observed to predicted values for your best predictive model.
+
+```{r}
+# create binary children variable
+train_df <- train_df %>%
+  mutate(children_bin = ifelse(children > 0, 1, 0))
+test_df <- test_df %>%
+  mutate(children_bin = ifelse(children > 0, 1, 0))
+
+# create categorical BMI variable
+train_df <- train_df %>%
+  mutate(bmi_cat = ifelse(bmi < 18.5, "underweight", 
+                          ifelse(bmi < 25, "normal",
+                                 ifelse(bmi < 30, "overweight", "obese"))))
+
+test_df <- test_df %>%
+  mutate(bmi_cat = ifelse(bmi < 18.5, "underweight", 
+                          ifelse(bmi < 25, "normal",
+                                 ifelse(bmi < 30, "overweight", "obese"))))
+
+mod_best <- lm(data = train_df, charges ~ age + bmi_cat + smoker + bmi:smoker + region + sex + children_bin + I(age^2) + I(bmi^2) + smoker:children  + sex:children_bin)
+summary(mod_best)
+
+predictions <- predict(mod_best, newdata = test_df)
+observations <- test_df %>% pull(charges)
+mse <- mean((predictions - observations)^2)
+mse
+```
+
+\textcolor{blue}{My best prediction model had an adjuted $R^2$ of 0.85, and an MSE of 21951040.}
+
+```{r}
+data.frame(predictions = predictions,
+           observations = observations) %>%
+  ggplot(aes(observations, predictions)) +
+  geom_point() +
+  geom_abline(slope = 1, intercept = 0, col = "red") +
+  coord_fixed()
+```
+
+
+
+

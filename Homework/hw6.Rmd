@@ -1,0 +1,79 @@
+---
+title: "Homework 6"
+subtitle: "BIOST 311"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(formatR)
+
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(results = "hide")
+```
+
+
+## Instructions
+
+This assignment should be submitted on Canvas as a .pdf by 12:30pm on Friday, May 13th. You are welcome to work together on the homework; however, final solutions should be written up individually. 
+
+Unedited software output in the body of your assignment is not acceptable. Please round numerical values to 2--3 significant digits, and include your R code (if applicable) in the same document. See the "How to Write a Proper Homework" document on Canvas for additional guidelines.  
+
+Each homework assignment is worth 20 points total. Problems are graded for correctness, according to the number of points given in the problem statement. 
+
+## 1. Summarizing binary variables
+
+For this question, we will be using the `wcgs` dataset to explore ways to summarize binary variables. Recall that in this study, they were interesting in knowing whether Type A behavior is associated with coronary heart disease. In this problem, we will compute various statistics that can help us answer this scientific question.
+
+a. Load the `wcgs` dataset (0 points)
+
+b. Provide relevant descriptive statistics for our outcome variable, `chd` (1 point).
+
+c. Provide relevant descriptive statistics for our predictor of interest, `tabp` (1 point).
+
+d. Report the proportion of people who have coronary heart disease among those with Type A behavior, and the proportion of people who have coronary heart disease among those without Type A behavior. Your answer should be in complete sentences, not only reporting numbers (1 point). 
+
+e. Report and interpret the risk difference of coronary heart disease between those with Type A behavior and those without. If the risk of coronary heart disease between those with Type A behavior and those without was the same, what would you expect the risk difference to be? (1 point)
+
+f. Report and interpret the relative risk of coronary heart disease between those with Type A behavior and those without. If the risk of coronary heart disease between those with Type A behavior and those without was the same, what would you expect the relative risk to be? (1 point)
+
+g. Report the odds of having coronary heart disease among those with Type A behavior, and the odds of having coronary heart disease among those without Type A behavior. Your answer should be in complete sentences, not only reporting numbers. (1 point)
+
+h. Report and interpret the ratio of odds of coronary heart disease, comparing people with and without a Type A behavior. If the odds of coronary heart disease between those with Type A behavior and those without was the same, what would you expect the odds ratio to be? (1 point)
+
+## 2. Linear regression with binary outcomes
+
+a. Recall that in this study, they were interested in knowing whether Type A behavior is associated with coronary heart disease. Translate this scientific question into a statistical question that can be answered using simple *linear* regression. (1 point)
+
+b. Perform a linear regression analysis to answer the statistical question from part (a). Be sure to include a statistic with appropriate uncertainty quantification, as well as a hypothesis test. Be sure to state the null and alternative hypotheses. You should interpret your results; don’t just give numerical output. (2 points)
+
+c. Compare your estimate from part (b) to the risk difference you estimated in Question 1 part (e). What do you notice? (1 point)
+
+## 3. Simple logistic regression
+
+a. Recall that in this study, they were interested in knowing whether Type A behavior is associated with coronary heart disease. Translate this scientific question into a statistical question that can be answered using simple *logistic* regression. (1 point)
+
+b. Perform a logistic regression analysis to answer the statistical question from part (a). Be sure to include a statistic with appropriate uncertainty quantification, as well as a hypothesis test. Be sure to state the null and alternative hypotheses. You should interpret your results; don’t just give numerical output. (2 points)
+
+c. Compare your estimate from part (b) to the odds ratio you estimated in Question 1 part (h). What do you notice? (1 point)
+
+## 4. Linear and logistic regression with a binary outcome and a quantitative predictor
+
+a. Suppose that we are interested in the association between coronary heart disease and blood pressure, measured in mmHg (millimeters of Mercury). Studies have shown that a greater risk of stroke and heart disease are related to higher systolic pressure changes compared with higher diastolic pressure changes. As such, we are particularly interested in the association between coronary heart disease and *systolic* blood pressure (`sbp` in our dataset). Translate this scientific question into *two* statistical questions: one that can be answered using simple *linear* regression, and one that can be answered using simple *logistic* regression. (1 point)
+
+b. Perform a linear regression analysis to answer one of your statistical questions from part (a). Be sure to include a statistic with appropriate uncertainty quantification, as well as a hypothesis test. Be sure to state the null and alternative hypotheses. You should interpret your results; don’t just give numerical output. (2 points)
+
+c. Perform a logistic regression analysis to answer your other statistical question from part (a). Be sure to include a statistic with appropriate uncertainty quantification, as well as a hypothesis test. Be sure to state the null and alternative hypotheses. You should interpret your results; don’t just give numerical output. (2 points)
+
