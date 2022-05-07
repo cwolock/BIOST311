@@ -1,0 +1,157 @@
+---
+title: 'Data Analysis Project, Report'
+subtitle: "BIOST 311: Regression Methods in the Health Sciences"
+author: "Taylor Okonek and Charlie Wolock"
+date: "Spring Quarter 2022; Submit on Canvas by 20 May 2022 (Draft) and 8 June 2022 (Final)"
+output: pdf_document
+---
+
+# Instructions
+
+A report detailing your conclusions is an integral part of any statistical analysis. You must be able to describe your conclusions, along with the methods that you used to address your questions, to your collaborators.
+
+This assignment is limited to **ten pages (including tables and figures)**, and your written text should use at least 12-point font. See the guidelines below for a list of components that need to be included.
+
+Submit your *First Draft* on Canvas by 11:59pm on May 20, and your *Final Report* by 11:59pm on June 8. **Do not discuss your project with other students or post questions about your project on the Canvas discussion board.** But, feel free to ask us any questions in person/via Canvas instead!
+ 
+This assignment is graded. The *First Draft* is worth 5% of your course grade, is graded on effort/completion, and is not binding: you are welcome (and encouraged!) to incorporate any of our feedback into your final report. You will also do a peer review (more details to come) and may make changes based on comments from your peer reviewer. The *Final Report* is worth 10% of your course grade.
+
+# Rubric:
+
+## Formatting (3 points)
+
+To receive full credit for this portion of the assignment, you should...
+
+- use 12 point font
+- write no more than ten pages (including your tables and figures)
+- write in full sentences and paragraphs
+
+You will lose points for...
+
+- including raw R code or output
+
+## Title (1 points)
+
+*Make up a title for your proposed study!*
+
+To receive full credit for this portion of the assignment, your title should...
+
+- be interesting and informative (e.g., allude to your scientific goal)
+- not contain any abbreviations
+
+## Background and Introduction (3 points)
+
+*Provide a brief description of your study to give perspective into the importance of the problem and the situation under study. In particular, why were the data collected?*
+
+To receive full credit for this portion of the assignment, your background/introduction should include...
+
+- 1-2 paragraphs of scientific background
+    - Set the stage for why this is an interesting overall scientific question to study
+    - Why is this an important/relevant outcome to look at?
+    - Why is this an important/relevant predictor/exposure to look at?
+    - What other variables might be related to your outcome and/or predictor?
+- (Brief, 1 paragraph) description of study/data
+    - Who (is being studied)? 
+    - Where (was the study conducted/are your subjects from)? 
+    - When (was the data collected)?
+    - Where did you get your data (provide enough detail that someone else could go out and find it)
+
+NOTE: You can re-use what you wrote for your *Statistical Analysis Plan,* but make sure to address any of the comments we gave you, and you may need to add additional detail to address the criteria above
+
+## Scientific Questions (4 points)
+
+*In this section, you should lay out the scientific agenda of your analysis. In particular, you should state both the overall scientific goal and the specific scientific objectives.*
+
+To receive full credit for this portion of the assignment, you should include...
+
+- your overall scientific goal
+- at least two specific scientific questions
+
+NOTE: You can re-use what you wrote for your *Statistical Analysis Plan,* but make sure to address any of the comments we gave you.
+
+## Statistical Questions (4 points)
+
+*Connect the scientific questions listed above with statistical questions that you can test using your statistical tools. Make sure to list all variables that you will use in each analysis.*
+
+To receive full credit for this portion of the assignment, you should take each of your (2+) specific scientific questions and re-phrase them as "statistical questions" here. In particular, your statistical questions should be more precise versions of your scientific questions, which specify:
+
+- what is the outcome variable
+- what is the predictor of interest
+- what other variables will you adjust for
+- how are you defining association (e.g., difference in means via linear regression, ratio of odds via logisitic regression)
+
+NOTE: You can re-use what you wrote for your *Statistical Analysis Plan,* but make sure to address any of the comments we gave you.
+
+## Methods (15 points)
+
+### Study Design (4 points)
+
+*How were the data collected? How many subjects are in the study? Include all necessary information for interpreting your analysis.*
+
+To receive full credit for this portion of the assignment, you should include...
+
+- who is being studied
+- how many participants are in the study (i.e., sample size)
+- what type of study is this (observational vs experimental; if observational, what type)
+- where was this study conducted, where are the subjects from
+- when was this study conducted
+- how were data collected
+
+NOTE: You can re-use what you wrote for your *Statistical Analysis Plan,* but make sure to address any of the comments we gave you.
+
+### Statistical Methods (9 points)
+
+*Describe the inferential analyses you will run (e.g., linear regression, logisitic regression), along with the estimates (e.g., which coefficients) and any other relevant values (e.g., confidence intervals) that you will interpret and report.*
+
+To receive full credit for this portion of the assignment, you should include...
+
+- a description of the model you will use to address each of your statistical questions
+- for each model: what type of regression, what is your outcome, what is your predictor of interest, what variables are you adjusting for
+- what numbers will you report/interpret; if this includes a p-value, what are your null and alternative hypotheses and what p-value threshold will you use for calling something "statistically significant"
+
+NOTE: You can re-use what you wrote for your *Statistical Analysis Plan,* but make sure to address any of the comments we gave you.
+
+### R code and data (2 points)
+
+*Upload your \texttt{R} code in a separate file.*
+
+To receive full credit for this portion of the assignment, you should include...
+
+- a \texttt{.R} or \texttt{.Rmd} file with the code you used to complete your analyses
+
+NOTE: This should **not** be a section in your report, but to receive full points you must upload the code to Canvas along with your report.
+
+## Results (15 points)
+
+### Descriptive analyses (5 points)
+
+*Actually run the descriptive analyses that you proposed in your Statistical Analysis Plan, and report the results in tables or figures, as appropriate.*
+
+To receive full credit for this portion of the assignment, you should include...
+
+- a table with summary statistics that describes your study population; the table should have:
+    - an informative caption
+    - meaningful row and column names
+    - units
+- an interpretation of interesting or informative differences between groups
+
+### Inferential analyses (10 points)
+
+*Report and interpret the point estimates, confidence intervals, and p-values corresponding to each scientific question that you address.*
+
+To receive full credit for this portion of the assignment, you should include...
+
+- a full paragraph interpretation of results for each regression analysis, tied to each statistical question, including:
+    - reporting and interpretation of the estimate, confidence interval, and p-value
+    - a conclusion tying these results back to the statistical question
+
+## Discussion (5 points)
+
+*Discuss what the statistical results you presented in the previous section mean in terms of the scientific questions that you posed at the beginning of the report.*
+
+To receive full credit for this portion of the assignment, you should include...
+
+- a 1--2 paragraph summary of the results of your analyses, in the context of your overall scientific goal (do not simply repeat your paragraphs from the *Results* section)
+- a discussion of the limitations of your data or analysis, e.g., 
+    - are there potential confounding variables that were missing from the data?
+- a discussion of the following questions: Are you surprised by what you found? How do your results fit in with the larger scientific literature (do not do a full literature review, but interpret your results in the context of your understanding of the problem)?
