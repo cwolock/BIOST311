@@ -1156,7 +1156,8 @@ Assume that the subgroups are defined so that subgroup 1 has some exposure that 
 
 \begin{frame}
 \frametitle{Cox proportional hazards regression}
-In practice, we have more than two subgroups. In fact, our predictor might be continuous, so defining subgroups isn't straightforward.
+TAYLOR: I know the title says it, but we should maybe mention somewhere on a slide that what we're getting to is cox proportional hazards regression
+In practice, we often have more than two subgroups. In fact, our predictor might be continuous, so defining subgroups isn't straightforward.
 \\ ~\ 
 
 Denoting the hazard function of $T$ given a single predictor of interest $X$ at time $t$ by $h(t \mid X)$, the \textbf{simple proportional hazards model} is:
@@ -1168,7 +1169,7 @@ for each $t$, where $h_0$ is an \textcolor{blue}{unspecified\textsuperscript{*}}
 
 How does this relate to the hazard ratio. We'll see!
 \vfill
-\small{\textsuperscript{*}What does this mean? It turns out that to estimate the $\beta$ parameter of this model, we don't ever have to deal with $h_0$.}
+\small{\textsuperscript{*}What does this mean? It turns out that to estimate the $\beta_1$ parameter of this model, we don't ever have to deal with $h_0$.}
 \end{frame}
 
 \begin{frame}
@@ -1183,7 +1184,7 @@ Since a survival distribution is completely determined by its hazard function, t
 \item a \textcolor{blue}{coefficient of interest} $\beta_1$: this is how we relate $X$ to the hazard
 \item a \textcolor{blue}{baseline hazard function} $h_0$ (often not of interest): doesn't involve $X$ at all
 \end{itemize}
-Without further assumptions, this is called a \textbf{semiparametric model}.
+Without further assumptions, this is called a \textbf{semiparametric model}. TAYLOR: Maybe just briefly mention what this means? Feels weird to just throw the word in without explaining it
 \end{frame}
 
 \begin{frame}
@@ -1211,7 +1212,7 @@ We could also say it's the  \textbf{ratio of the instantaneous risk of the event
 
 	The syntax for Cox proportional hazards regression in \texttt{R} is similar to fitting a linear model or GLM, except
 	\begin{enumerate}
-		\item We use the function \texttt{coxph}
+		\item We use the function \texttt{coxph} in the \texttt{survival} package in \texttt{R}
 		\item Our outcome is a \texttt{Surv} object
 	\end{enumerate}
 	\begin{center}
@@ -1263,7 +1264,7 @@ Always keep in mind that hazard = ``instantaneous risk of an event." The term ``
 	When adjusting for \textcolor{green}{precision variables}, as in logistic regression, we don't necessarily reduce our standard errors, so whether to include them or not depends on our scientific question. 
 	\\ ~\ 
 	
-	Finally, as in logistic regression, \textcolor{blue}{effect modification} is assessed using an interaction term that is interpreted as a ratio of ratios.
+	Finally, as in linear and logistic regression, \textcolor{blue}{effect modification} is assessed using an interaction term that is interpreted as a ratio of ratios.
 \end{frame}
 
 \begin{frame}{Multiple Cox regression: example}
@@ -1342,7 +1343,7 @@ The model posits that
 in other words, that \textit{for each $t$}, the hazard ratio is the same (and is $e^{\beta}$).
 \\ ~\ 
 
-This assumption is violated, for example, if the survival curves cross!
+This assumption is violated, for example, if the survival curves cross! TAYLOR: Maybe just include a picture here where survival curves cross so they can see what it looks like
 \end{frame}
 
 \begin{frame}{Cox proportional hazards regression: assumptions}
@@ -1355,7 +1356,7 @@ This assumption is violated, for example, if the survival curves cross!
 		\item Over time, immunity wanes, and reinfection becomes more likely. 
 	\end{itemize}
 
-	There are ways to assess proportional hazards using generalizations of the residual-vs.-fitted plots we saw in Chapter 1, although we won't get into them. For this course, just be aware of how strong this assumption may.
+	There are ways to assess proportional hazards using generalizations of the residual-vs.-fitted plots we saw in Chapter 1, although we won't get into them. For this course, just be aware of how strong this assumption may be.
 \end{frame}
 
 
