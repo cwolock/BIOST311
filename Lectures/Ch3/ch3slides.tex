@@ -72,7 +72,7 @@
 \begin{frame}{Quantitative and binary outcomes}
 Up to this point, we have focused on questions involving \textcolor{blue}{quantitative} or \textcolor{red}{binary} outcomes: 
 \begin{itemize}
-\item Is lung function (\textcolor{blue}{FEV}) associated with smoking?
+\item Is lung function (\textcolor{blue}{FEV}) associated with smoking? TAYLOR: maybe remove this bullet point cause we didn't actually do this one really
 \item Is \textcolor{blue}{birthweight} associated with participation in First Steps?
 \item Is \textcolor{red}{coronary heart disease} associated with Type A personality? 
 \end{itemize}
@@ -177,7 +177,7 @@ placebo & \textcolor{red}{21.00+} &  \textcolor{red}{3.94+} &  \textcolor{red}{7
 \end{tabular}
 }
 \vspace{0.2cm}
-
+TAYLOR: Isn't treating them as missing essentially the same as throwing them out?
 Should we treat these incompletely observed times as missing data? Should we throw them out? \pause \textcolor{red}{Either of these is a bad idea!}\pause
 
 \begin{itemize}
@@ -228,12 +228,16 @@ Distribution of times in participants who become censored or uncensored, and the
 \frametitle{Survival analysis}
 \textbf{Survival analysis} is the branch of statistics concerned with the analysis of \textbf{time-to-event data}.
 
+\vspace{0.3cm}
+
 Often, the goals of a survival analysis are to:
 \begin{itemize}
 \item describe the distribution of a time-to-event variable
 \item compare the time-to-event distribution in different subpopulations
 \item investigate the relationship between explanatory variables and the time-to-event distribution
 \end{itemize}
+
+\vspace{0.3cm}
 
 Even when our time-to-event data do not truly mean survival (e.g., time to first severe panic attack), we still use the term ``survival." 
 \end{frame}
@@ -347,6 +351,7 @@ A few observations:
 
 \begin{frame}
 \frametitle{Fraction-at-risk}
+TAYLOR: Haven't explained what simulation parameters are prior to this slide
 We can plot the fraction-at-risk over time. It won't be a smooth curve, but we can compare it to the expected fraction-at-risk (which we calculate from our simulation parameters).
 \begin{center}
 \includegraphics[height=0.8\textheight]{figs/risk_set.png}
@@ -419,7 +424,7 @@ h(t) := & \ \lim_{\Delta t \to 0} \frac{P(t \leq T < t + \Delta t \mid T \geq t)
 \begin{itemize}
 \item \textcolor{blue}{$h(t) = $ instantaneous event rate at $t$}\pause 
 \item $h(t)\Delta t$ approximates the probability that $T$ is in the interval $[t, t + \Delta t)$ given $T \geq t$\pause 
-\item In our panic attack example, $h(t)$ refers to the incidence rate of panic attacks at time $t$ after randomization \pause 
+\item In our panic attack example, $h(t)$ refers to the incidence rate of panic attacks at time $t$ after randomization \pause TAYLOR: Maybe have a reminder of what incidence rate is? Might be useful to have a slide reminding them about prevalence vs. incidence as well
 \end{itemize}
 
 The \textbf{cumulative hazard function} $H$ is given by $H(t) := \int_0^t h(u) du$.
@@ -430,7 +435,8 @@ The \textbf{cumulative hazard function} $H$ is given by $H(t) := \int_0^t h(u) d
 \end{frame}
 
 \begin{frame}
-\frametitle{The hazard function}
+\frametitle{The hazard function} 
+TAYLOR: what is the intention behind having this slide here?
 \centering
 \includegraphics[height=0.4\textheight]{figs/hazard_function.png}
 
@@ -462,6 +468,7 @@ What shape do we expect the hazard function to have? \textcolor{red}{It depends.
 
 \underline{\,\phantom{right}\,} \hspace{1.5cm} \underline{\,\phantom{right}\,} \hspace{1.5cm} \underline{\,\phantom{right}\,} \hspace{1.5cm} \underline{\,\phantom{right}\,}
 \end{center}
+TAYLOR: Maybe have an answer slide here also, so they can look back at the notes later
 \end{frame}
 
 \section{Kaplan-Meier and the log rank test}
@@ -495,6 +502,7 @@ If we observed actual survival times $T_1, T_2, \dots, T_n$, we could take
 \frac{1}{n}\sum_{i=1}^n I(T_i \geq t)
 \end{align*}
 as an estimator of $S(t)$ (in other words, just count how many people made it past time $t$ without an event). This is a \textbf{nonparametric} estimator; we do not have to postulate a parametric model for the true survival distribution.
+TAYLOR: Maybe an example of what it means for something to be parametric, like just even noting that regression coefficients are parameters that we estimate in linear and logistic regression
 \\ ~\ 
 
 Can we use this estimator in practice? \pause \textcolor{red}{No, since we do not see $T_i$ for participants who are censored!}
@@ -515,14 +523,14 @@ Can we use this estimator in practice? \pause \textcolor{red}{No, since we do no
 \frametitle{Nonparametric estimation of a survival function}
 \vspace{-0.8cm}
 Denote by $u_1 < u_2 < \dots < u_m$ the observed ordered, distinct times. (\textbf{Question}: When is $m$ equal to $n$, the sample size? \pause \textbf{Answer}: When all the times are unique (no ties).)\pause 
-\\ ~\ 
+\\ ~\ TAYLOR: times of what? Do you mean censoring/observation times in your data?
 
 Also, denote: 
 \begin{align*}
 d_k = & \ \text{\# of events having occurred at time $u_k$} \\
 n_k = & \ \text{\# of individuals \textbf{at risk} at time $u_k$}
 \end{align*}
-Suppose the data are $\{4, 5, 5+, 8, 12+, 13, 18+, 23, 23, 30\}$.\pause
+Suppose the data are $\{4, 5, 5+, 8, 12+, 13, 18+, 23, 23, 30\}$.\pause TAYLOR: Maybe include a column for $k$, I would find this easier later on when looking at the table and calculating probabilities if there was a k column
 
 \begin{center}
 \begin{tabular}{|c|c|c|}
@@ -552,6 +560,7 @@ time $u_k$ & $d_k$ & $n_k$ \\
 	\begin{align*}
 		P(A, B) = P(A \mid B)P(B).
 	\end{align*}
+	TAYLOR: I have a venn diagram graphic that might make this more intuitive for people, if I end up being the one going over these slides I could draw it myself, otherwise I can make some example in powerpoint. Might be helpful to include idk
 \end{frame}
 
 \begin{frame}
@@ -585,7 +594,7 @@ What is a sensible estimate of $P(T > u_1)$?
 		How many people made it to \textbf{at least} $u_1$ without an event? \pause \textcolor{blue}{10/10}
 		\\ ~\ 
 		
-		Among those who make it to at least $u_1$ without an event, how many experienced an event \textbf{after} $u_1$? \pause \textcolor{blue}{9/10}
+		Among those who make it to at least $u_1$ without an event, how many experienced an event \textbf{after} $u_1$? \pause \textcolor{blue}{9/10} 
 	\end{column}
 \end{columns}
 \vspace{0.5cm}
@@ -685,7 +694,7 @@ A few observations:
 \item $\widehat{S}(t) = 1$ for each $t$ preceding the first event time $u_1$ \pause
 \item $\widehat{S}$ is a non-increasing function. Why? \pause
 \item $\widehat{S}$ drops to zero at the largest time $u_m$ only if the last observed time is an event (not censoring) \pause
-\item the KM estimator only jumps at observed event times \pause
+\item the KM estimator only jumps at observed event times \pause TAYLOR: Maybe explain what you mean by jumping
 \item the KM estimator relies on \textbf{independent censoring} but does not require postulating a parametric family, and is thus \textbf{nonparametric}
 \end{itemize}
 \end{frame}
@@ -730,13 +739,14 @@ time $u_k$ & $d_k$ & $n_k$ & $d_k/n_k$ & $1 - d_k/n_k$ & $\widehat{S}(u_k)$ \\
 \begin{itemize}
 	\item Redistribute weight at each censoring time
 	\item Add up remaining weights at each observed event time
+	TAYLOR: Maybe explain a few steps in the process of filling in this table? I can never keep track of shit with this method of filling things in
 \end{itemize}
 		\begin{footnotesize}
 		\begin{tabular}{|c|c|c|c|c|}
 			\hline
 				$u_k$ & $d_k$ & $n_k$ & Weight per obs. & Remaining weight = $\widehat{S}(u_k)$ \\
 			\hline
-			4 & 1 & 10 & $\frac{1}{10} = 0.1$ & $9\cdot 0.1= 0.9$\\
+			4 & 1 & 10 & $\frac{1}{10} = 0.1$ & $9\times 0.1= 0.9$\\
 			5 & 1 & 9 & $0.1$ &  $8\times 0.1= 0.8$  \\
 			8 & 1 & 7 & $0.1 + (0.1\times \frac{1}{7}) = 0.1143$ & $7 \times 0.1143 = 0.6857$\\
 			12 & 0 & 6 & $0.1143 +  (0.1143\times\frac{1}{5}) = 0.1371$ &  0.6857\\
@@ -779,6 +789,7 @@ time $u_k$ & $d_k$ & $n_k$ & $\widehat{S}(u_k)$ & $\widehat{SE}(t)$ & CI lower &
 30 & 1 & 1 & 0 & & & \\
 \hline
 \end{tabular}
+TAYLOR: Do you want to include some comment about the intervals that go outside of 0 and 1 here, just like about being cautious when interpreting them or something?
 \end{frame}
 
 \begin{frame}{\texttt{mayo} dataset}
@@ -968,7 +979,7 @@ At any observed failure time $t$, we can construct a $2 \times 2$ table:\vspace{
 	\end{tabular}
 \end{center}\vspace{-0.2cm}
 
-If $H_0$ is true, then we expect that the rows and columns are independent. That means we can compute \textcolor{blue}{expected count} of deaths and compare to the observed counts.
+If $H_0$ is true, then we expect that the rows and columns are independent. That means we can compute the \textcolor{blue}{expected counts} of deaths and compare to the observed counts. TAYLOR: I don't think it's clear why you expect rows and columns to be independent based on our null hypothesis. I also don't think it's clear why you're comparing expecteds to observeds to see if the survival curves in each group are equal
 \end{frame}
 
 \begin{frame}
