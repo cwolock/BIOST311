@@ -785,19 +785,63 @@ time $u_k$ & $d_k$ & $n_k$ & $\widehat{S}(u_k)$ & $\widehat{SE}(t)$ & CI lower &
 	Let's dig into some real data!
 	\\ ~\ 
 	
-	The \texttt{mayo} dataset comes from a \textcolor{blue}{randomized controlled trial} of 
+	The \texttt{mayo} dataset comes from a \textcolor{blue}{randomized controlled trial} of d-penicillamine for treatment of primary biliary cirrhosis (PBC). PBC is a liver disease that affects the bile ducts, and can eventually lead to severe liver damage, called cirrhosis. There's some evidence that PBC has an autoimmune component, and d-penicillamine was considered due to its possible effect on autoimmune processes. 
+	\\ ~\ 
+	
+	In this trial, 311 patients were randomized to receive either treatment or placebo. Baseline health information was collected (mostly about baseline liver function), and patients were followed until death or censoring (due to either administrative censoring or dropout). 
+\end{frame}
+
+\begin{frame}{\texttt{mayo} dataset}
+	A subset of relevant variables in this dataset:
+	\begin{itemize}
+		\item \texttt{obstime}: Time from randomization until death or last follow-up
+		\item \texttt{status}: Indicator variable of whether death was observed
+		\item \texttt{treatment}: Indicator of treatment group
+		\item \texttt{age}: Age at baseline (years)
+		\item \texttt{sex}: Binarized sex (1 = female, 0 = male)
+		\item \texttt{edema}: Indicator of edema (swelling in legs indicative of decreased liver function)
+		\item \texttt{stage}: Disease stage at baseline (1-4 in increasing order of severity)
+		\item \texttt{bili}: level of bilirubin in blood, indicator of liver function (higher is worse) 
+	\end{itemize}
+	We'll leave the descriptives to you!
+\end{frame}
+
+\begin{frame}{Nonparametric estimation of a survival function}
+	Let's start by taking a look at the Kaplan-Meier survival curves in the two treatment arms. Most of the survival analysis functions we'll use in Chapter 3 involve the \texttt{survival} and \texttt{survminer} packages. 
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{figs/KM_unstrat_code.png}
+	\end{center}
 \end{frame}
 
 \begin{frame}
-\frametitle{Nonparametric estimation of a survival function}
-\centering
-\includegraphics[height=0.95\textheight]{figs/inflamm_km.png}
+\frametitle{Nonparametric estimation of a survival function} 
+\begin{center}
+\includegraphics[width=\textwidth]{figs/KM_unstrat.png}
+\end{center}
 \end{frame}
 
 \begin{frame}
-\frametitle{Nonparametric estimation of a survival function}
-\centering
-\includegraphics[height=0.95\textheight]{figs/inflamm_km_cis.png}
+	\frametitle{Nonparametric estimation of a survival function} 
+	We stratify by treatment group using the formula syntax in \texttt{survfit}:
+	\begin{center}
+		\includegraphics[width=\textwidth]{figs/KM_strat_code.png}
+	\end{center}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Nonparametric estimation of a survival function} 
+	\begin{center}
+		\includegraphics[width=\textwidth]{figs/KM_strat.png}
+	\end{center}
+	What's missing from this plot? \pause Confidence bands!
+\end{frame}
+
+\begin{frame}
+	\frametitle{Nonparametric estimation of a survival function} 
+	\begin{center}
+			\includegraphics[height=0.3\textheight]{figs/KM_strat_CI_code.png}
+		\includegraphics[width=\textwidth]{figs/KM_strat_CI.png}
+	\end{center}
 \end{frame}
 
 \begin{frame}
@@ -848,31 +892,41 @@ In practice, we will use as estimator of $t_{0.5}$ the median $\hat{t}_{0.5}$ of
 \begin{center}
 \includegraphics[width=0.6\textheight]{figs/km_small_example_median.png}
 \end{center}
-Here, $\hat{S}(t)$ jumps from above 0.5 to below 0.5 without hitting it exactly.
+Here, $\hat{S}(t)$ jumps from above 0.5 to below 0.5 without hitting it exactly. We'll need to think about what we do here. 
 \end{frame}
  
 
 \begin{frame}
 \frametitle{Nonparametric estimation of measures of central tendency}
+Some other potential issues: 
 \begin{enumerate}
 \item What if there is no point $\hat{t}_{0.5}$ at which $\widehat{S}$ goes from above to below 0.5?
+\begin{center}
+	\includegraphics[width=0.6\textheight]{figs/no_median.png}
+\end{center}
 \item What happens if $\widehat{S}$ equals 0.5 over a whole interval?
 \end{enumerate}
 
 \end{frame}
 
-%\begin{comment}
+
+\begin{frame}{Nonparametric esitmation of measures of central tendency}
+	To be precise, we'll define the mean as the \textcolor{blue}{smallest value $t$ such that $\widehat{S}(t) \leq 0.5$}. This covers us in case the survival curve ``jumps over" 0.5 without hitting it, or is equal to 0.5 over an entire interval of times. 
+	\\ ~\ 
+	
+	In addition, if the estimated survival curve never crosses 0.5, we simply cannot estimate the median survival time. 
+\end{frame}
+
+
 \begin{frame}
-\frametitle{Nonparametric estimation of measures of central tendency}
-\begin{enumerate}
-\item What if there is no point $\hat{t}_{0.5}$ at which $\widehat{S}$ goes from above to below 0.5?
-\item[] \textcolor{blue}{Then we cannot estimate the median survival time!}
-\item What happens if $\widehat{S}$ equals 0.5 over a whole interval?
-\item[] \textcolor{blue}{Then we should pick the smallest value $t$ such that $\widehat{S}(t) \leq 0.5$ (no one has the event in this range by definition)}
-\end{enumerate}
-
+	\vspace{-0.5cm}
+	Adding the median to a KM curve:
+	\frametitle{Nonparametric estimations of measures of central tendency} 
+	\begin{center}
+		\includegraphics[height=0.3\textheight]{figs/KM_strat_medians_code.png}
+		\includegraphics[width=\textwidth]{figs/KM_strat_medians.png}
+	\end{center}
 \end{frame}
-%\end{comment}
 
 \begin{frame}
 \frametitle{Nonparametric testing of equal survivorship between two groups}
@@ -961,8 +1015,12 @@ We can aggregate $o(t) - e(t)$ over \textcolor{orange}{all distinct observed fai
 \begin{frame}
 \frametitle{Nonparametric testing of equal survivorship between two groups}
 
-\centering
-\includegraphics[width=1\textwidth]{figs/inflamm_logrank.png}
+\begin{center}
+	\includegraphics[width=\textwidth]{figs/logrank_code.png}
+\end{center}
+
+Using a log-rank test of the null hypothesis of no survival difference at any time between treatment and placebo against the alternative of a survival difference, we fail to reject the null hypothesis at a 0.05 significance level ($p = 0.8$). We do not find statistically significant evidence of a survival difference. 
+
 \end{frame}
 
 \begin{frame}[fragile]
@@ -981,21 +1039,37 @@ This is where regression modeling comes in!
 
 \section{Semiparametric estimation and inference}
 \begin{frame}
-\frametitle{SECTION 3: COX PROPORTIONAL HAZARDS REGRESSION}
+\frametitle{Motivation for Cox proportional hazards regression}
+\vspace{-0.8cm}
 With a continuous predictor, we could split the predictor into two subgroups and perform a nonparametric analysis to compare the survivorship between the subgroups.
+\\ ~\ 
+
+For example, we could split \texttt{age} into those under 50 years old, and those over 50 years old, and compare survival:
 
 \begin{center}
-\includegraphics[height = 0.6\textheight]{figs/cum_haz_inflamm_crp.png}
+\includegraphics[width = \textwidth]{figs/KM_strat_age.png}
 \end{center}
 \end{frame}
 
+\begin{frame}{Motivation for Cox proportional hazards regression}
+	A log rank test tests the null hypothesis of no survival difference between under and over 50 age groups:
+	\begin{center}
+		\includegraphics[width = \textwidth]{figs/logrank_agecat.png}
+	\end{center}
+\end{frame}
+
 \begin{frame}
-\frametitle{SECTION 3: COX PROPORTIONAL HAZARDS REGRESSION}
-This plot was based on the inflammatory biomarkers data, where I have split the C reactive protein variable based on Mayo Clinic guidelines: CRP $\leq$ 10 is normal, while $> 10$ implies serious infection, trauma, or chronic disease.
+\frametitle{Motivation for Cox proportional hazards regression}
 
-It appears that the cumulative hazard function in patients with higher levels of CRP is proportional to the cumulative hazard function in other patients.
+It appears that the survival probabilities are generally lower (at any point in time) for older versus younger patients. 
+\\ ~\ 
 
-This observation could lead us to consider the model
+\textbf{Question:} What does this suggest about the \textcolor{blue}{hazards} in the two age groups? \pause
+
+\textbf{Answer:} Because the younger age group has higher survival probability, we can infer that it also has a lower hazard. 
+\\ ~\ 
+
+If we want to relate the hazard functions between two groups, we might consider a model like
 \begin{align*}
 \textcolor{orange}{h_1(t)} &= c\textcolor{cyan}{h_0(t)},
 \end{align*}
@@ -1037,6 +1111,14 @@ What does $c < 1$ imply? \pause A \textbf{decreased hazard} in subgroup 1 relati
 \\ ~\ 
 
 What does $c > 1$ imply? \pause An \textbf{increased hazard} in subgroup 1 relative to subgroup 0.  Subgroup 1 is at higher instantaneous risk than subgroup 0 by a factor of $c$.
+\end{frame}
+
+\begin{frame}{The hazard ratio}
+	\textbf{Question:} Based on our Kaplan-Meier curves for survival by age group, what can we say about the sign of the following hazard ratio?
+	\begin{align*}
+		\frac{h_{\text{over 50}}(t)}{h_{\text{under 50}}(t)}
+	\end{align*} \pause 
+	\textbf{Answer:} Since we saw lower survival over all times for the older versus the younger group (i.e., a larger hazard), we'd expect this hazard ratio to be greater than 1.
 \end{frame}
 
 \begin{frame}
@@ -1112,6 +1194,39 @@ So $e^{\beta_1}$ is the \textbf{hazard ratio} comparing two groups at the same t
 We could also say it's the  \textbf{ratio of the instantaneous risk of the event} comparing two groups at the same time that differ in $X$ by one unit.
 \end{frame}
 
+\begin{frame}{Cox proportional hazards regression in \texttt{R}}
+	Estimates of the $\beta$ parameters from proportional hazards regression are (approximately) normally distributed for large sample size, like all of our other regression estimators.
+	\\ ~\ 
+
+	The syntax for Cox proportional hazards regression in \texttt{R} is similar to fitting a linear model or GLM, except
+	\begin{enumerate}
+		\item We use the function \texttt{coxph}
+		\item Our outcome is a \texttt{Surv} object
+	\end{enumerate}
+	\begin{center}
+		\texttt{coxph(Surv(time, event) $\sim$ X1 + \dots)}
+	\end{center}
+	\begin{itemize}
+	\item This provides naive standard errors. Robust implementations do exist.
+	\item Note that \texttt{coxph}, unlike \texttt{glm}, gives us exponentiated coefficients and confidence intervals! 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Simple Cox regression: example}
+	Rather than having to arbitrarily binarize age and do a log-rank test, let's instead fit a Cox model: 
+	\begin{center}
+		\includegraphics[width = \textwidth]{figs/cox_age.png}
+	\end{center}
+	Use the first p-value in the display (7.41 $\times 10^{-6}$).
+\end{frame}
+
+\begin{frame}{Simple Cox regression: example}
+	We got a hazard ratio of 1.04, with 95\% CI (1.023 - 1.059). In context:
+	\\ ~\ 
+	
+	\textcolor{blue}{We estimate the hazard ratio of death comparing groups one year apart in age is 1.04, with the older group having the higher hazard. The data would not be surprising if the true hazard ratio were between 1.023 and 1.059. We reject the null hypothesis of a hazard ratio of 1 against the alternative that the hazard ratio is not 1 (p $<$ 0.001). There is significant evidence of an association between age and the instantaneous risk of death.}
+\end{frame}
+
 \begin{frame}
 \frametitle{Multiple Cox proportional hazards regression}
 With more than one covariate, we simply extend the model:
@@ -1130,17 +1245,77 @@ We interpret $e^{\beta_j}$, for $j = 2, \dots, p$, as: \pause
 Always keep in mind that hazard = ``instantaneous risk of an event." The term ``hazard ratio" by itself isn't very informative, but it's the more common way to phrase this.
 \end{frame}
 
-\begin{frame}
-\frametitle{Cox proportional hazards regression in \texttt{R}}
-Estimates of the $\beta$ parameters from proportional hazards regression are (approximately) normally distributed for large sample size, like all of our other regression estimators.
-\\ ~\ 
+\begin{frame}{Cox proportional hazards regression: adjustment variables}
+	Adjusting for \textcolor{red}{potential confounders}, as in all other types of regression we have seen, is necessary if we have observational data and wish to estimate an association between two variables. We do this by adding the potential confounders as covariates in our model.
+	\\ ~\ 
+	
+	When adjusting for \textcolor{green}{precision variables}, as in logistic regression, we don't necessarily reduce our standard errors, so whether to include them or not depends on our scientific question. 
+	\\ ~\ 
+	
+	Finally, as in logistic regression, \textcolor{blue}{effect modification} is assessed using an interaction term that is interpreted as a ratio of ratios.
+\end{frame}
 
-We can fit proportional hazards regression in \texttt{R}:
+\begin{frame}{Multiple Cox regression: example}
+	\vspace{-0.6cm}
+	Another variable in our dataset is \texttt{stage}, which is an ordinal categorical variable (4 categories) describing the stage of disease at baseline. Here are boxplots of \texttt{age} by \texttt{stage}: 
+	\begin{center}
+		\includegraphics[width = \textwidth]{figs/stage_by_age_box.png}
+	\end{center}
+	If we have reason to believe \texttt{stage} may have a causal effect on survival time, what role does \texttt{stage} play in the association between \texttt{age} and survival?
+\end{frame}
 
-\texttt{coxph(Surv(obstime, event) $\sim$ X\_1 + \dots)}
-\begin{itemize}
-\item This provides naive standard errors. Robust implementations do exist. 
-\end{itemize}
+\begin{frame}{Multiple Cox regression: example}
+	So, in order to deal with possible confounding by \texttt{stage}, let's include it in our model:
+		\begin{center}
+		\includegraphics[width = \textwidth]{figs/multiple_cox_regression_code.png}
+	\end{center}
+\end{frame}
+
+\begin{frame}{Multiple Cox regression: example}
+		We got a hazard ratio of 1.03, with 95\% CI (1.013 - 1.049). In context:
+	\\ ~\ 
+	
+		\textcolor{blue}{We estimate the hazard ratio of death comparing groups one year apart in age with the same disease stage is 1.03, with the older group having the higher hazard. The data would not be surprising if the true hazard ratio were between 1.013 and 1.049. We reject the null hypothesis of a hazard ratio of 1 against the alternative that the hazard ratio is not 1 (p $<$ 0.001). There is significant evidence of an association between age and the instantaneous risk of death.}
+\end{frame}
+
+\begin{frame}{Cox proportional hazards regression: effect modification}
+	Suppose we have a predictor of interest $X$ and binary potential effect modifier $Z$. We fit the proportional hazards model
+	\begin{align*}
+		h(t \mid X, Z) = h_0(t)e^{\beta_1X + \beta_2Z + \beta_3XZ}
+	\end{align*}\pause 
+	The hazard ratio comparing groups differing by 1 unit of $X$, for $Z = 0$, is
+	\begin{small}
+	\begin{align*}
+		\frac{h(t \mid X = x+ 1, Z = 0)}{h(t \mid X = x, Z = 0)} = \frac{h_0(t)e^{\beta_1 (x + 1) + 0 + 0}}{h_0(t)e^{\beta_1x + 0 + 0}} = \frac{e^{\beta_1(x + 1)}}{e^{\beta_1 x}} = e^{\beta_1}
+	\end{align*}
+	\end{small}\pause 
+	The hazard ratio comparing groups differing by 1 unit of $X$, for $Z = 1$, is
+	\begin{small}
+	\begin{align*}
+		\frac{h(t \mid X = x+ 1, Z = 1)}{h(t \mid X = x, Z = 1)} = \frac{h_0(t)e^{\beta_1 (x + 1) + \beta_2 + \beta_3(x + 1)}}{h_0(t)e^{\beta_1x + \beta_2 + \beta_3x}} = \frac{e^{(\beta_1 + \beta_3)(x + 1) }}{e^{(\beta_1  + \beta_3)x}} = e^{\beta_1 + \beta_3}
+	\end{align*}
+	\end{small}\pause 
+	The ratio of these two hazard ratios is $e^{\beta_3}$. 
+\end{frame}
+
+\begin{frame}{Cox proportional hazards regression: effect modification example}
+	Does binarized \texttt{sex} (0 = male, 1 = female) modify the association between age and survival?
+	\begin{align*}
+		h(t \mid \texttt{age}, \texttt{sex}) = h_0(t)e^{\beta_1\texttt{age} + \beta_2\texttt{sex} + \beta_3\texttt{sex}\times\texttt{age}}
+	\end{align*}
+			\begin{center}
+		\includegraphics[width = \textwidth]{figs/interaction.png}
+	\end{center} 
+\end{frame}
+
+\begin{frame}{Cox proportional hazards regression: effect modification example}
+	Our estimated (exponentiated) coefficients for \texttt{age} and \texttt{age:sex} were 1.054 and 0.981, respectively.
+	\\ ~\ 
+	
+	Among males (\texttt{sex == 0}), we have a hazard ratio of 1.054, and among females (\texttt{sex == 1}), we have a hazard ratio of $1.054 \times 0.981 = 1.034$.  
+	\\ ~\ 
+	
+	\textcolor{blue}{Among males, we estimate the hazard ratio comparing groups differing by one year in age to be 1.054, with older groups having the higher risk of death. Among females, we estimate the hazard ratio comparing groups differing by one year in age to be 1.034, with older groups having the higher risk of death. This difference in association would not be surprising if the true difference were between 0.941 and 1.024. We do not find significant evidence of effect modification by sex (p $= 0.38$).}
 \end{frame}
 
 \begin{frame}
@@ -1157,19 +1332,21 @@ in other words, that \textit{for each $t$}, the hazard ratio is the same (and is
 \\ ~\ 
 
 This assumption is violated, for example, if the survival curves cross!
-\\ ~\ 
-
-In practice, be careful, and be able to justify your approach.
 \end{frame}
 
-\begin{frame}
-\frametitle{Cox proportional hazards regression}
-When adjusting for \textcolor{red}{potential confounders}, as in all other types of regression we have seen, \textcolor{red}{the estimate of the parameter of interest can be smaller, larger, or approximately the same} between the adjusted and unadjusted regression analysis.
+\begin{frame}{Cox proportional hazards regression: assumptions}
+	If the exposure has a time-varying effect on the outcome, this is unlikely to hold. 
+	\\ ~\ 
+	
+	For example, if you are studying the risk of COVID-19 infection comparing those who have recently been infected to those who have not, you would not expect proportional hazards to hold. 
+	\begin{itemize}
+		\item In the immediate aftermath of an infection, someone is very unlikely to be infected compared to someone who's immunologically naive. 
+		\item Over time, immunity wanes, and reinfection becomes more likely. 
+	\end{itemize}
 
-When adjusting for \textcolor{green}{precision variables}, as in logistic regression, \textcolor{green}{the estimate in the adjusted regression analysis will be further from one} than the unadjusted estimate.
-
-Finally, as in logistic regression, \textcolor{blue}{effect modification} is assessed using an interaction term that is interpreted as a \textcolor{blue}{ratio of ratios.}
+	There are ways to assess proportional hazards using generalizations of the residual-vs.-fitted plots we saw in Chapter 1, although we won't get into them. For this course, just be aware of how strong this assumption may.
 \end{frame}
+
 
 \section{Summary}
 \begin{frame}
