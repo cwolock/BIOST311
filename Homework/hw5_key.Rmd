@@ -1,0 +1,221 @@
+---
+title: "Homework 5: Key"
+subtitle: "BIOST 311"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(formatR)
+
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(results = "hide")
+```
+
+
+## Instructions
+
+This assignment should be submitted on Canvas as a .pdf by 12:30pm on Friday, May 6th. You are welcome to work together on the homework; however, final solutions should be written up individually. 
+
+Unedited software output in the body of your assignment is not acceptable. Please round numerical values to 2--3 significant digits, and include your R code (if applicable) in the same document. See the "How to Write a Proper Homework" document on Canvas for additional guidelines.  
+
+Each homework assignment is worth 20 points total. Problems are graded for correctness, according to the number of points given in the problem statement. 
+
+
+```{r preliminaries}
+library(readr)
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+```
+
+## 1. Effect modification
+
+For this question, we will explore effect modification in the `births` dataset. For Homework 4, you conducted a stratified analysis examining the association beteween age and birthweight within strata of birth parents who drank versus did not drink during pregnancy.  
+
+a. Load the `births` dataset (0 points)
+
+```{r 1a}
+births <- read_csv(url("https://raw.githubusercontent.com/cwolock/BIOST311/main/Datasets/births.csv"))
+```
+
+b. Perform one multiple linear regression analysis to assess whether and how drinking modifies the relationship between parental age and birthweight (i.e., do NOT perform a stratified analyses). You can choose to communicate your answer however you like, but your answer must include relevant point estimate(s), confidence interval(s), hypothesis test(s), etc., along with interpretation of any parameter estimates you give. (2 points)
+
+```{r}
+mod <- lm(data = births, bwt ~ age + drink + age:drink)
+summary(mod)
+confint(mod)
+```
+
+\textcolor{blue}{Among birth parents who did not drink during pregnancy, we estimate that there is an average difference of 8.9 grams of birthweight comparing groups of parents one year apart in age, with older parents having heavier babies on average. Among birth parents who did drink during pregnancy, we estimate that there is an average difference of 14.6 grams of birthweight comparing groups of parents one year apart in age, with younger parents having heavier babies on average. The observed difference in association between age and birthweight comparing those who drank and those who did not would not be surprising if the true difference were between -60.3 and 13.3 grams. Testing the null hypothesis that the interaction coefficient in this model is 0 versus the two-sided alternative that it is non-zero, we fail to reject the null hypothesis (p = 0.21). We lack significant evidence to conclude that there is effect modification by drinking status on the association between age and birthweight.}
+
+c. Create a graph visualizing the relationship between `bwt` and `age`, and include information on `drink` however you see fit. Use jittered points. Add two linear regression lines to your plot: one for the relationship between `bwt` and `age` among those who did not drink, and one for the relationship between `bwt` and `age` among those who did drink. Use labels to make clear what each part of your plot represents. (1 point)
+
+```{r}
+births %>%
+  mutate(Drink = ifelse(drink == 1, "Drank", "Did not drink")) %>%
+  ggplot(aes(age, bwt)) +
+  geom_point(position = "jitter", alpha = 0.4) +
+  geom_smooth(method = "lm", se=FALSE, color="blue", formula = y ~ x) + 
+  labs(x = "Age of birth parent (years)", y = "Birth weight (grams)", 
+       title = "Age of birth parent vs. birth weight of child") +
+  facet_wrap(~Drink) + 
+  theme_bw()
+```
+
+d. Compare your results from part (c) to Questions 1(e) and 1(f) on Homework 4 (if you did not answer those questions correctly, please compare your results to the Homework 4 answer key). Do the results agree or disagree? Note any differences you see. (2 points)
+
+\textcolor{blue}{The point estimates for the linear association between age and birthweight among groups of birth parents who drank during pregnancy and those who did not agree exactly with the point estimates from our stratified analysis on Homework 4. Of course, in that stratified analysis we were unable to make inference on the difference in association between those who drank and those who did not (although we noted that the signs of the regression slopes were different). In this analysis, we were able to perform such a hypothesis test, and found we lacked siginficant evidence to conclude that there was a difference.}
+
+e. Evaluate the four classical linear regression assumptions for the model you fit in part (c). Include plots, and discuss whether or not you believe each assumption is met. (2 points)
+
+```{r}
+resids <- residuals(mod)
+fittedvals <- predict(mod)
+# residuals vs fitted values scatterplot
+data.frame(resids = resids,
+           fittedvals = fittedvals) %>%
+  ggplot(aes(x = fittedvals, y = resids)) +
+  geom_point() +
+  geom_hline(yintercept = 0, col = "red") +
+  xlab("Fitted values") +
+  ylab("Residuals") +
+  ggtitle("Scatterplot of residuals vs. fitted values") +
+  theme_bw()
+
+data.frame(resids = resids) %>%
+  ggplot(aes(x = resids)) +
+  geom_histogram(bins = 15, col = "black") +
+  xlab("Residuals") +
+  ggtitle("Histogram of residuals") +
+  theme_bw()
+```
+
+\textcolor{blue}{Based on the plot of residuals versus fitted values, there is no clear pattern, so there are no major concerns of violations of linearity. The variance of residuals appears to be larger for intermediate fitted values versus larger or smaller fitted values, which could be cause for conern, although it's difficult to tell by eye.} 
+
+\textcolor{blue}{Based on the sampling scheme (individual birth parents sampled), there are no concerns about violations of independence.}
+
+\textcolor{blue}{The residual histogram appears roughly normal, although there is a clear left skew. The general curve is bell-shaped.}
+
+## 2. Precision variables
+
+For this question, we will explore precision variables in the `births` dataset.
+
+a. Suppose we are interested in estimating the association between First Steps participation and birthweight. I suggest that we include gestational age (in weeks) and parental age (in years) in order to increase the precision of our estimate. For each of these variables, explain why it is or is not likely to be a precision variable. Use your scientific knowledge and include graphs where appropriate to back up your claims. (2 points)
+
+```{r}
+births <- births %>% mutate(firstep = factor(firstep, levels = c(0,1), labels = c("No", "Yes")))
+births %>% ggplot(aes(x = firstep, y = gestation)) + 
+  geom_boxplot() + 
+  theme_bw() + 
+  labs(x = "First Steps participation",
+       y = "Gestational age (weeks)", 
+       title = "Distribution of gestational age by First Steps")
+births %>% ggplot(aes(x = firstep, y = age)) + 
+  geom_boxplot() + 
+  theme_bw() + 
+  labs(x = "First Steps participation",
+       y = "Parental age (years)", 
+       title = "Distribution of parental age by First Steps")
+```
+
+\textcolor{blue}{Gestational age is a reasonable precision variable; parental age is not. Looking at the two boxplots above, we see that gestational age is not associated with First Steps (the exposure of interest), which is a requirement for being a precision variable. On the other hand, parental age is quite clearly associated with First Steps, with First Steps participants tending to be younger on average. In terms of the outcome, we have reason to believe that gestational age causally affects birthweight, so it meets the second requirement of a precision variable.}
+
+b. Fit an unadjusted linear regression model of birthweight on First Steps (i.e., a simple linear regression). Give a point estimate and confidence interval for the association between First Steps and birthweight. (2 points)
+
+```{r}
+mod <- lm(data = births, bwt ~ firstep)
+summary(mod)
+confint(mod)
+```
+
+\textcolor{blue}{We estimate that the difference in mean birthweight comparing birth parents who participated in First Steps versus those who did not was 66.2 grams, with First Steps participants having lower birthweight on average. The 95\% confidence interval is (-125.8, -6.6).}
+
+c. Using whichever precision variable(s) you chose in part (a), fit an adjusted model of birthweight on First Steps (i.e., a multiple linear regression). Give a point estimate and confidence interval for the association between First Steps and birthweight, holding other covariates equal. How does the standard error of the First Steps coefficient in this analysis compare to the standard error of the First Steps coefficient in your analysis in part (b)? (2 points)
+
+```{r}
+mod <- lm(data = births, bwt ~ firstep + gestation)
+summary(mod)
+confint(mod)
+```
+
+\textcolor{blue}{We estimate that the difference in mean birthweight comparing birth parents who participated in First Steps versus those who did not, holding gestational age equal, was 42.0 grams, with First Steps participants having lower birthweight on average. The 95\% confidence interval is (-92.7, 8.6). This confidence interval is narrower than our confidence interval from part (b) (i.e., the standard error of our estimate is lower after accounting for gestational age.), suggesting a possible gain in precision.}
+
+## 3. Prediction
+
+For this question, we will use the `births` dataset to explore prediction. Specifically, we will aim to predict a child's birthweight based on characteristics of the birth parent and their pregnancy.
+
+a. Split your data into a testing dataset and a training dataset, with 70% of your observations in the training dataset and 30% in the testing dataset. Provide descriptive statistics and a descriptive plot of the `bwt` variable in each dataset. Does the distribution of `bwt` look similar or different in the two datasets? (2 points)
+
+```{r}
+set.seed(24)
+values <- c(rep(0, 0.7*nrow(births)),
+            rep(1, 0.3*nrow(births)))
+births <- births %>% mutate(test = sample(values))
+test_df <- births %>%
+  mutate(test_indicator = test) %>%
+  filter(test_indicator == 1)
+train_df <- births %>%
+  mutate(test_indicator = test) %>%
+  filter(test_indicator == 0)
+births <- births %>% mutate(test = factor(test, levels = c(0,1), labels = c("Training", "Testing")))
+births %>% ggplot(aes(x = test, y = gestation)) + 
+  geom_boxplot() + 
+  theme_bw() + 
+  labs(x = "Dataset",
+       y = "Birthweight (grams)", 
+       title = "Distribution of gestational age by First Steps")
+```
+
+\textcolor{blue}{Looking at the side-by-side boxplots, the distribution of birthweight appears similar in the testing and training datasets.}
+
+b. Build a linear model to predict birthweight using gestational age. Make a plot of predictions vs. observed birthweights, and evaluate the model in terms of both $R^2$ and mean-squared error. (2 points)
+
+```{r}
+mod <- lm(data = train_df, bwt ~ gestation)
+summary(mod)
+predictions <- predict(mod, newdata = test_df)
+observations <- test_df %>% pull(bwt)
+mse <- mean((predictions - observations)^2)
+data.frame(predictions = predictions,
+           observations = observations) %>%
+  ggplot(aes(observations, predictions)) + 
+  geom_point() + 
+  geom_abline(slope = 1, intercept = 0, col = "purple") + 
+  theme_bw()
+```
+
+\textcolor{blue}{The adjusted $R^2$ of this model is 0.2679, and the MSE for predicting birthweight on the test set was 226,293.} 
+
+c. Build a linear model to predict birthweight using gestational age and assigned sex. Make a plot of predictions vs. observed birthweights, and evaluate the model in terms of both $R^2$ and mean-squared error. (2 points)
+
+```{r}
+mod2 <- lm(data = train_df, bwt ~ gestation + sex ) 
+summary(mod2)
+predictions2 <- predict(mod2, newdata = test_df)
+mse2 <- mean((predictions2 - observations)^2)
+data.frame(predictions = predictions2,
+           observations = observations) %>%
+  ggplot(aes(observations, predictions)) + 
+  geom_point() + 
+  geom_abline(slope = 1, intercept = 0, col = "purple")  + 
+  theme_bw()
+```
+
+\textcolor{blue}{The adjusted $R^2$ of this model is 0.2916, and the MSE for predicting birthweight on the test set was 228,210.} 
+
+d. Based on your results from parts (b) and (c), which model would you say has better predictive performance on out-of-sample data? Why? (1 point)
+
+\textcolor{blue}{I would choose the model with only gestational age. This model is simpler and has a lower MSE, which is indicative of out-of-sample error. The larger model has a larger adjusted $R^2$, but this does not measure out-of-sample performance in any way.}

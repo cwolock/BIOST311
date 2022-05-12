@@ -27,7 +27,7 @@ knitr::opts_chunk$set(results = "hide")
 
 ## Instructions
 
-This assignment should be submitted on Canvas as a .pdf by 12:30pm on Friday, May 13th. You are welcome to work together on the homework; however, final solutions should be written up individually. 
+This assignment should be submitted on Canvas as a .pdf by 11:59pm on Friday, May 13th. You are welcome to work together on the homework; however, final solutions should be written up individually. 
 
 Unedited software output in the body of your assignment is not acceptable. Please round numerical values to 2--3 significant digits, and include your R code (if applicable) in the same document. See the "How to Write a Proper Homework" document on Canvas for additional guidelines.  
 
