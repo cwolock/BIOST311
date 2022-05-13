@@ -1,0 +1,82 @@
+---
+title: "Homework 7"
+subtitle: "BIOST 311"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(formatR)
+
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(results = "hide")
+```
+
+
+## Instructions
+
+This assignment should be submitted on Canvas as a .pdf by 11:59pm on Friday, May 20th. You are welcome to work together on the homework; however, final solutions should be written up individually. 
+
+Unedited software output in the body of your assignment is not acceptable. Please round numerical values to 2--3 significant digits, and include your R code (if applicable) in the same document. See the "How to Write a Proper Homework" document on Canvas for additional guidelines.  
+
+Each homework assignment is worth 20 points total. Problems are graded for correctness, according to the number of points given in the problem statement.
+
+## 1. Case-control studies
+
+In this question, we'll investigate how case-control sampling affects two measures of association for binary variables using the `wcgs` dataset. 
+
+a. Load the `wcgs` dataset (0 points)
+
+b. Create a new binary variable indicating if the subject smokes cigarettes (i.e., do they smoke more than 0 cigarettes per day). Summarize this variable using an appropriate descriptive statistic. (1 point)
+
+c. Calculate and interpret the relative risk *and* the odds ratio of CHD among those who smoke versus those who do not. (2 points)
+
+d. Create an artificial case-control study from the full `wcgs` data set. To do this, randomly select 150 subjects with CHD and 150 subjects without CHD, and combine these 300 subjects into a single data set. Summarize the binary variable for smoking status within this case-control sample. The pseudocode below should help you get started. (4 points)
+
+```
+1. Get 100 subjects with cHD.
+    a. Select all subjects with CHD. 
+    b. Create new variable assigning each subject to inclusion or exclusion from 
+       case-control sample. There should be 100 assigned to inclusion.
+    c. Select CHD subjects assigned to inclusion. 
+2. Get 100 subjects without CHD.
+    a. Select all subjects without CHD. 
+    b. Create new variable assigning each subject to inclusion or exclusion from 
+       case-control sample. There should be 100 assigned to inclusion.
+    c. Select non-CHD subjects assigned to inclusion. 
+3. Combine 100 CHD and 100 non-CHD subjects into case-control data set. 
+```
+
+e. Within the case-control data set, calculate and interpret the relative risk *and* the odds ratio of CHD among those who smoke versus those who do not. (2 points)
+
+f. Compare your answers from parts (c) and (e). How similar are your estimates of relative risk and odds ratio? (1 point)
+
+## 2. Multiple logistic regression
+
+In this question, we will study the association between high blood pressure and CHD. 
+
+a. As we discussed in Week 7 Section, high blood pressure is defined as a diastolic blood pressure greater than 90, and a systolic blood pressure greater than 140. Create a new binary variable indicating whether a subject has high blood pressure. Perform a logistic regression to investigate the association between CHD (outcome) and high blood pressure (predictor of interest).  Give a point estimate for the association between high blood pressure and CHD, along with appropriate uncertainty quantification. Perform a hypothesis test for the association, and be sure to state your null and alternative hypthoses. Interpret your results. (2 points)
+
+b. Perform a multiple logistic regression to investigate whether or not age acts as an effect modifier for the association between high blood pressure and CHD. Estimate the association between high blood pressure and CHD for subjects who are 40 years old and for subjects who are 50 years old (using only your logistic regression model), and perform a hypothesis test for effect modification. Be sure to state your null and alternative hypotheses and interpret your results. (2 points)
+
+## 3. Prediction with logistic regression
+
+One of the secondary goals of the WCGS study was to build a model to predict the occurrence of CHD. In this problem you will build and evalute several risk models using logistic regression. 
+
+a. The Framingham Hard Coronary Heart Disease model predicts risk of CHD occurrence using age, cholesterol, systolic blood pressure, and smoking status (as well as a couple other variables which are unavailable in the `wcgs` data set). Using these variables, build a logistic regression model to predict the occurence of CHD patients. Evaluate its performance by creating an ROC curve and calculating the area under the curve (AUC). Be sure to evaluate your model on out-of-sample testing data! (3 points)
+
+b. Build another logistic regression predictive model of your choosing using the variables available in `wcgs`. Your model must include at least one variable that is not in the Framingham model, and it need not include all Framingham variables. Evaluate your model by creating an ROC curve and calculating the AUC. Compare the performance of your model to the Framingham model. (3 points)
+
+
