@@ -473,6 +473,16 @@ What shape do we expect the hazard function to have? \textcolor{red}{It depends.
 	\end{center}
 \end{frame}
 
+\begin{frame}{Characteristics of survival data: summary}
+	\begin{itemize}
+		\item In survival analysis we study variables representing the time to some event occurring.
+		\item Survival data are generally subject to being right-censored.
+		\item Simply ignoring censored data is not a good idea!
+		\item Most methods rely on the assumption of \textcolor{blue}{independent censoring}.
+		\item Key quantities: the risk set, the hazard function, the survival function
+	\end{itemize}
+\end{frame}
+
 \section{Kaplan-Meier and the log rank test}
 
 \begin{frame}
@@ -1171,7 +1181,7 @@ At any observed failure time $t$, we can construct a $2 \times 2$ table:\vspace{
 	\end{tabular}
 \end{center}\vspace{-0.2cm}
 
-If $H_0$ is true, then we expect that the rows and columns are independent. That means we can compute the \textcolor{blue}{expected counts} of deaths and compare to the observed counts. TAYLOR: I don't think it's clear why you expect rows and columns to be independent based on our null hypothesis. I also don't think it's clear why you're comparing expecteds to observeds to see if the survival curves in each group are equal
+If $H_0$ is true, then we expect that the rows and columns are independent. That means we can compute the \textcolor{blue}{expected counts} of deaths and compare to the observed counts.
 \end{frame}
 
 \begin{frame}
@@ -1240,7 +1250,20 @@ In addition, we'd like to get some \textcolor{blue}{estimate} of association, ra
 This is where regression modeling comes in!
 \end{frame}
 
-\section{Semiparametric estimation and inference}
+\begin{frame}{Kaplan-Meier and the log-rank test: summary}
+	\begin{itemize}
+		\item The Kaplan-Meier estimator is a nonparametric (does not make assumptions about the distribution of $T$) method for estimating the survival function while account for censoring. We framed it in terms of
+		\begin{itemize}
+			\item Estimating conditional probabilities at each observed time
+			\item Redistribution to the right
+		\end{itemize}
+		\item We can plot Kaplan-Meier curves (with confidence bands) in \texttt{R} using the \texttt{survival} and \texttt{survminer} packages. 
+		\item We can (sometimes) use the Kaplan-Meier curve to estimate the median survival time, which may be of more interest than the mean
+		\item The log-rank test compares the survival functions of two groups
+	\end{itemize}
+\end{frame}
+
+\section{The Cox proportional hazards model}
 \begin{frame}
 \frametitle{Motivation for Cox proportional hazards regression}
 \vspace{-0.8cm}
@@ -1549,7 +1572,14 @@ This assumption is violated, for example, if the survival curves cross!
 	There are ways to assess proportional hazards using generalizations of the residual-vs.-fitted plots we saw in Chapter 1, although we won't get into them. For this course, just be aware of how strong this assumption may be.
 \end{frame}
 
-
+\begin{frame}{The Cox proportional hazards model: summary}
+	\begin{itemize}
+		\item For regression modeling, we focus on comparing the hazards between groups
+		\item The Cox model allows us to estimate the \textcolor{blue}{hazard ratio} comparing groups differing in covariate values
+		\item The Cox model relies on the strong assumption of proportional hazards over all times
+		\item As with other regression methods, we can account for confounding, include precision variables (although they don't work quite the same as in linear regression), and study effect modification
+	\end{itemize}
+\end{frame}
 %\section{Summary}
 %\begin{frame}
 %\frametitle{SECTION 4: SUMMARY}
