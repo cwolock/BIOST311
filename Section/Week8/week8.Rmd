@@ -1,0 +1,51 @@
+---
+title: "Logistic Regression: Prediction"
+subtitle: "BIOST 311, Discussion Section Week 8"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(formatR)
+
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(results = "hide")
+```
+
+# Introduction
+
+In this discussion section, we'll walk through a logistic regression prediction problem. We will use data collected from the Australia New Zealand Intensive Care Society and eICU Collaborative Research Datasets, which contains information on hospital patients from Australia, the US, and New Zealand. Patients in the dataset are over the age of 16 years old on admission to the hospital, and had at least a 4 hour stay in the ICU. The dataset can be found at https://www.kaggle.com/datasets/sadiaanzum/patient-survival-prediction-dataset. Each patient in the dataset is only recorded one time (i.e. if there were repeat ICU visits for a given individual, we only have data for one of them).
+
+We aim to predict hospital death for individuals from a variety of demographic and medical variables we have access to within the dataset. The dataset is called `hospitaldeaths.csv`, and is available on the Canvas site on the Week 8 page, or on the course github site. The metadata can also be found on the Canvas site on the Week 8 page, or on the course github site, as `hospitaldeaths_metadata.csv`. The code is provided below to load the dataset direclty from github, but you may download it to your personal machine and load it in that way if you prefer. We suggest downloading the metadata and opening it the file in Excel or another app, so that you can see what variables in the dataset you have access to for your prediction model.
+
+```{r}
+library(tidyverse)
+library(readr)
+library(pROC)
+df <- read_csv(url("https://raw.githubusercontent.com/cwolock/BIOST311/main/Datasets/hospitaldeaths.csv"))
+```
+
+# Exploratory plot and set-up
+
+1. Suppose we want to begin our prediction modeling by seeing whether a simple logistic regression model with `hospital_death` as our outcome and `age` is our predictor does a good job (in terms of AUC) at predicting hospital death. First, make a plot comparing the distribution of age between those who died in the hospital and those who did not die in the hospital. How would you describe the relationship between age and hospital death?
+
+# Simple logistic regression: Prediction
+
+2. Build a logistic regression model to predict the hospital death by age. Evaluate its performance by creating an ROC curve and calculating the area under the curve (AUC). Be sure to evaluate your model on out-of-sample testing data. Use a 70/30 split for your training/testing data.
+
+# Multiple logistic regression: Prediction
+
+3. Build a new, multiple logistic regression model to predict the hospital death by whichever variables you choose. Evaluate its performance by creating an ROC curve and calculating the area under the curve (AUC). Be sure to evaluate your model on out-of-sample testing data. Use a 70/30 split for your training/testing data. Try to get the highest AUC you can!
+
