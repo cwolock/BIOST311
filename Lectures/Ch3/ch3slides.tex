@@ -511,7 +511,7 @@ Let's start by \textbf{estimating the survival probability at time $t$}: $S(t) =
 
 If we observed actual survival times $T_1, T_2, \dots, T_n$, we could take
 \begin{align*}
-\frac{1}{n}\sum_{i=1}^n I(T_i \geq t)
+\frac{1}{n}\sum_{i=1}^n I(T_i > t)
 \end{align*}
 as an estimator of $S(t)$ (in other words, just count how many people made it past time $t$ without an event). This is a \textbf{nonparametric} estimator; we do not have to postulate a parametric model for the true survival distribution. This is unlike \textcolor{blue}{classical} linear regression, for example, where we assumed that the errors had a Normal distribution. 
 \\ ~\ 
