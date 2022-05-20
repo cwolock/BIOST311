@@ -1,0 +1,80 @@
+---
+title: "Homework 8"
+subtitle: "BIOST 311"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(formatR)
+
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(results = "hide")
+```
+
+
+## Instructions
+
+This assignment should be submitted on Canvas as a .pdf by 11:59pm on Friday, May 27th. You are welcome to work together on the homework; however, final solutions should be written up individually. 
+
+Unedited software output in the body of your assignment is not acceptable. Please round numerical values to 2--3 significant digits, and include your R code (if applicable) in the same document. See the "How to Write a Proper Homework" document on Canvas for additional guidelines.  
+
+Each homework assignment is worth 20 points total. Problems are graded for correctness, according to the number of points given in the problem statement.
+
+```{r preliminaries}
+library(readr)
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+library(survival)
+library(survminer)
+```
+
+## 1. Characteristics of survival data
+
+Suppose I am studying people with severe bone fractures, and I am interested in knowing whether or not the time it takes for the fracture to heal varies depending on whether the individual with the fracture had surgery. The more severe a fracture is, the more likely that surgery will be recommended. We hypothesize that individuals who had surgery will have longer healing times than those who did not have surgery, given that more severe fractures take longer to heal. We enroll people in our study at the time they have a severe bone fracture, and follow them over time to record when their fracture healed completely, measured at a follow-up clinic appointment. We lose a few people in our study to follow-up, and we end our study after 20 weeks, where a few individuals are subject to administrative censoring.
+
+For scenarios 1a through 1d, determine whether or not the independent censoring assumption holds, and justify your answer.
+
+a. Participants exit the study because their health has worsened to the point where they cannot come to the clinic for a follow-up appointment. (2 points)
+
+b. Participants exit the study because they switched their follow-up care to a doctor at a different clinic. The doctor at the different clinic is equally medically qualified to take care of the participants, and would provide the same care as would be provided at the clinic used in our study. (2 points)
+
+c. Participants exit the study because they were referred to a doctor at a different clinic who specializes in treating bone fractures. (2 points)
+
+d. Participants exit the study because they forget to return for a follow-up appointment. (2 points)
+
+## 2. Kaplan-Meier & the log rank test
+
+a. Load the `mayo` dataset (0 points)
+
+b. Plot a Kaplan-Meier survival curve for all individuals in the dataset (that is, just a single curve, no stratification by another variable). Include a median survival line on your plot, and use this to estimate (approximately) the median survival time for individuals in your dataset. (2 points)
+
+c. Plot Kaplan-Meier survival curves for all individuals in the dataset, stratified by stage of disease. Include a legend in your plot, confidence bands, and median survival lines for each strata. For each strata, estimate (approximately) the median survival time for individuals in that strata, or explain why you cannot estimate the median survival time for individuals in that strata. Based on your plot, what do you notice about the relationship between time to death and stage of disease? (2 points)
+
+d. Create a new, binary variable called `advanced_stage` that is either 0 if `stage` is 1 or 2, or is 1 if `stage` is 3 or 4. Here, we consider `advanced_stage` equal to 0 to be a non-advanced stage of disease, and `advanced_stage` equal to 1 to be an advanced stage of disease. Plot Kaplan-Meier survival curves for all individuals in the dataset, stratified by `advanced_stage`. Include a legend in your plot and confidence bands for each strata. Based on your plot, what do you notice about the relationship between time to death and advanced stage of disease? (2 points)
+
+e. Conduct a log-rank test for a survival difference by advanced stage of disease (a binary variable). Your answer must include a statement of null and alternative hypotheses, as well as a conclusion based on a p-value. (2 points)
+
+## 3. Cox proportional hazards regression
+
+a. Suppose we are interested in the association between survival time and platelet count. Create a descriptive plot for the distribution of platelet counts within our dataset, and describe the distribution. Include in your summary the minimum and maximum platelet count in 10^3 cells per mm^3 (the units of the variable `platelet`). Do you notice anything odd or concerning about the distribution of platelet count? (2 points)
+
+b. You should have noticed a few individuals with platelet counts that do not make sense. Sometimes, rather than recording missing values as "NA" in datasets, people will record missing values with "-9", "-99", or "-999". This is typically reported in the metadata for a given dataset, but not for this one! Create a new dataset that includes only observations with platelet counts that make sense (aka platelet counts that are not missing). (0 points)
+
+c. Perform a Cox proportional hazards regression analysis to assess whether platelet count is associated with survival time, using the dataset you created in part (b). Interpret the output of your model; don't just give numerical output. Be sure to include a statistic quantifying the association with appropriate uncertainty quantification, as well as hypothesis tests. Be sure to state the null and alternative hypotheses. (2 points)
+
+
+
