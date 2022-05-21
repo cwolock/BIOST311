@@ -511,7 +511,7 @@ Let's start by \textbf{estimating the survival probability at time $t$}: $S(t) =
 
 If we observed actual survival times $T_1, T_2, \dots, T_n$, we could take
 \begin{align*}
-\frac{1}{n}\sum_{i=1}^n I(T_i \geq t)
+\frac{1}{n}\sum_{i=1}^n I(T_i > t)
 \end{align*}
 as an estimator of $S(t)$ (in other words, just count how many people made it past time $t$ without an event). This is a \textbf{nonparametric} estimator; we do not have to postulate a parametric model for the true survival distribution. This is unlike \textcolor{blue}{classical} linear regression, for example, where we assumed that the errors had a Normal distribution. 
 \\ ~\ 
@@ -869,7 +869,7 @@ time $u_k$ & $d_k$ & $n_k$ & $d_k/n_k$ & $1 - d_k/n_k$ & $\widehat{S}(u_k)$ \\
 			5 & 1 & 9 & $0.1$ &  $8\times 0.1= 0.8$  \\
 			8 & 1 & 7 & $0.1 + (0.1\times \frac{1}{7}) = 0.1143$ & $7 \times 0.1143 = 0.6857$\\
 			12 & 0 & 6 & $0.1143 +  (0.1143\times\frac{1}{5}) = 0.1371$ &  0.6857\\
-			13 & 1 & 5 & 0.1371 & $4 \times 0.1343 =0.5486 $\\
+			13 & 1 & 5 & 0.1371 & $4 \times 0.1371 =0.5486 $\\
 			18 & 0 & 4 & & \\
 			23 & 2 & 3 & & \\
 			30 & 1 & 1 & & \\
@@ -896,7 +896,7 @@ time $u_k$ & $d_k$ & $n_k$ & $d_k/n_k$ & $1 - d_k/n_k$ & $\widehat{S}(u_k)$ \\
 			5 & 1 & 9 & $0.1$ &  $8\times 0.1= 0.8$  \\
 			8 & 1 & 7 & $0.1 + (0.1\times \frac{1}{7}) = 0.1143$ & $7 \times 0.1143 = 0.6857$\\
 			12 & 0 & 6 & $0.1143 +  (0.1143\times\frac{1}{5}) = 0.1371$ &  0.6857\\
-			13 & 1 & 5 & 0.1371 & $4 \times 0.1343 =0.5486 $\\
+			13 & 1 & 5 & 0.1371 & $4 \times 0.1371 =0.5486 $\\
 			18 & 0 & 4 & $0.1371 + (0.1371\times \frac{1}{3}) = 0.1829$ & 0.5486\\
 			23 & 2 & 3 & & \\
 			30 & 1 & 1 & & \\
@@ -923,7 +923,7 @@ time $u_k$ & $d_k$ & $n_k$ & $d_k/n_k$ & $1 - d_k/n_k$ & $\widehat{S}(u_k)$ \\
 			5 & 1 & 9 & $0.1$ &  $8\times 0.1= 0.8$  \\
 			8 & 1 & 7 & $0.1 + (0.1\times \frac{1}{7}) = 0.1143$ & $7 \times 0.1143 = 0.6857$\\
 			12 & 0 & 6 & $0.1143 +  (0.1143\times\frac{1}{5}) = 0.1371$ &  0.6857\\
-			13 & 1 & 5 & 0.1371 & $4 \times 0.1343 =0.5486 $\\
+			13 & 1 & 5 & 0.1371 & $4 \times 0.1371 =0.5486 $\\
 			18 & 0 & 4 & $0.1371 + (0.1371\times \frac{1}{3}) = 0.1829$ & 0.5486\\
 			23 & 2 & 3 & 0.1829&  $1 \times 0.1829 = 0.1829$\\
 			30 & 1 & 1 & & \\
@@ -950,7 +950,7 @@ time $u_k$ & $d_k$ & $n_k$ & $d_k/n_k$ & $1 - d_k/n_k$ & $\widehat{S}(u_k)$ \\
 			5 & 1 & 9 & $0.1$ &  $8\times 0.1= 0.8$  \\
 			8 & 1 & 7 & $0.1 + (0.1\times \frac{1}{7}) = 0.1143$ & $7 \times 0.1143 = 0.6857$\\
 			12 & 0 & 6 & $0.1143 +  (0.1143\times\frac{1}{5}) = 0.1371$ &  0.6857\\
-			13 & 1 & 5 & 0.1371 & $4 \times 0.1343 =0.5486 $\\
+			13 & 1 & 5 & 0.1371 & $4 \times 0.1371 =0.5486 $\\
 			18 & 0 & 4 & $0.1371 + (0.1371\times \frac{1}{3}) = 0.1829$ & 0.5486\\
 			23 & 2 & 3 & 0.1829&  $1 \times 0.1829 = 0.1829$\\
 			30 & 1 & 1 & 0.1829 & $0.1829 \times 0 = 0$\\

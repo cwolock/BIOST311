@@ -28,7 +28,7 @@ knitr::opts_chunk$set(results = "hide")
 
 In this discussion section, we'll walk through a logistic regression prediction problem. We will use data collected from the Australia New Zealand Intensive Care Society and eICU Collaborative Research Datasets, which contains information on hospital patients from Australia, the US, and New Zealand. Patients in the dataset are over the age of 16 years old on admission to the hospital, and had at least a 4 hour stay in the ICU. The dataset can be found at https://www.kaggle.com/datasets/sadiaanzum/patient-survival-prediction-dataset. Each patient in the dataset is only recorded one time (i.e. if there were repeat ICU visits for a given individual, we only have data for one of them).
 
-We aim to predict hospital death for individuals from a variety of demographic and medical variables we have access to within the dataset. The dataset is called `hospitaldeaths.csv`, and is available on the Canvas site on the Week 8 page, or on the course github site. The metadata can also be found on the Canvas site on the Week 8 page, or on the course github site, as `hospitaldeaths_metadata.csv`. The code is provided below to load the dataset direclty from github, but you may download it to your personal machine and load it in that way if you prefer. We suggest downloading the metadata and opening it the file in Excel or another app, so that you can see what variables in the dataset you have access to for your prediction model.
+We aim to predict hospital death for individuals from a variety of demographic and medical variables we have access to within the dataset. The dataset is called `hospitaldeaths.csv`, and is available on the Canvas site on the Week 8 page, or on the course github site. The metadata can also be found on the Canvas site on the Week 8 page, or on the course github site, as `hospitaldeaths_metadata.csv`. The code is provided below to load the dataset directly from github, but you may download it to your personal machine and load it in that way if you prefer. We suggest downloading the metadata and opening it the file in Excel or another app, so that you can see what variables in the dataset you have access to for your prediction model.
 
 ```{r}
 library(tidyverse)
@@ -39,11 +39,45 @@ df <- read_csv(url("https://raw.githubusercontent.com/cwolock/BIOST311/main/Data
 
 # Exploratory plot and set-up
 
-1. Suppose we want to begin our prediction modeling by seeing whether a simple logistic regression model with `hospital_death` as our outcome and `age` is our predictor does a good job (in terms of AUC) at predicting hospital death. First, make a plot comparing the distribution of age between those who died in the hospital and those who did not die in the hospital. How would you describe the relationship between age and hospital death?
+1. Suppose we want to begin our prediction modeling by seeing whether a simple logistic regression model with `hospital_death` as our outcome and `age` as our predictor does a good job (in terms of AUC) at predicting hospital death. First, make a plot comparing the distribution of age between those who died in the hospital and those who did not die in the hospital. How would you describe the relationship between age and hospital death?
+
+```{r}
+df %>%
+  mutate(hospital_death = ifelse(hospital_death == 1, "Yes", "No")) %>%
+  ggplot() +
+  geom_boxplot(aes(x = age, fill = hospital_death, group = hospital_death))
+```
+
+people who died in the hospital in our dataset seem to be older on average. we can see that the IQR and the median age are higher for those who died in the hospital
 
 # Simple logistic regression: Prediction
 
 2. Build a logistic regression model to predict the hospital death by age. Evaluate its performance by creating an ROC curve and calculating the area under the curve (AUC). Be sure to evaluate your model on out-of-sample testing data. Use a 70/30 split for your training/testing data.
+
+```{r}
+set.seed(1234)
+vals <- c(rep(0, round(0.7 * nrow(df))),
+  rep(1, round(0.3 * nrow(df))))
+test_indicator <- sample(vals)
+
+test_df <- df %>%
+  mutate(test = test_indicator) %>%
+  filter(test == 1)
+train_df <- df %>%
+  mutate(test = test_indicator) %>%
+  filter(test == 0)
+
+mod <- glm(data = train_df, hospital_death ~ age, family = binomial)
+test_df$predictions <- predict(mod, newdata = test_df, type = "response")
+
+roc(test_df$hospital_death,
+    test_df$predictions,
+    smoothed = TRUE, plot = TRUE, auc.polygon = TRUE,
+    max.auc.polygon = TRUE, grid = TRUE, print.auc = TRUE,
+    show.thres = TRUE)
+```
+
+AUC is 0.614
 
 # Multiple logistic regression: Prediction
 
