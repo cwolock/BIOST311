@@ -1,0 +1,41 @@
+---
+title: 'Data Analysis Project, Peer Review'
+subtitle: "BIOST 311: Regression Methods in the Health Sciences"
+author: "Taylor Okonek and Charlie Wolock"
+date: "Spring Quarter 2022; Submit on Canvas by 27 May 2022"
+output: pdf_document
+---
+
+# Instructions
+
+Peer review is a critical step in the process of scientific research. Whether written research is published in a formal academic journal or casually disseminated among colleagues, it almost always goes through some version of peer review. This allows fellow researchers with relevant expertise to assess the soundness, clarity, and overall quality of the methodology, interpretation, and communication. 
+
+For this assignment, we are asking you to review a classmate's data analysis project first draft. Your goal is to provide useful feedback on both major and minor points, in order for the author to improve their project in the final report. You will structure your peer review as a formal peer review for a scientific journal (more details below). This will allow you to get a feel for how research dissemination works!
+
+This assignment is limited to **two pages**, and your written text should use at least 12-point font. See the guidelines below for a list of components that need to be included.
+
+Submit your *Peer Review* on Canvas by 11:59pm on May 27. **Do not discuss your project with other students or post questions about your project on the Canvas discussion board.** But, feel free to ask us any questions in person/via Canvas instead!
+ 
+This assignment is worth 5% of your course grade and is graded on effort/completion. 
+
+# Rubric:
+
+## Formatting (1 point)
+
+To receive full credit for this portion of the assignment, you should...
+
+- use 12 point font
+- write no more than two pages
+- write in full sentences
+
+## Overall assessment (8 points)
+
+*Provide a brief summary of what the aims of the project are, as well as the main findings and implications. What were the primary methods used to answer the scientific questions? What are the contributions of this project to our understanding of the primary topic?*
+
+## Major points (8 points)
+
+*Here you go over issues you identify in your reading of the paper. As a reviewer you don’t necessarily need to check all the results yourself, but you should point out concerns with, for example, assumptions or general appropriateness of methods. For example, you might comment on whether the statistical approach is adequate for answering the scientific questions. You can comment on how well they motivate the problem --- do they provide enough background for you to understand how this research fits into the big picture? Are there substantial analyses you feel are missing?* 
+
+## Minor points (8 points)
+
+*Use this section to outline typos, grammar issues, problems with figures/tables, etc. Is the report well-formatted? Do the figures have labels and legends? Is the writing clear?*
