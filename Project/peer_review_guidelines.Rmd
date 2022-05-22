@@ -12,9 +12,9 @@ Peer review is a critical step in the process of scientific research. Whether wr
 
 For this assignment, we are asking you to review a classmate's data analysis project first draft. Your goal is to provide useful feedback on both major and minor points, in order for the author to improve their project in the final report. You will structure your peer review as a formal peer review for a scientific journal (more details below). This will allow you to get a feel for how research dissemination works!
 
-This assignment is limited to **two pages**, and your written text should use at least 12-point font. See the guidelines below for a list of components that need to be included.
+This assignment is limited to **two pages**, and your written text should use at least 12-point font. See the guidelines below for a list of components that need to be included. You should submit your assignment as a pdf file *without your name attached* so that your comments remain anonymous.
 
-Submit your *Peer Review* on Canvas by 11:59pm on May 27. **Do not discuss your project with other students or post questions about your project on the Canvas discussion board.** But, feel free to ask us any questions in person/via Canvas instead!
+Submit your *Peer Review* on Canvas by 11:59pm on May 27. **Do not discuss your peer review with other students or post questions about your project on the Canvas discussion board.** But, feel free to ask us any questions in person/via Canvas instead!
  
 This assignment is worth 5% of your course grade and is graded on effort/completion. 
 
@@ -38,4 +38,4 @@ To receive full credit for this portion of the assignment, you should...
 
 ## Minor points (8 points)
 
-*Use this section to outline typos, grammar issues, problems with figures/tables, etc. Is the report well-formatted? Do the figures have labels and legends? Is the writing clear?*
+*Use this section to outline problems with clarity of writing, figures/tables, etc. Is the report well-formatted? Do the figures have labels and legends? Is the writing clear?*
