@@ -1,0 +1,203 @@
+---
+title: "Homework 7: Key"
+subtitle: "BIOST 311"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(formatR)
+
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(results = "hide")
+```
+
+
+## Instructions
+
+This assignment should be submitted on Canvas as a .pdf by 11:59pm on Friday, May 20th. You are welcome to work together on the homework; however, final solutions should be written up individually. 
+
+Unedited software output in the body of your assignment is not acceptable. Please round numerical values to 2--3 significant digits, and include your R code (if applicable) in the same document. See the "How to Write a Proper Homework" document on Canvas for additional guidelines.  
+
+Each homework assignment is worth 20 points total. Problems are graded for correctness, according to the number of points given in the problem statement.
+
+```{r preliminaries}
+library(readr)
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+```
+
+## 1. Case-control studies
+
+In this question, we'll investigate how case-control sampling affects two measures of association for binary variables using the `wcgs` dataset. 
+
+a. Load the `wcgs` dataset (0 points)
+
+```{r 1a}
+wcgs <- read_csv(url("https://raw.githubusercontent.com/cwolock/BIOST311/main/Datasets/wcgs.csv"))
+```
+
+b. Create a new binary variable indicating if the subject smokes cigarettes (i.e., do they smoke more than 0 cigarettes per day). Summarize this variable using an appropriate descriptive statistic. (1 point)
+
+```{r}
+wcgs <- wcgs %>% mutate(smoke = ifelse(ncigs > 0, 1, 0)) 
+wcgs %>% pull(smoke) %>% table()
+```
+
+\textcolor{blue}{Out of the 3154 subjects, 1502 (47.6\%) smoke at least one cigarette per day.} 
+
+c. Calculate and interpret the relative risk *and* the odds ratio of CHD among those who smoke versus those who do not. (2 points)
+
+```{r}
+p_smoke <- wcgs %>% filter(smoke == 1) %>% pull(chd) %>% mean()
+p_nsmoke <- wcgs %>% filter(smoke == 0) %>% pull(chd) %>% mean()
+odds_smoke <- p_smoke / (1 - p_smoke)
+odds_nsmoke <- p_nsmoke / (1 - p_nsmoke)
+RR <- p_smoke/p_nsmoke
+OR <- odds_smoke/odds_nsmoke 
+```
+
+\textcolor{blue}{The relative risk of CHD comparing smokers to nonsmokers is 1.78, indicating that the risk of CHD is 1.78 times as high in smokers as in nonsmokers. The odds ratio of CHD comparing smokers to nonsmokers is 1.88, indicating that the risk of CHD is 1.88 times as high in smokers as in nonsmokers.}
+
+d. Create an artificial case-control study from the full `wcgs` data set. To do this, randomly select 150 subjects with CHD and 150 subjects without CHD, and combine these 300 subjects into a single data set. Summarize the binary variable for smoking status within this case-control sample. The pseudocode below should help you get started. (4 points)
+
+```
+1. Get 100 subjects with cHD.
+    a. Select all subjects with CHD. 
+    b. Create new variable assigning each subject to inclusion or exclusion from 
+       case-control sample. There should be 100 assigned to inclusion.
+    c. Select CHD subjects assigned to inclusion. 
+2. Get 100 subjects without CHD.
+    a. Select all subjects without CHD. 
+    b. Create new variable assigning each subject to inclusion or exclusion from 
+       case-control sample. There should be 100 assigned to inclusion.
+    c. Select non-CHD subjects assigned to inclusion. 
+3. Combine 100 CHD and 100 non-CHD subjects into case-control data set. 
+```
+
+```{r}
+chd_set <- wcgs %>% filter(chd == 1)
+nchd_set <- wcgs %>% filter(chd == 0)
+set.seed(24)
+values <- c(rep(1, 150),
+            rep(0, nrow(chd_set) - 150))
+chd_set <- chd_set %>% mutate(included = sample(values))
+cases <- chd_set %>%
+  mutate(include_indicator = included) %>%
+  filter(include_indicator == 1)
+values <- c(rep(1, 150),
+            rep(0, nrow(nchd_set) - 150))
+nchd_set <- nchd_set %>% mutate(included = sample(values))
+ctrls <- nchd_set %>%
+  mutate(include_indicator = included) %>%
+  filter(include_indicator == 1)
+cc_dat <- rbind(cases, ctrls)
+
+cc_dat %>% pull(smoke) %>% table()
+```
+
+\textcolor{blue}{In the case-control data set, 159 out of 300 subjects (53\%) smoke at least one cigarette per day.}
+
+e. Within the case-control data set, calculate and interpret the relative risk *and* the odds ratio of CHD among those who smoke versus those who do not. (2 points)
+
+```{r}
+p_smoke <- cc_dat %>% filter(smoke == 1) %>% pull(chd) %>% mean()
+p_nsmoke <- cc_dat %>% filter(smoke == 0) %>% pull(chd) %>% mean()
+odds_smoke <- p_smoke / (1 - p_smoke)
+odds_nsmoke <- p_nsmoke / (1 - p_nsmoke)
+RR <- p_smoke/p_nsmoke
+OR <- odds_smoke/odds_nsmoke 
+```
+
+\textcolor{blue}{WIthin the case-control data set, the relative risk of CHD comparing smokers to nonsmokers is 1.39, indicating that the risk of CHD is 1.39 times as high in smokers as in nonsmokers. The odds ratio of CHD comparing smokers to nonsmokers is 1.86, indicating that the risk of CHD is 1.86 times as high in smokers as in nonsmokers.}
+
+f. Compare your answers from parts (c) and (e). How similar are your estimates of relative risk and odds ratio? (1 point)
+
+\textcolor{blue}{Using our case-control data set, we found that the odds ratio for CHD comparing smokers to nonsmokers was nearly identical (1.88 vs. 1.86). On the other hand, the relative risk was quite different (1.78 vs. 1.39).}
+
+## 2. Multiple logistic regression
+
+In this question, we will study the association between high blood pressure and CHD. 
+
+a. As we discussed in Week 7 Section, high blood pressure is defined as a diastolic blood pressure greater than 90, and a systolic blood pressure greater than 140. Create a new binary variable indicating whether a subject has high blood pressure. Perform a logistic regression to investigate the association between CHD (outcome) and high blood pressure (predictor of interest).  Give a point estimate for the association between high blood pressure and CHD, along with appropriate uncertainty quantification. Perform a hypothesis test for the association, and be sure to state your null and alternative hypthoses. Interpret your results. (2 points)
+
+```{r}
+wcgs <- wcgs %>% mutate(hbp = ifelse(sbp > 140 & dbp > 90, 1, 0))
+mod <- glm(chd ~ hbp, data = wcgs, family = binomial())
+summary(mod)
+exp(coef(mod))
+exp(confint(mod))
+```
+
+\textcolor{blue}{We estimate that the ratio of odds of CHD comparing those with to those without high blood pressure is 2.21. The observed odds ratio would not be surprising if the true odds ratio were between 1.56 and 3.09. We reject the null hypothesis that the odds ratio is equal to 1, against the alternative that it is not equal to 1 (p < 0.001). We find significant evidence an association between high blood pressure and CHD.}
+
+b. Perform a multiple logistic regression to investigate whether or not age acts as an effect modifier for the association between high blood pressure and CHD. Estimate the association between high blood pressure and CHD for subjects who are 40 years old and for subjects who are 50 years old (using only your logistic regression model), and perform a hypothesis test for effect modification. Be sure to state your null and alternative hypotheses and interpret your results. (2 points)
+
+```{r}
+mod <- glm(chd ~ hbp*age, data = wcgs, family = binomial())
+summary(mod)
+exp(coef(mod))
+exp(confint(mod))
+
+# odds ratio for 40 year-olds
+exp(-0.54485 + (40 * 0.02473))
+
+# odds ratio for 50 year-olds
+exp(-0.54485 + (50 * 0.02473))
+```
+
+\textcolor{blue}{We estimate that the ratio of odds of CHD comparing those with to those without high blood pressure, among those 40 years old, is 1.56. We estimate that the ratio of odds of CHD comparing those with to those without high blood pressure, among those 50 years old, is 2.00. The observed ratio of odds ratios would not be surprising if the true ratio were between 0.96 and 1.09. We fail to reject the null hypothesis that the ratio of odds ratios is equal to 1 (p = 0.4), against an alternative hypothesis that the ratio of odds ratios is not equal to 1. We do not find significant evidence of effect modification by age.} 
+
+## 3. Prediction with logistic regression
+
+One of the secondary goals of the WCGS study was to build a model to predict the occurrence of CHD. In this problem you will build and evaluate several risk models using logistic regression. 
+
+a. The Framingham Hard Coronary Heart Disease model predicts risk of CHD occurrence using age, cholesterol, systolic blood pressure, and smoking status (as well as a couple other variables which are unavailable in the `wcgs` data set). Using these variables, build a logistic regression model to predict the occurrence of CHD patients. Evaluate its performance by creating an ROC curve and calculating the area under the curve (AUC). Be sure to evaluate your model on out-of-sample testing data! (3 points)
+
+```{r}
+set.seed(1001)
+values <- c(rep(0, floor(0.7*nrow(wcgs))),
+            rep(1, ceiling(0.3*nrow(wcgs))))
+wcgs <- wcgs %>% mutate(test = sample(values))
+test_df <- wcgs %>%
+  mutate(test_indicator = test) %>%
+  filter(test_indicator == 1)
+train_df <- wcgs %>%
+  mutate(test_indicator = test) %>%
+  filter(test_indicator == 0)
+mod <- glm(chd ~ age + chol + sbp + smoke, data = train_df, family = binomial())
+test_df <- test_df %>% mutate(predictions = predict(mod, newdata = test_df, type = "response"))
+library(pROC)
+roc(test_df %>% pull(chd),
+    test_df %>% pull(predictions),
+    smoothed = TRUE, plot = TRUE, auc.polygon = TRUE, 
+    max.auc.polygon = TRUE, grid = TRUE, print.auc = TRUE, show.thres=TRUE) 
+```
+
+\textcolor{blue}{The ROC curve for the Framingham model is shown above. The AUC of this model is 0.759, calculating using test data comprising 30\% of the data set.}
+
+b. Build another logistic regression predictive model of your choosing using the variables available in `wcgs`. Your model must include at least one variable that is not in the Framingham model, and it need not include all Framingham variables. Evaluate your model by creating an ROC curve and calculating the AUC. Compare the performance of your model to the Framingham model. (3 points)
+
+```{r}
+mod <- glm(chd ~ age*chol*sbp*smoke*tabp, data = train_df, family = binomial())
+test_df <- test_df %>% mutate(predictions = predict(mod, newdata = test_df, type = "response"))
+roc(test_df %>% pull(chd),
+    test_df %>% pull(predictions),
+    smoothed = TRUE, plot = TRUE, auc.polygon = TRUE, 
+    max.auc.polygon = TRUE, grid = TRUE, print.auc = TRUE, show.thres=TRUE)
+```
+
+\textcolor{blue}{I created a new prediction model including age, cholesterol, systolic blood presure, smoking status, Type A personality, and all possible interaction terms. The ROC curve for this model is shown below. The estimated AUC using test data was 0.744. My model, which is significantly more complex than the Framingham model, performs slightly worse. I would use the Framingham model in practice since it's much simpler.}

@@ -1124,7 +1124,7 @@ Some other potential issues:
 
 
 \begin{frame}{Nonparametric esitmation of measures of central tendency}
-	To be precise, we'll define the mean as the \textcolor{blue}{smallest value $t$ such that $\widehat{S}(t) \leq 0.5$}. This covers us in case the survival curve ``jumps over" 0.5 without hitting it, or is equal to 0.5 over an entire interval of times. 
+	To be precise, we'll define the median as the \textcolor{blue}{smallest value $t$ such that $\widehat{S}(t) \leq 0.5$}. This covers us in case the survival curve ``jumps over" 0.5 without hitting it, or is equal to 0.5 over an entire interval of times. 
 	\\ ~\ 
 	
 	In addition, if the estimated survival curve never crosses 0.5, we simply cannot estimate the median survival time. 
@@ -1146,7 +1146,7 @@ Some other potential issues:
 
 It is often of interest to \textbf{contrast the survivorship of several groups}, rather than simply describing the survival time distribution in a single group. For example:
 \begin{itemize}
-\item Does time to death or liver transplantation depend on treatment with d-penicillamine? 
+\item Does time to death depend on treatment with d-penicillamine? 
 \end{itemize}
 
 Commonly, in survival analysis, we \textcolor{blue}{compare the entire survival function between two groups} to make this contrast.
@@ -1163,7 +1163,7 @@ Comparing the entire survival function is the same as saying that the group-spec
 
 \textbf{Answer:}
 \begin{align*}
-\textcolor{blue}{H_0: S_0(t) = S_1(t) \text{ for all } t} \ \text{vs} \ \textcolor{orange}{H_a: S_0(t) \neq S_1(t) \text{ for some }t}.
+\textcolor{blue}{H_0: S_0(t) = S_1(t) \text{ for all } t} \ \text{vs} \ \textcolor{orange}{H_1: S_0(t) \neq S_1(t) \text{ for some }t}.
 \end{align*} \pause 
 Note that we need to compare survival across all times! How do we do this? 
 \end{frame}
