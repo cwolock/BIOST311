@@ -1,0 +1,74 @@
+% Create a Table of Contents in Beamer
+\documentclass[10pt,t]{beamer}
+% Theme choice:
+\usetheme{Singapore}
+\useoutertheme{sidebar}
+\usecolortheme{seahorse}
+\setbeamercolor{titlelike}{bg=white}
+\setbeamercolor{frametitle}{bg=white}
+%\setbeamertemplate{frametitle}[default][left]
+\setbeamertemplate{navigation symbols}{}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{ulem}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{wrapfig}
+\usepackage{subfig}
+\usepackage{setspace}
+\usepackage{enumerate}
+\usepackage{verbatim}
+
+% new amber color
+\definecolor{amber}{rgb}{1.0, 0.75, 0.0}
+
+% Title page details: 
+\title{Bonus Lecture: Spatial Statistics and Under-5 Mortality Estimation} 
+\author{Taylor Okonek}
+\date{\today}
+
+
+\begin{document}
+	% Title page frame
+\begin{frame}
+	\titlepage 
+\end{frame}
+
+
+% Outline frame
+\begin{frame}{Outline}
+	\tableofcontents
+\end{frame}
+
+\AtBeginSection[ ]
+{
+	\begin{frame}{Outline}
+		\tableofcontents[currentsection]
+	\end{frame}
+}
+
+
+\section{Under-5 Mortality Estimation}
+
+\subsection{Why does this matter?}
+
+\subsection{Why do we need fancy statistical methods?}
+
+\begin{frame}{Quantitative and binary outcomes}
+content...
+\end{frame}
+
+\section{Spatial Statistics}
+
+\subsection{Dependent data}
+
+\subsection{Bayesian statistics}
+
+\section{Cool maps and open statistical questions}
+
+
+\end{document}
