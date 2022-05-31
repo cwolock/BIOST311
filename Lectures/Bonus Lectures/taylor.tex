@@ -594,9 +594,173 @@ One way to visualize discrete spatial structure is to create a \textcolor{blue}{
 
 \end{frame}
 
+\begin{frame}{Spatial dependence}
+Let's consider a subset of Namibia Administrative 1 regions in the Northwestern part of the country. We label the regions with numbers below.
+
+
+\begin{figure}
+	\centering \includegraphics[scale=0.4]{namibia_admin1_subset.png}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Spatial dependence}
+
+\begin{figure}
+	\centering \includegraphics[scale=0.4]{namibia_admin1_subset.png}
+\end{figure}
+
+We can record information about the structure of this graph in the following table:
+
+\vspace{0.3cm}
+
+\begin{table}[]
+	\begin{tabular}{l|l|l}
+		\multicolumn{1}{c|}{Region} & \multicolumn{1}{c|}{Number of Neighbors} & \multicolumn{1}{c}{Neighbors} \\ \hline
+		1                           & 3                                        & \{2,3,5\}                     \\
+		2                           & 3                                        & \{1,3,4\}                     \\
+		3                           & 4                                        & \{1,2,4,5\}                   \\
+		4                           & 3                                        & \{2,3,5\}                     \\
+		5                           & 3                                        & \{1,3,4\}                    
+	\end{tabular}
+\end{table}
+
+\end{frame}
+
+\begin{frame}{Spatial dependence}
+Without going into too many details, we can transform the information in our table into a matrix, which we can then use to encode spatial dependence into a \textcolor{orange}{spatial random effect}.
+
+\vspace{0.3cm}
+
+What we will eventually end up doing is using this spatial structure along with some parameters (such as a variance parameter) as \textcolor{blue}{prior information} in a Bayesian model. This will allow us to obtain precise predictions of our outcome for all regions in our geographic area, even if we have little to no data in some of those regions.
+
+\vspace{0.3cm}
+
+\includegraphics[scale=0.01]{chilipepper.png} With this particular form of spatial random effect, there is an underlying bias-variance tradeoff going on under the hood here, where we sacrifice some (hopefully negligible) amount of bias for smaller variances (and therefore, more precise predictions).
+
+\end{frame}
+
 \subsection{Bayesian statistics}
 
+\begin{frame}{Bayes' rule, and why it's cool!}
+You may recall from BIOST 310 that Bayes' rule is a theorem that relates conditional and mariginal probabilities of events. Suppose we have two events $A$ and $B$. Then Bayes' rule states that
+$$
+P(A \mid B)  = \frac{P(B \mid A) P(A)}{P(B)}
+$$
+Bayes' rule is a useful theorem in a variety of statistical applications, but importantly, it is the structural basis of \textcolor{blue}{Bayesian statistics}.
+
+\vspace{0.3cm}
+
+Everything we have done in BIOST 311 falls under the category of \textcolor{orange}{Frequentist statistics}.
+
+\vspace{0.3cm}
+
+\textbf{Fun fact:} Back in the day, statisticians used to get into huge fights over which crowd they fell into (Frequentist or Bayesian). Nowadays, most (reasonable) people agree that both approaches to statistics are useful in different settings.
+
+\end{frame}
+
+\begin{frame}{Bayesian vs. Frequentist statistics}
+\small The key difference between Bayesian and Frequentist statistics is whether or not the parameters that you are trying to estimate are \textcolor{orange}{fixed} or \textcolor{blue}{random} variables.
+
+\vspace{0.3cm}
+
+In Frequentist linear regression, recall that the parameters we were trying to estimate were regression coefficients $\beta_0, \dots, \beta_p$. Our estimates of these coefficients were estimates of some \textcolor{orange}{fixed}, unknown, true parameters in the population. This is in part what makes confidence interval interpretations somehwat dissatisfying. 
+
+\vspace{0.3cm}
+
+If we were instead to do Bayesian linear regression, the regression coefficients that we estimate are instead treated as \textcolor{blue}{random} variables with their own probability distributions. For example, rather than $\beta_1$ being a fixed unknown slope coefficient, $\beta_1$ instead would have an entire probability distribution. Rather than a confidence interval for $\beta_1$, we instead get a \textcolor{blue}{credible interval} based on the estimated distribution for $\beta_1$, and the interpretation of the credible interval is the probability that our estimate lies within the interval (a satisfying interpretation!).
+
+\end{frame}
+
+\begin{frame}{Bayesian statistics}
+How does all of this relate to Bayes' rule? Let's again consider the case of linear regression. Suppose we have an outcome $Y$ and predictor $X$, and we want to estimate the intercept and slope parameters in our regression. We will estimate both of these parameters as a vector $\beta = (\beta_0, \beta_1)$. Using Bayes' rule, we could write
+$$
+P(\beta \mid X, Y) = \frac{P(Y \mid X, \beta) P(\beta \mid X)}{P(Y \mid X)}
+$$
+ A few things to note: \pause
+
+\vspace{0.3cm}
+\small 
+
+\begin{itemize}
+	\item $P(Y \mid X, \beta)$ should look somewhat familiar to you. Remember that in Chapter 1 we always had $E[Y \mid X, \beta]$ on the left hand side of our regression equation. This piece is similar in Bayesian linear regression!
+	\item $P(\beta \mid X, Y)$ is going to be the distribution of our regression coefficients that we are trying to estimate
+	\item $P(\beta \mid X)$ is going to be some \textit{prior information} about our regression coefficients that we will use to inform our model
+	\item $P(Y \mid X)$ will end up being something we can mostly ignore
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Bayesian statistics}
+In words, we can write Bayes' rule as
+$$
+\text{Posterior} = \frac{\text{Likelihood} \times \text{Prior}}{\text{Normalizing constant}}
+$$
+\begin{itemize}
+	\item The posterior distribution of our parameters is what we aim to estimate
+	\item The likelihood is the contribution of our data to our estimates
+	\item The prior contains ``prior" beliefs about our parameters
+	\item The normalizing constant makes sure that our posterior distribution is a true probability distribution (a.k.a. that our posterior distribution integrates to 1)
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bayesian statistics}
+Why would we ever want to do Bayesian statistics?
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item Bayesian statistics is a natural way of thinking about the world! As humans, we typically have prior beliefs about things, and then we use new information (data) to update those beliefs
+	\item \pause Bayesian statistics is especially useful in scenarios where we have good prior information and very little data. Much of Frequentist statistics relies on nice statistical things happening when we have large sample sizes. However, there are certain events in the world that we know will never occur a large number of times (for example, submarine crashes). It may make more sense in these scenarios to do something Bayesian instead
+	\item \pause Bayesian statistics can sometimes be computationally more feasible to do than Frequentist statistics. All of the analyses we did in BIOST 311 took very little time to do (probably a few seconds). Many statistical models take \textit{much} longer (days, weeks, \dots) than this to run. This is often true in spatial statistics settings!
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Bayesian statistics}
+How does this relate back to spatial statistics? \pause
+
+\vspace{0.3cm}
+
+In spatial statistics settings, we often have some prior information about the spatial structure of our data (or how strong of a spatial structure our data may have) that we can incorporate into our model in a Bayesian framework. \pause
+
+\vspace{0.3cm}
+
+Additionally, as mentioned on the previous slide, Bayesian statistics is often a much more computationally tractable route when spatial models get complex.
+\end{frame}
+
 \section{Cool maps and open statistical questions}
+
+\begin{frame}{Cool maps!}
+On the next few slides, there are examples of cool maps we can make of the predictions we obtain using Bayesian spatial models for Under-5 Mortality estimation for the UN and HIV prevalence estimation for a project related to spatial statistics methodology development.
+\end{frame}
+
+\begin{frame}{Under-5 Mortality Estimation for the UN}
+\centering \includegraphics[scale=0.4]{namibia_igme.png}
+\end{frame}
+
+\begin{frame}{HIV Prevalence estimation in South Africa}
+\centering \includegraphics[scale=0.4]{map_compare_medians.png}
+\end{frame}
+
+\begin{frame}[c]{HIV Prevalence estimation in South Africa}
+\centering \includegraphics[scale=0.4]{ranking_plot.png}
+\end{frame}
+
+\begin{frame}{Open statistical questions}
+Examples of spatial statistics and under-5 mortality research questions that have yet to be answered in a satisfying way:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item How do we combine vital registration, full birth history, and summary birth history data to produce predictions of under-5 mortality?
+	\item How do we encode spatial dependence into a statistical model for countries that contain islands (if at all)?
+	\item How do we incorporate fertility and migration information into models for under-5 mortality?
+	\item How do we adequately account for the design of DHS (or other) surveys in our statistical models when we have little to no data in certain regions?
+	\item How do we improve the computational speed of our models so that statisticians in national statistical offices in low and middle income countries can produce their own estimates?
+	\item Many more!
+\end{itemize}
+
+\end{frame}
 
 
 \end{document}
