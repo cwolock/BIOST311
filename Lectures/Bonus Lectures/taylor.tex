@@ -257,7 +257,7 @@ Both full and summary birth history data are typically collected via nationally 
 
 
 \begin{frame}{The Demographic and Health Surveys (DHS) Program}
-One of the leading sources of full birth history data for low and middle income countries are the Demographic and Health Surveys (DHS). They are designed to provide nationally representative (unbiased) estimates for a variety of demographic indicators. 
+One of the leading sources of full birth history data for low and middle income countries are the Demographic and Health Surveys (\href{https://dhsprogram.com/}{\textcolor{cyan}{DHS}}). They are designed to provide nationally representative (unbiased) estimates for a variety of demographic indicators. 
 
 \vspace{0.3cm}
 
@@ -449,10 +449,150 @@ Where statistics can help us is through making \textit{reasonable} assumptions a
 \section{Spatial Statistics}
 
 \begin{frame}{Spatial statistics}
-Spatial statistics is an \textit{incredibly} broad subfield of statistics, and we will only touch on a small part of it in this lecture. In particular, we will focus on \textcolor{blue}{discrete} spatial statistics.
+Spatial statistics is an \textit{incredibly} broad subfield of statistics, and we will only touch on a small part of it in this lecture. In particular, we will focus on \textcolor{blue}{discrete} spatial statistics (and even then, only a small part of it!)
+
+\vspace{0.3cm}
+
+By discrete spatial statistics, we mean that the data we collect have well-defined, geographic boundaries. In our case, we have Administrative regions that define our geographic boundaries. 
+
+\vspace{0.3cm}
+
+This is opposed to continuous (or geostatistcal) spatial data where we do not have well-defined boundaries. 
+
+\vspace{0.3cm}
+
+\pause \small Often, treating your data as discrete or continuous (spatially) is a choice that the statistician gets to make, in collaboration with other scientists / policy makers. For under-5 mortality, we treat the data as discrete, because we are ultimately interested in making predictions of under-5 mortality for discrete regions, though it is currently up for debate whether this is the best way to handle the data!
+
 \end{frame}
 
 \subsection{Dependent data}
+
+\begin{frame}{Why is spatial data dependent data?}
+Throughout this course, we have only touched on methods for \textit{independent} data. This was a key assumption for the regression methods we have considered thus far.
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Question:} Why is spatial data dependent data?
+
+\vspace{0.3cm}
+
+\pause We typically have reason to believe that observations (individuals) that are closer together in space will be more similar to one another, than observations (individuals) who are far apart in space.
+
+\vspace{0.3cm}
+
+\pause Examples:
+
+\vspace{0.3cm}
+
+\begin{itemize}
+	\item Air temperature
+	\item Air pollution measures
+	\item Risk of COVID-19 (or other infectious diseases)
+	\item Child mortality rates
+\end{itemize} 
+
+\end{frame}
+
+\begin{frame}{Simple ways of dealing with dependent data}
+Dependent data typically presents itself in clusters (multiple individuals who see the same dentist, multiple individuals in the same state, etc.). While our observations are dependent overall, they are generally going to be independent \textit{within} clusters. 
+
+\vspace{0.3cm}
+
+\pause Suppose we are interested in estimating the association between $\text{PM}_{2.5}$ and lung cancer in the U.S. For each individual in our dataset, we collect information on whether they have lung cancer or have had lung cancer previously, the latitude and longitude for where they permanently reside, the $\text{PM}_{2.5}$ level at that latitude and longitude, and the state in which they live. Our data looks something like this:
+
+\vspace{0.3cm}
+
+\begin{table}[]
+	\begin{tabular}{l|l|l|l|l|l}
+		\multicolumn{1}{c|}{ID} & \multicolumn{1}{c|}{Lung Cancer} & \multicolumn{1}{c|}{Lat} & \multicolumn{1}{c|}{Long} & \multicolumn{1}{c|}{$\text{PM}_{2.5}$ ($\mu$g/$m^3$)} & \multicolumn{1}{c}{State} \\ \hline
+		1                                   & 1                                & 33.5186                  & 86.8104                   & 25                          & AL                   \\
+		2                                   & 0                                & 45.0854                  & 93.0081                   & 10                          & MN                \\
+		3                                   & 0                                & 47.6062                  & 122.3321                  & 12                          & WA             
+	\end{tabular}
+\end{table}
+
+\end{frame}
+
+\begin{frame}{Simple ways of dealing with dependent data}
+We have reason to believe that our data is dependent, because observations geographically close together will have similar $\text{PM}_{2.5}$ levels. If we treat our spatial data as discrete, we could consider states (AL, MN, WA, etc.) to contain geographic clusters of observations. Perhaps it is reasonable to assume that \textit{within} each state, our observations are independent.*
+
+\vspace{0.3cm}
+
+\textcolor{blue}{Question(s):} What statistical model could answer our scientific question \textit{if we assume all of our data is independent}? What statistical model could answer our scientific question \textit{if we assume all of our data is independent within states}?
+
+\vspace{0.3cm}
+
+\vfill
+
+\tiny *This may not always be a reasonable assumption, and in this case, we could consider using a continuous spatial model instead rather than assuming observations are independent within states.
+\end{frame}
+
+\begin{frame}{Simple ways of dealing with dependent data}
+Recall our scientific question: We are interested in estimating the association between $\text{PM}_{2.5}$ and lung cancer in the U.S.
+
+\vspace{0.3cm}
+
+Assuming all of our data is independent, we could fit the logistic regression model:
+$$
+\log(\text{Odds}[\text{lung cancer} \mid \text{pm2.5}]) = \beta_0 + \beta_1  \text{pm2.5}
+$$
+
+\vspace{0.3cm} Assuming our data is independent within states, we could fit the logistic regression model:
+$$
+\log(\text{Odds}[\text{lung cancer} \mid \text{pm2.5}, \text{state}]) = \beta_0 + \beta_1  \text{pm2.5} + \beta_2 \text{state}
+$$
+\end{frame}
+
+\begin{frame}{Simple ways of dealing with dependent data}
+\begin{align*}
+\text{Model 1:} & \log(\text{Odds}[\text{lung cancer} \mid \text{pm2.5}]) \\
+& \hspace{1cm} = \beta_0 + \beta_1  \text{pm2.5} \\
+\text{Model 2:} & \log(\text{Odds}[\text{lung cancer} \mid \text{pm2.5}, \text{state}]) \\
+& \hspace{1cm} = \beta_0 + \beta_1  \text{pm2.5} + \beta_2 \text{state}
+\end{align*}
+
+\vspace{0.3cm}
+
+A few observations:
+
+\begin{itemize}
+	\item We know that Model 1 violates the independence assumption, and therefore our resulting estimate of the association between lung cancer and $\text{PM}_{2.5}$ is going to be misleading
+	\item We know from discussing adjustment variables that the interpretation of our estimate will be different for Model 2 than for Model 1. For Model 2, we will interpret our odds ratio $e^{\beta_1}$ for individuals \textit{within the same state} \textcolor{blue}{(and we assumed individuals within the same state are independent!)}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Simple ways of dealing with dependent data}
+\textbf{Key Takeaway:} As a general rule, if we include covariate(s) in our model that account for all of the clustering (dependency) in our data, then our error terms $\epsilon_i$ will satisfy the independence assumption we need for linear/logistic/etc. regression.
+
+\vspace{0.3cm}
+
+This is arguably the simplest, valid way of dealing with dependent data, though more often in practice, people will use something called \textcolor{orange}{random effects}. Details on what random effects are will be left to a future course in statistics, but at a high level, you should know that random effects are another way of incorporating information about the dependence (spatial or otherwise) in your data into your statistical model.
+
+\vspace{0.3cm}
+
+Most discrete spatial statistics problems involve \textit{spatial} random effects. We'll describe how they incorporate spatial dependence into a model at a high level in the following slides.
+\end{frame}
+
+\begin{frame}{Spatial dependence}
+In the $\text{PM}_{2.5}$ example, we saw one way to deal with spatial dependence. However, we didn't incorporate any information on the spatial \textit{structure} of our data into our model. 
+
+\vspace{0.3cm}
+
+What do we mean by spatial structure? Consider the following map of Adminsitrative 1
+regions in Namibia:
+
+\centering \includegraphics[scale=0.4]{namibia_admin1.png}
+
+\end{frame}
+
+\begin{frame}{Spatial dependence}
+One way to visualize discrete spatial structure is to create a \textcolor{blue}{graph} with nodes at the geographic midpoint of each Administrative 1 region, and edges connecting \textit{neighboring} Administrative 1 regions:
+
+\vspace{0.3cm}
+
+\centering \includegraphics[scale=0.4]{namibia_admin1_2.png}
+
+\end{frame}
 
 \subsection{Bayesian statistics}
 
