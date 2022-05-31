@@ -86,7 +86,7 @@ The Millennium Development Goals (MDGs) for the year 2015 were established in 20
 	\item To combat HIV/AIDS, malaria, and other diseases
 	\item To ensure environmental sustainability
 	\item To develop a global partnership for development
-\end{enumerate} \pause
+\end{enumerate} 
 
 \end{frame}
 
@@ -104,7 +104,7 @@ In 2004, the United Nations Inter-agency Group for Child Mortality Estimation (\
 \vspace{0.3cm}
 
 \begin{itemize}
-	\item assess whether Target 4A (among other within MDG 4) was on track to be met
+	\item assess whether Target 4A (among others within MDG 4) was on track to be met
 	\item improve methods for child mortality estimation
 	\item share data on child mortality estimates
 \end{itemize}
@@ -180,11 +180,11 @@ SDG 3: Good health and well-being
 
 \vspace{0.3cm}
 
-\pause As of 2021, 195 countries have already met this target. However, UN IGME estimates that if current trends continue, 54 countries will not meet the under-5 mortality target by 2030, and 61 countries will not meet the under-5 mortality target by 2030.
+\pause As of 2021, 195 countries have already met this target. However, UN IGME estimates that if current trends continue, 54 countries will not meet the under-5 mortality target by 2030, and 61 countries will not meet the neonatal mortality target by 2030.
 
 \vspace{0.3cm}
 
-\pause Where can we come in (as biostatisticans) to help countries meet this target, and lower child mortality rates in general?
+\pause Where can we come in (as biostatisticians) to help countries meet this target, and lower child mortality rates in general?
 \end{frame}
 
 \subsection{Why do we need fancy statistical methods?}
@@ -261,7 +261,7 @@ One of the leading sources of full birth history data for low and middle income 
 
 \vspace{0.3cm}
 
-As with most surveys, the DHS cannot collect information from every individual in a country. The majority of their surveys to ensure that users of their data are able to make \textit{precise}, unbiased estimates and precictions at the \textcolor{orange}{Administrative 1} level.
+As with most surveys, the DHS cannot collect information from every individual in a country. The majority of their surveys are designed to ensure that users of their data are able to make \textit{precise}, unbiased estimates and predictions at the \textcolor{orange}{Administrative 1} level.
 
 \vspace{0.3cm}
 
@@ -299,7 +299,7 @@ Obtaining \textit{subnational} estimates of quantities like child mortality, dis
 
 \vspace{0.3cm}
 
-\pause If we have vital registration data, obtaining reliable estimates at the Administrative 2 level is very straightforward. When we only have access to survey data that is designed to obtain relibale estimates at the Adminstrative 1 level, this gets very complicated very quickly\dots
+\pause If we have vital registration data, obtaining reliable estimates at the Administrative 2 level is very straightforward. When we only have access to survey data that is designed to obtain reliable estimates at the Adminstrative 1 level, this gets very complicated very quickly\dots
 \end{frame}
 
 \begin{frame}{Data sparsity}
@@ -476,7 +476,7 @@ Throughout this course, we have only touched on methods for \textit{independent}
 
 \vspace{0.3cm}
 
-\pause We typically have reason to believe that observations (individuals) that are closer together in space will be more similar to one another, than observations (individuals) who are far apart in space.
+\pause We typically have reason to believe that observations (individuals) that are closer together in space will be more similar to one another than observations (individuals) who are far apart in space.
 
 \vspace{0.3cm}
 
@@ -664,11 +664,11 @@ Everything we have done in BIOST 311 falls under the category of \textcolor{oran
 
 \vspace{0.3cm}
 
-In Frequentist linear regression, recall that the parameters we were trying to estimate were regression coefficients $\beta_0, \dots, \beta_p$. Our estimates of these coefficients were estimates of some \textcolor{orange}{fixed}, unknown, true parameters in the population. This is in part what makes confidence interval interpretations somehwat dissatisfying. 
+In Frequentist linear regression, recall that the parameters we were trying to estimate were regression coefficients $\beta_0, \dots, \beta_p$. Our estimates of these coefficients were estimates of some \textcolor{orange}{fixed}, unknown, true parameters in the population. This is in part what makes confidence interval interpretations somewhat dissatisfying. 
 
 \vspace{0.3cm}
 
-If we were instead to do Bayesian linear regression, the regression coefficients that we estimate are instead treated as \textcolor{blue}{random} variables with their own probability distributions. For example, rather than $\beta_1$ being a fixed unknown slope coefficient, $\beta_1$ instead would have an entire probability distribution. Rather than a confidence interval for $\beta_1$, we instead get a \textcolor{blue}{credible interval} based on the estimated distribution for $\beta_1$, and the interpretation of the credible interval is the probability that our estimate lies within the interval (a satisfying interpretation!).
+If we were instead to do Bayesian linear regression, the regression coefficients that we estimate are instead treated as \textcolor{blue}{random} variables with their own probability distributions. For example, rather than $\beta_1$ being a fixed unknown slope coefficient, $\beta_1$ instead would have an entire probability distribution. Rather than a confidence interval for $\beta_1$, we instead get a \textcolor{blue}{credible interval} based on the estimated distribution for $\beta_1$, and the interpretation of the credible interval is the probability that our parameter lies within the interval (a satisfying interpretation!).
 
 \end{frame}
 
