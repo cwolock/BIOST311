@@ -69,11 +69,11 @@
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Randomization and control}
+\begin{frame}{Randomization and controls}
 	The specific characteristics of RCTs that we'll focus on are
 	\begin{itemize}
 		\item Randomization: predictor of interest (treatment) is independent of all other covariates by design - confounding is not (theoretically) possible
-		\item Control: The presence of a control group allows us to make comparisons. We can imagine what might have happened to the treatment group had they not received treatment. 
+		\item Controls: The presence of a control group allows us to make comparisons. We can imagine what might have happened to the treatment group had they not received treatment. 
 	\end{itemize}
 \begin{center}
 	\includegraphics[width = 0.6\textwidth]{rct.jpg}
@@ -104,7 +104,7 @@
 	\begin{itemize}
 		\item Can we run smaller, shorter trials while still getting good estimates of treatment effect?
 	\end{itemize}
-	This brings us to statistical efficiency theory. 
+	This brings us to the idea of statistical efficiency. 
 \end{frame}
 
 \section{Covariate adjustment}
@@ -112,7 +112,7 @@
 \begin{frame}{Estimand of interest}
 	Suppose in our trial we have a binary treatment $A$ (1 = treatment, 0 = placebo) and a quantitative outcome $Y$. We want to estimate (and do statistical inference on) the so-called ``average treatment effect" 
 	\begin{align*}
-		\mu_1 - \mu_0 := E[Y \mid A = 1] - E[Y \mid A = 0]
+		E[Y \mid A = 1] - E[Y \mid A = 0]
 	\end{align*}
 	\textbf{Question:} How would you estimate $E[Y \mid A = 1]$ and $E[Y \mid A = 0]$?\pause 
 	\\ ~\ 
@@ -241,6 +241,7 @@
 	In general, we don't just have one covariate $X$, but rather a whole vector $X_1,\dots, X_p$. The motivating question of my research is
 	\begin{itemize}
 		\item What is the most efficient way to incorporate covariates into an estimator of the average treatment effect, without assuming any underlying data generating model? 
+		\item Can we develop methods that are stable and straightforward to use (and therefore more practical for people running clinical trials)
 	\end{itemize}
 \end{frame}
 
