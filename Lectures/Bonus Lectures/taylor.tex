@@ -494,75 +494,88 @@ Throughout this course, we have only touched on methods for \textit{independent}
 \end{frame}
 
 \begin{frame}{Simple ways of dealing with dependent data}
-Dependent data typically presents itself in clusters (multiple individuals who see the same dentist, multiple individuals in the same state, etc.). While our observations are dependent overall, they are generally going to be independent \textit{within} clusters. 
+Dependent data typically presents itself in clusters (multiple individuals who see the same dentist, etc.). While our observations are dependent overall, they are generally going to be independent \textit{between} clusters. 
 
 \vspace{0.3cm}
 
-\pause Suppose we are interested in estimating the association between $\text{PM}_{2.5}$ and lung cancer in the U.S. For each individual in our dataset, we collect information on whether they have lung cancer or have had lung cancer previously, the latitude and longitude for where they permanently reside, the $\text{PM}_{2.5}$ level at that latitude and longitude, and the state in which they live. Our data looks something like this:
+\pause Suppose we are interested in estimating the association between $\text{PM}_{2.5}$ and forced expiratory volume (FEV) in the U.S. For each individual in our dataset, we collect information on their FEV, the latitude and longitude for where they permanently reside, the $\text{PM}_{2.5}$ level at that latitude and longitude, and the state in which they live. Our data looks something like this:
 
 \vspace{0.3cm}
 
 \begin{table}[]
 	\begin{tabular}{l|l|l|l|l|l}
-		\multicolumn{1}{c|}{ID} & \multicolumn{1}{c|}{Lung Cancer} & \multicolumn{1}{c|}{Lat} & \multicolumn{1}{c|}{Long} & \multicolumn{1}{c|}{$\text{PM}_{2.5}$ ($\mu$g/$m^3$)} & \multicolumn{1}{c}{State} \\ \hline
-		1                                   & 1                                & 33.5186                  & 86.8104                   & 25                          & AL                   \\
-		2                                   & 0                                & 45.0854                  & 93.0081                   & 10                          & MN                \\
-		3                                   & 0                                & 47.6062                  & 122.3321                  & 12                          & WA             
+		\multicolumn{1}{c|}{ID} & \multicolumn{1}{c|}{FEV (L/sec)} & \multicolumn{1}{c|}{Lat} & \multicolumn{1}{c|}{Long} & \multicolumn{1}{c|}{$\text{PM}_{2.5}$ ($\mu$g/$m^3$)} & \multicolumn{1}{c}{State} \\ \hline
+		1                                   & 3.1                                & 33.5186                  & 86.8104                   & 25                          & AL                   \\
+		2                                   & 4.3                                & 45.0854                  & 93.0081                   & 10                          & MN                \\
+		3                                   & 5.4                                & 47.6062                  & 122.3321                  & 12                          & WA             
 	\end{tabular}
 \end{table}
 
 \end{frame}
 
 \begin{frame}{Simple ways of dealing with dependent data}
-We have reason to believe that our data is dependent, because observations geographically close together will have similar $\text{PM}_{2.5}$ levels. If we treat our spatial data as discrete, we could consider states (AL, MN, WA, etc.) to contain geographic clusters of observations. Perhaps it is reasonable to assume that \textit{within} each state, our observations are independent.*
+We have reason to believe that our data is dependent, because observations geographically close together will have similar $\text{PM}_{2.5}$ levels. If we treat our spatial data as discrete, we could consider states (AL, MN, WA, etc.) to contain geographic clusters of observations. Perhaps it is reasonable to assume that \textit{between} each state, our observations are independent.*
 
 \vspace{0.3cm}
 
-\textcolor{blue}{Question(s):} What statistical model could answer our scientific question \textit{if we assume all of our data is independent}? What statistical model could answer our scientific question \textit{if we assume all of our data is independent within states}?
+\textcolor{blue}{Question(s):} What statistical model could answer our scientific question \textit{if we assume all of our data is independent}? What statistical model could answer our scientific question \textit{if we assume all of our data is independent between states}?
 
 \vspace{0.3cm}
 
 \vfill
 
-\tiny *This may not always be a reasonable assumption, and in this case, we could consider using a continuous spatial model instead rather than assuming observations are independent within states.
+\tiny *This may not always be a reasonable assumption, and in this case, we could consider using a more complicated spatial model instead rather than assuming observations are independent between states.
 \end{frame}
 
 \begin{frame}{Simple ways of dealing with dependent data}
-Recall our scientific question: We are interested in estimating the association between $\text{PM}_{2.5}$ and lung cancer in the U.S.
+Recall our scientific question: We are interested in estimating the association between $\text{PM}_{2.5}$ and FEV in the U.S.
 
 \vspace{0.3cm}
 
-Assuming all of our data is independent, we could fit the logistic regression model:
+Assuming all of our data is independent, we could fit the linear regression model:
 $$
-\log(\text{Odds}[\text{lung cancer} \mid \text{pm2.5}]) = \beta_0 + \beta_1  \text{pm2.5}
+E[\text{FEV} \mid \text{pm2.5}] = \beta_0 + \beta_1  \text{pm2.5}
 $$
 
-\vspace{0.3cm} Assuming our data is independent within states, we could fit the logistic regression model:
-$$
-\log(\text{Odds}[\text{lung cancer} \mid \text{pm2.5}, \text{state}]) = \beta_0 + \beta_1  \text{pm2.5} + \beta_2 \text{state}
-$$
 \end{frame}
 
 \begin{frame}{Simple ways of dealing with dependent data}
+
+Assuming our data is independent \textit{between} states, we could first fit a linear regression model for each state separately:
+$$
+E[\text{FEV} \mid \text{pm2.5}, \text{state} = \text{state}_j] = \beta_{0,j} + \beta_{1,j}  \text{pm2.5} + \beta_{2,j} \text{state}_j
+$$
+
+We end up with 50 different regression coefficients $\beta_{2,j}$ for the linear association between $\text{PM}_{2.5}$ and FEV. We then take the average of these regression coefficients to obtain as estimate of the mean association between $\text{PM}_{2.5}$ and FEV across states.
+
+\vspace{0.3cm}
+
+This is sometimes called \textcolor{blue}{two-stage least squares}, where in this case, the second linear regression model includes only an intercept term (this is equivalent to taking the mean of all of our regression coefficients from the first stage).
+
+\end{frame}
+
+\begin{frame}{Simple ways of dealing with dependent data}
+
+\vspace{-1cm}
+
 \begin{align*}
-\text{Model 1:} & \log(\text{Odds}[\text{lung cancer} \mid \text{pm2.5}]) \\
+\text{Model 1: } & E[\text{FEV} \mid \text{pm2.5}] \\
 & \hspace{1cm} = \beta_0 + \beta_1  \text{pm2.5} \\
-\text{Model 2:} & \log(\text{Odds}[\text{lung cancer} \mid \text{pm2.5}, \text{state}]) \\
-& \hspace{1cm} = \beta_0 + \beta_1  \text{pm2.5} + \beta_2 \text{state}
+\text{Model 2: } & E[\text{FEV} \mid \text{pm2.5}, \text{state} = \text{state}_j] \\
+& \hspace{1cm} = \beta_{0,j} + \beta_{1,j}  \text{pm2.5} + \beta_{2,j} \text{state}_j \\
+& \hspace{1cm} \hat{\beta}_2 = \frac{1}{50} \sum_{j = 1}^{50} \beta_{2,j}
 \end{align*}
-
-\vspace{0.3cm}
 
 A few observations:
 
 \begin{itemize}
 	\item We know that Model 1 violates the independence assumption, and therefore our resulting estimate of the association between lung cancer and $\text{PM}_{2.5}$ is going to be misleading
-	\item We know from discussing adjustment variables that the interpretation of our estimate will be different for Model 2 than for Model 1. For Model 2, we will interpret our odds ratio $e^{\beta_1}$ for individuals \textit{within the same state} \textcolor{blue}{(and we assumed individuals within the same state are independent!)}
+	\item The interpretation of our estimate from Model 2 will be different than for Model 1. For Model 2, the interpretation of our estimate will be an average association between FEV and $\text{PM}_{2.5}$ across all states. However, since we fit separate linear regressions for each state (conditional on each state), our independence assumption is satisfied. 
 \end{itemize}
 \end{frame}
 
 \begin{frame}{Simple ways of dealing with dependent data}
-\textbf{Key Takeaway:} As a general rule, if we include covariate(s) in our model that account for all of the clustering (dependency) in our data, then our error terms $\epsilon_i$ will satisfy the independence assumption we need for linear/logistic/etc. regression.
+\textbf{Key Takeaway:} As a general rule, if we do two-stage regression (the first stage within cluster, the second stage between cluster), then our resulting error terms $\epsilon_i$ will satisfy the independence assumption we need for linear/logistic/etc. regression.
 
 \vspace{0.3cm}
 
@@ -574,7 +587,7 @@ Most discrete spatial statistics problems involve \textit{spatial} random effect
 \end{frame}
 
 \begin{frame}{Spatial dependence}
-In the $\text{PM}_{2.5}$ example, we saw one way to deal with spatial dependence. However, we didn't incorporate any information on the spatial \textit{structure} of our data into our model. 
+In the $\text{PM}_{2.5}$ example, we saw one way to deal with dependence. However, we didn't incorporate any information on the spatial \textit{structure} of our data into our model. In fact, we assumed that observations in different regions were independent from one another!  
 
 \vspace{0.3cm}
 
