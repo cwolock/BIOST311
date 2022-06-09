@@ -1,0 +1,167 @@
+---
+title: "Homework 8: Key"
+subtitle: "BIOST 311"
+author: "Taylor Okonek and Charlie Wolock"
+date: \today
+output: 
+  pdf_document:
+    toc: false
+header-includes:
+  - \usepackage{color}
+  - \usepackage{fvextra}
+  - \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+library(formatR)
+
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(results = "hide")
+```
+
+
+## Instructions
+
+This assignment should be submitted on Canvas as a .pdf by 11:59pm on Wednesday, June 1st. You are welcome to work together on the homework; however, final solutions should be written up individually. 
+
+Unedited software output in the body of your assignment is not acceptable. Please round numerical values to 2--3 significant digits, and include your R code (if applicable) in the same document. See the "How to Write a Proper Homework" document on Canvas for additional guidelines.  
+
+Each homework assignment is worth 20 points total. Problems are graded for correctness, according to the number of points given in the problem statement.
+
+```{r preliminaries}
+library(readr)
+library(tidyverse)
+library(ggplot2)
+library(knitr)
+library(survival)
+library(survminer)
+```
+
+## 1. Characteristics of survival data
+
+Suppose I am studying people with severe bone fractures, and I am interested in knowing whether or not the time it takes for the fracture to heal varies depending on whether the individual with the fracture had surgery. The more severe a fracture is, the more likely that surgery will be recommended. We hypothesize that individuals who had surgery will have longer healing times than those who did not have surgery, given that more severe fractures take longer to heal. We enroll people in our study at the time they have a severe bone fracture, and follow them over time to record when their fracture healed completely, measured at a follow-up clinic appointment. We lose a few people in our study to follow-up, and we end our study after 20 weeks, where a few individuals are subject to administrative censoring.
+
+For scenarios 1a through 1d, determine whether or not the independent censoring assumption holds, and justify your answer.
+
+a. Participants exit the study because their health has worsened to the point where they cannot come to the clinic for a follow-up appointment. (2 points)
+
+\textcolor{blue}{The independent censoring assumption likely does not hold, because in this case, censored individuals would have worse health than non-censored individuals, which in turn could lead to longer time to a completely healed fracture.}
+
+b. Participants exit the study because they switched their follow-up care to a doctor at a different clinic. The doctor at the different clinic is equally medically qualified to take care of the participants, and would provide the same care as would be provided at the clinic used in our study. (2 points)
+
+\textcolor{blue}{The independent censoring assumption likely holds, because censored individuals would be receiving essentially the same care as non-censored individuals. There is no reason to believe individuals seeing the doctor at a different clinic would have shorter or longer times to completely healed fractures than individuals seeing the original doctor at the study clinic.}
+
+c. Participants exit the study because they were referred to a doctor at a different clinic who specializes in treating bone fractures. (2 points)
+
+\textcolor{blue}{The independent censoring assumption likely does not hold, because censored individuals would likely be receiving better care than non-censored individuals, and therefore may have shorter times to completely healed fractures than non-censored individuals.}
+
+d. Participants exit the study because they forget to return for a follow-up appointment. (2 points)
+
+\textcolor{blue}{The independent censoring assumption likely holds, because there is no reason to believe forgetful individuals (who are censored) have longer or shorter times to completely healed fractures than less forgetful people.}
+
+## 2. Kaplan-Meier & the log rank test
+
+a. Load the `mayo` dataset (0 points)
+
+```{r 1a}
+mayo <- read_csv(url("https://raw.githubusercontent.com/cwolock/BIOST311/main/Datasets/mayo.csv"))
+```
+
+b. Plot a Kaplan-Meier survival curve for all individuals in the dataset (that is, just a single curve, no stratification by another variable). Include a median survival line on your plot, and use this to estimate (approximately) the median survival time for individuals in your dataset. (2 points)
+
+```{r}
+fit <- survfit(Surv(time = obstime, event = status) ~ 1,
+               data = mayo)
+ggsurvplot(fit, data = mayo,
+           censor.shape = "|",
+           censor.size = 4,
+           surv.median.line = "hv",
+           legend = "none") +
+  labs(x = "Time (days)",
+       title = "Overall Kaplan-Meier survival curve") 
+```
+
+\textcolor{blue}{I estimate that median survival time for individuals in our dataset is approximately 3200 days. I arrived at this number by eyeballing the time in days where the survival probability crossed 0.5 on the y-axis of the plot.}
+
+c. Plot Kaplan-Meier survival curves for all individuals in the dataset, stratified by stage of disease. Include a legend in your plot, confidence bands, and median survival lines for each strata. For each strata, estimate (approximately) the median survival time for individuals in that strata, or explain why you cannot estimate the median survival time for individuals in that strata. Based on your plot, what do you notice about the relationship between time to death and stage of disease? (2 points)
+
+```{r}
+fit <- survfit(Surv(time = obstime, event = status) ~ stage,
+               data = mayo)
+ggsurvplot(fit, data = mayo,
+           censor.shape = "|",
+           legend.labs = c("1","2","3","4"),
+           censor.size = 4,
+           conf.int = TRUE,
+           surv.median.line = "hv",
+           legend.title = element_blank()) +
+  labs(x = "Time (days)",
+       title = "Kaplan-Meier survival curves by Stage") 
+```
+
+\textcolor{blue}{I estimate that the median survival time is 1800 days for those with disease stage 4, 3200 days for those with disease stage 3, and 4100 for those with disease stage 2. We cannot estimate the median survival time for those with disease stage 1 because the survival probability is never below 50\%. In general, it appears as though less advanced stages of disease are associated with higher survival probability, and longer time to death.}
+
+d. Create a new, binary variable called `advanced_stage` that is either 0 if `stage` is 1 or 2, or is 1 if `stage` is 3 or 4. Here, we consider `advanced_stage` equal to 0 to be a non-advanced stage of disease, and `advanced_stage` equal to 1 to be an advanced stage of disease. Plot Kaplan-Meier survival curves for all individuals in the dataset, stratified by `advanced_stage`. Include a legend in your plot and confidence bands for each strata. Based on your plot, what do you notice about the relationship between time to death and advanced stage of disease? (2 points)
+
+```{r}
+mayo <- mayo %>%
+  mutate(advanced_stage = ifelse(stage == 1 | stage == 2, 0, 1))
+
+fit <- survfit(Surv(time = obstime, event = status) ~ advanced_stage,
+               data = mayo)
+ggsurvplot(fit, data = mayo,
+           censor.shape = "|",
+           legend.labs = c("not advanced", "advanced"),
+           censor.size = 4,
+           conf.int = TRUE,
+           legend.title = element_blank()) +
+  labs(x = "Time (days)",
+       title = "Kaplan-Meier survival curves by Advanced Stage") 
+```
+
+\textcolor{blue}{In general, it appears as though individuals with disease that is not in an advanced stage have higher survival probability, and longer time to death, than those with disease in an advanced stage.}
+
+e. Conduct a log-rank test for a survival difference by advanced stage of disease (a binary variable). Your answer must include a statement of null and alternative hypotheses, as well as a conclusion based on a p-value. (2 points)
+
+```{r}
+survdiff(Surv(time = obstime, event = status) ~ advanced_stage, data = mayo)
+```
+
+\textcolor{blue}{Using a log-rank test of the null hypothesis of no survival difference at any time between those with advanced stage of disease and those with non-advanced stage of disease against the alternative of a survival difference, we reject the null hypothesis at a 0.05 significance level (p < 0.001). We find statistically significant evidence of a survival difference.}
+
+## 3. Cox proportional hazards regression
+
+a. Suppose we are interested in the association between survival time and platelet count. Create a descriptive plot for the distribution of platelet counts within our dataset, and describe the distribution. Include in your summary the minimum and maximum platelet count in 10^3 cells per mm^3 (the units of the variable `platelet`). Do you notice anything odd or concerning about the distribution of platelet count? (2 points)
+
+```{r}
+mayo %>%
+  ggplot(aes(platelet)) +
+  geom_histogram(bins = 10, col = "black") +
+  labs(x = "Platelet count (10^3 cells/mm^3)", y = "Count", title = "Distribution of platelet count")
+
+mayo %>% pull(platelet) %>% range()
+```
+
+\textcolor{blue}{The distribution of platelet counts in our dataset is roughly symmetric. The maximum platelet count in the dataset is 563 thousand cells per $mm^3$, however, the minimum is -9 thousand cells per $mm^3$. This is concerning because individuals cannot have negative platelet counts. Sometimes in datasets, missing values will instead be recorded with "-9", "-99", or "-999", suggesting these observations with negative platelet counts are in fact missing rather than truly negative.}
+
+b. You should have noticed a few individuals with platelet counts that do not make sense. Sometimes, rather than recording missing values as "NA" in datasets, people will record missing values with "-9", "-99", or "-999". This is typically reported in the metadata for a given dataset, but not for this one! Create a new dataset that includes only observations with platelet counts that make sense (aka platelet counts that are not missing). (0 points)
+
+```{r}
+mayo_nomissing <- mayo %>% filter(platelet > 0)
+```
+
+c. Perform a Cox proportional hazards regression analysis to assess whether platelet count is associated with survival time, using the dataset you created in part (b). Interpret the output of your model; don't just give numerical output. Be sure to include a statistic quantifying the association with appropriate uncertainty quantification, as well as hypothesis tests. Be sure to state the null and alternative hypotheses. (2 points)
+
+```{r}
+mod <- coxph(Surv(time = obstime, event = status) ~ platelet, data = mayo_nomissing)
+summary(mod)
+```
+
+\textcolor{blue}{We estimate the hazard ratio of death comparing groups $10^3$ cells/$mm^3$ apart in platelet count is 0.997, with the group with lower platelet count having the higher hazard. The data would not be surprising if the true hazard ratio were between 0.995 and 0.999. We reject the null hypothesis of a hazard ratio of 1 against the alternative that the hazard ratio is not equal to 1 (p < 0.001). There is significant evidence of an association between platelet count and instantaneous risk of death.}
+
+
